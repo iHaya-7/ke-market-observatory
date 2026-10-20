@@ -146,6 +146,10 @@ tests/
 README.md
 ```
 
+## Knowledge Engineering Workspace
+
+The [`knowledge-engineering/`](knowledge-engineering/) workspace prepares the approved lightweight Ontology Pipeline for future improvements to job classification, salary benchmarking reliability, and source traceability. It provides stage folders for scope, vocabulary and metadata, taxonomy, ontology, knowledge graph, validation, and controlled before/after evaluation against the existing observatory baseline. This organization adds documentation and placeholders only; Stage 0 — Baseline and Stage 1 — Scope are the next steps.
+
 ## Local Setup
 
 ### Prerequisites
