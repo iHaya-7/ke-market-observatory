@@ -24,7 +24,7 @@ const AR={
  'Made by Knowledge Engineers Haya & Lubna':'إعداد مهندستَي المعرفة هيا ولبنى',
  'Review queue':'قائمة المراجعة',
  'EVIDENCE OVER ASSUMPTIONS':'الأدلة قبل الافتراضات',
- 'Compare the work. Not just the title.':'قارني طبيعة العمل، وليس المسمى فقط.',
+ 'Compare the work. Not just the title.':'قارن طبيعة العمل، وليس المسمى فقط.',
  'Public sources only.':'مصادر عامة فقط.',
  'No personal data.':'لا توجد بيانات شخصية.',
  'MARKET INTELLIGENCE':'معلومات السوق',
@@ -47,13 +47,13 @@ const AR={
  'Offline preview':'معاينة دون اتصال',
  'Update unavailable':'التحديث غير متاح',
  'Snapshot connected':'البيانات متصلة',
- 'Check collection health':'راجعي حالة جمع البيانات',
+ 'Check collection health':'راجع حالة جمع البيانات',
  'Not activated':'لم يتم التفعيل',
  'This preview is not a live site. Data collection activates after deployment.':'هذه معاينة غير متصلة؛ يبدأ جمع البيانات بعد النشر.',
  'Showing the embedded or last saved snapshot because the update failed.':'نعرض آخر نسخة متاحة لأن تحديث البيانات تعذر.',
  'Last successful collection':'آخر جمع ناجح',
  'The browser checks published data every 5 minutes; the scheduled workflow checks sources daily.':'تفحص الصفحة البيانات المنشورة كل خمس دقائق؛ ويفحص النظام المصادر يوميًا.',
- 'The last successful collection is missing or stale. Verify the source status.':'آخر جمع ناجح غير متاح أو قديم؛ تحققي من حالة المصادر.',
+ 'The last successful collection is missing or stale. Verify the source status.':'آخر جمع ناجح غير متاح أو قديم؛ تحقق من حالة المصادر.',
  'Daily collection has not been activated.':'التحديث اليومي لم يتم تفعيله بعد.',
  'Source-level evidence dates retained':'تواريخ أدلة المصادر محفوظة',
  'Not disclosed':'غير معلن',
@@ -103,7 +103,7 @@ const AR={
  'Pay basis':'نوع الأجر',
  'Saudi listing status':'حالة إعلان سعودي',
  'THE VALUE OF CONNECTED KNOWLEDGE':'قيمة المعرفة المترابطة',
- 'Know the market. Know your value.':'اعرفي السوق. واعرفي قيمة تخصصك.',
+ 'Know the market. Know your value.':'اعرف السوق. واعرف قيمة تخصصك.',
  'overviewIntro':'مرجع موثق لرواتب وظائف هندسة المعرفة عالميًا، إلى جانب إعلانات التوظيف المرتبطة بها داخل السعودية.',
  'One reference. Two perspectives.':'مرجع واحد. زاويتان للمقارنة.',
  'Global compensation · Saudi market demand':'الرواتب العالمية · الطلب في السعودية',
@@ -120,13 +120,13 @@ const AR={
  'Explore':'استكشاف',
  'NEW · SAUDI ARABIA':'الوظائف · السعودية',
  'Where the work is being advertised.':'أين تُعرض وظائف هندسة المعرفة؟',
- 'saudiOverviewIntro':'اكتشفي فرص الأنطولوجيا والرسوم البيانية المعرفية والدلالات، حتى إن كان المسمى Architect أو Data Engineer.',
+ 'saudiOverviewIntro':'اكتشف فرص الأنطولوجيا والرسوم البيانية المعرفية والدلالات، حتى إن كان المسمى Architect أو Data Engineer.',
  'Explore Saudi opportunities':'استكشاف الفرص السعودية',
  'A FAIR COMPARISON':'مقارنة منصفة',
  'A missing year count does not mean Junior.':'غياب سنوات الخبرة لا يعني أن الوظيفة للمبتدئين.',
  'evidenceOverviewIntro':'تحفظ الخبرة ونوع الأجر وحالة المصدر لكل مرجع. ولا تُستنتج رواتب غير معلنة.',
  'Read the Junior evidence':'عرض أدلة المبتدئين',
- 'Review source health before sharing the benchmark.':'راجعي حالة المصادر قبل مشاركة الأرقام مع الإدارة.',
+ 'Review source health before sharing the benchmark.':'راجع حالة المصادر قبل مشاركة الأرقام مع الإدارة.',
  'View update coverage':'عرض تغطية التحديثات',
  'No verified employer base-salary ranges in this selection.':'لا توجد رواتب أساسية موثقة من الجهات في هذا الاختيار.',
  'Research pay ranges · not in headline benchmark':'رواتب للبحث والمراجعة · خارج المقارنة المعتمدة',
@@ -135,8 +135,8 @@ const AR={
  'chartDisclaimer':'يمثل الرسم نطاقات الرواتب الأساسية المعلنة والمؤكدة فقط، بما فيها مراجع تاريخية. ليس متوسطًا إحصائيًا أو توصية براتب سعودي.',
  'INTERNATIONAL SALARY BENCHMARK':'مرجع الرواتب الدولية',
  'Global salaries.':'الرواتب العالمية.',
- 'globalIntro':'قارني الوظائف بحسب الشركة والدولة والخبرة والأجر الشهري، مع إبقاء العملة والمصدر الأصلي متاحين.',
- 'Search company, role or skill':'ابحثي عن شركة أو وظيفة أو مهارة',
+ 'globalIntro':'قارن الوظائف بحسب الشركة والدولة والخبرة والأجر الشهري، مع إبقاء العملة والمصدر الأصلي متاحين.',
+ 'Search company, role or skill':'ابحث عن شركة أو وظيفة أو مهارة',
  'Country / market':'الدولة أو السوق',
  'Location':'المدينة',
  'Evidence type':'نوع المصدر',
@@ -164,7 +164,7 @@ const AR={
  'Highest advertised ceiling':'أعلى حد معلن',
  'Monthly equivalent; not a typical offer':'مقابل شهري؛ ليس عرضًا نموذجيًا',
  'The salary reference set':'قاعدة المراجع الوظيفية والرواتب',
- 'salaryTableIntro':'اختاري حتى ثلاث وظائف للمقارنة. لا تُخلط الرواتب غير المؤكدة بالتعويض الإجمالي أو التقديرات.',
+ 'salaryTableIntro':'اختر حتى ثلاث وظائف للمقارنة. لا تُخلط الرواتب غير المؤكدة بالتعويض الإجمالي أو التقديرات.',
  'Export CSV':'تصدير CSV',
  'Role / company':'الوظيفة / الشركة',
  'Market':'السوق',
@@ -175,7 +175,7 @@ const AR={
  'Source & details':'المصدر والتفاصيل',
  'Review pay basis':'مراجعة نوع الراتب',
  'No matching references':'لا توجد مراجع مطابقة',
- 'Change your filters. Missing evidence is not replaced with estimates.':'غيّري خيارات البحث؛ الأدلة المفقودة لا تُستبدل بتقديرات.',
+ 'Change your filters. Missing evidence is not replaced with estimates.':'غيّر خيارات البحث؛ الأدلة المفقودة لا تُستبدل بتقديرات.',
  'LOCAL OPPORTUNITY TRACKER':'متابعة الفرص المحلية',
  'Knowledge Engineering in Saudi Arabia.':'هندسة المعرفة في السعودية.',
  'saudiIntro':'سجل منفصل لوظائف الأنطولوجيا والرسوم البيانية المعرفية والأدوار الدلالية المجاورة. ليست كل المسميات Knowledge Engineer.',
@@ -196,15 +196,15 @@ const AR={
  'Last seen in feed':'آخر ظهور في المصدر',
  'Possible overlap; client identity unconfirmed.':'احتمال تكرار الإعلان؛ هوية العميل غير مؤكدة.',
  'No matching Saudi postings':'لا توجد إعلانات سعودية مطابقة',
- 'saudiEmpty':'جربي إظهار الإعلانات المؤرشفة أو تغيير التصنيف. عدم وجود نتيجة لا يعني عدم وجود وظائف في السعودية.',
+ 'saudiEmpty':'جرّب إظهار الإعلانات المؤرشفة أو تغيير التصنيف. عدم وجود نتيجة لا يعني عدم وجود وظائف في السعودية.',
  'EARLY CAREER / READ CAREFULLY':'المستوى المبكر · قراءة حذرة',
  'Junior evidence, without inflated claims.':'مراجع Junior، دون مبالغة.',
  'juniorIntro':'نعرض فقط الوظائف التي تحمل مستوى Junior أو Entry-Level بوضوح. غياب شرط الخبرة ليس دليلًا على أنها لخريجين جدد.',
  'juniorDisclaimer':'هذه ليست عينة إحصائية موحدة لرواتب المبتدئين. تتضمن المراجع إعلانًا تاريخيًا وتقديرات منصات رواتب، ولا يمكن دمجها في متوسط واحد.',
  'SAR per month, gross equivalent':'ريال شهريًا قبل الاستقطاعات (مكافئ)',
  'Read source evidence':'عرض أدلة المصدر',
- 'Compare the scope, then the price':'قارني طبيعة الدور قبل الراتب',
- 'juniorMethod':'احتفظي بالدولة والمسؤوليات والخبرة والقيود الخاصة معًا. وقد تؤثر التصاريح الأمنية والقطاع والضرائب والتعويض الإجمالي على المقارنة. الراتب الأمريكي ليس توصية براتب سعودي للمبتدئين.',
+ 'Compare the scope, then the price':'قارن طبيعة الدور قبل الراتب',
+ 'juniorMethod':'احتفظ بالدولة والمسؤوليات والخبرة والقيود الخاصة معًا. وقد تؤثر التصاريح الأمنية والقطاع والضرائب والتعويض الإجمالي على المقارنة. الراتب الأمريكي ليس توصية براتب سعودي للمبتدئين.',
  'Browse all salary references':'كل مراجع الرواتب',
  'TRANSPARENCY BY DESIGN':'شفافية موثقة',
  'Sources, freshness and what updates.':'المصادر وحداثة البيانات وآلية التحديث.',
@@ -245,7 +245,7 @@ const AR={
  'Open FX source':'فتح مصدر الصرف',
  'fxCaveat':'الرواتب غير المؤكدة والتقديرات لا تدخل إحصائيات الرواتب الأساسية. لا يتغير تاريخ دليل الراتب الأصلي عند تحديث العملات.',
  'Manage one shared reference':'إدارة مرجع واحد مشترك',
- 'manageIntro':'هذه النسخة للقراءة فقط. لإضافة وظيفة موثقة أو تعديلها، عدلي data/curated.json في GitHub. ولإضافة مصدر عدلي config/sources.json. لا تضعي أي بيانات شخصية أو رواتب سرية داخل المستودع العام.',
+ 'manageIntro':'هذه النسخة للقراءة فقط. لإضافة وظيفة موثقة أو تعديلها، عدّل data/curated.json في GitHub. ولإضافة مصدر عدّل config/sources.json. لا تضع أي بيانات شخصية أو رواتب سرية داخل المستودع العام.',
  'Export dataset JSON':'تصدير البيانات JSON',
  'Export all references CSV':'تصدير كل المراجع CSV',
  'saveInfo':'حفظ نسخة ينشئ نسخة HTML غير متصلة، ولا ينشئ موقعًا جديدًا. لا توجد مفاتيح GitHub سرية داخل الصفحة.',
@@ -261,7 +261,7 @@ const AR={
  'Open source':'فتح المصدر',
  'View role':'عرض الوظيفة',
  'No pending review items':'لا توجد بنود مراجعة معلّقة',
- 'reviewInstructions':'لا يوجد اعتماد من داخل المتصفح العام. لقبول وظيفة آلية بعد مراجعة مصدرها، أضيفي معرفها إلى approved في data/review_decisions.json. للرفض أضيفيه إلى rejected. راجعي نوع الراتب في data/curated.json بعد التوثيق.',
+ 'reviewInstructions':'لا يوجد اعتماد من داخل المتصفح العام. لقبول وظيفة آلية بعد مراجعة مصدرها، أضف معرّفها إلى approved في data/review_decisions.json. للرفض أضفه إلى rejected. راجع نوع الراتب في data/curated.json بعد التوثيق.',
  'Original evidence':'الأدلة الأصلية',
  'MONTHLY EQUIVALENT / SAR':'المقابل الشهري / ريال',
  'No salary conversion is calculated.':'لم يتم احتساب تحويل راتب.',
@@ -274,7 +274,7 @@ const AR={
  'First tracked automatically':'أول رصد آلي',
  'Limitations & restrictions':'القيود والملاحظات',
  'Curated reference; check original evidence.':'مرجع محفوظ؛ يُرجى التحقق من المصدر الأصلي.',
- 'Rule-matched feed role; review the source.':'وظيفة رصدتها قواعد المطابقة؛ راجعي وصفها الأصلي.',
+ 'Rule-matched feed role; review the source.':'وظيفة رصدتها قواعد المطابقة؛ راجع وصفها الأصلي.',
  'Client identity unconfirmed.':'هوية العميل غير مؤكدة.',
  'Open source':'فتح المصدر',
  'Close':'إغلاق',
@@ -314,7 +314,35 @@ const AR={
  'Needs manual review':'تحتاج مراجعة بشرية',
  'Evidence confirmed for source only':'تم التحقق من المصدر فقط',
 };
-const t=key=>lang==='ar'?(AR[key]||key):key;
+// Preserve English paragraph copy when a translation uses an internal message key.
+const EN={
+ overviewIntro:'A traceable salary benchmark for global Knowledge Engineering roles, alongside the opportunities being advertised in Saudi Arabia.',
+ saudiOverviewIntro:'Find ontology, knowledge graph and semantic roles — even when the job title says Architect or Data Engineer.',
+ evidenceOverviewIntro:'Experience, salary basis and source status are preserved for every reference. No missing salary is converted into an estimate.',
+ chartDisclaimer:'The chart shows explicitly verified employer base-salary ranges, including historical references. It is not a market average or a recommended Saudi salary.',
+ globalIntro:'Compare source-backed roles by employer, market, experience and monthly salary. Original currencies and evidence remain one click away.',
+ salaryTableIntro:'Select up to three roles to compare. Unverified pay, total compensation and estimates stay separate from verified base-salary statistics.',
+ saudiIntro:'A separate register of Saudi postings: core semantic roles, applied knowledge graph work, and adjacent metadata positions. Not every title is Knowledge Engineer.',
+ saudiSalaryDisclaimer:'Jobs are not Saudi salary benchmarks. Undisclosed salaries stay blank, and listing status depends on the latest source verification.',
+ saudiEmpty:'Try including archived records or broader role labels. No result is not proof that no such job exists in Saudi Arabia.',
+ juniorIntro:'Only explicitly Junior or entry-level references belong here. A missing experience requirement or an all-level salary range is not evidence of a graduate offer.',
+ juniorDisclaimer:'This is not a statistically established Junior salary band. Historical postings and salary-platform estimates are not interchangeable and cannot be combined into one average.',
+ juniorMethod:'Keep geography, actual responsibilities, experience and special restrictions together. Defense-related clearance, specialist industries, taxes and total compensation can change the comparison substantially. A US monthly equivalent is not a recommended Saudi starting salary.',
+ sourcesIntro:'The browser reads a shared dataset. A scheduled server workflow collects public job boards, validates the result and publishes a new snapshot. These are separate steps.',
+ sourcesWorkflow:'The system checks public job boards daily, approximately 08:17 Riyadh time. It does not collect LinkedIn postings directly.',
+ sourcesMatching:'Specialist titles are accepted; uncertain related roles enter the review queue before approval.',
+ sourcesPay:'Only employer disclosures explicitly identifying the pay basis enter the base-salary benchmark. Total compensation is shown separately.',
+ sourcesPublish:'GitHub Actions publishes the updated JSON and HTML to the same site URL after checks pass.',
+ sourcesViewer:'The open dashboard checks for a new published snapshot every five minutes.',
+ sourcesCaveat:'API failures preserve last-good records. A role missing from two complete checks is marked absent from the feed, not definitively closed. GitHub schedules can be delayed.',
+ fxFormula:'Monthly SAR = original salary × FX rate, divided by 12 for annual salaries. Hourly pay is not annualized without explicit working-time assumptions.',
+ fxCaveat:'Unverified pay and estimates do not enter base-salary statistics. Original salary evidence dates do not change when exchange rates refresh.',
+ manageIntro:'This online edition is read-only for visitors. The repository is the central source of truth. To add or correct an approved reference, edit data/curated.json and publish; to add a feed, edit config/sources.json. Do not put private notes, contacts or confidential salary information in a public repository.',
+ saveInfo:'Save copy produces an offline snapshot, not another live deployment. No editing keys or GitHub tokens are placed in this page.',
+ reviewIntro:'Uncertain role matches, unclear salary evidence and older listing statuses remain here until sufficient evidence is available.',
+ reviewInstructions:'The public dashboard does not approve records. After reviewing an automatic candidate\'s source, add its ID to approved or rejected in data/review_decisions.json. Verify salary basis separately in data/curated.json before updating the evidence.',
+};
+const t=key=>lang==='ar'?(AR[key]||key):(EN[key]||key);
 const h=key=>esc(t(key));
 const num=n=>n==null?t('Not disclosed'):new Intl.NumberFormat('en-US',{maximumFractionDigits:0}).format(n);
 const locale=()=>lang==='ar'?'ar-SA':'en-GB';
@@ -355,7 +383,7 @@ function payRange(r){if(!isSalary(r))return t('Not disclosed');const lo=monthly(
 function originalPay(r){if(!isSalary(r))return t('Not disclosed');let s=r.currency+' '+num(r.salaryMin);if(r.salaryMax!=null&&r.salaryMax!==r.salaryMin)s+='–'+num(r.salaryMax);return s+' / '+t(r.period==='Annual'?'year':'month');}
 function expText(r){const v=r.experience||'Not specified';if(lang!=='ar')return v;if(['Not specified','Not reverified'].includes(v))return t('Not specified');const range=/^(\d+)(?:-(\d+))?\+?\s*years?\b/i.exec(v);if(range)return range[1]+(range[2]?'–'+range[2]:'+')+' '+t('years');if(/less than 1 year/i.test(v))return 'أقل من سنة';return v;}
 function reLabel(r){return t(r.relevance||'Not specified');}
-function recordSummary(r){return lang==='ar'?(r.summaryAr|| (r.collection==='automatic'?'مهارات وردت في وصف الوظيفة: '+(r.skills||[]).join('، ')+'. تحققي من المسؤوليات في المصدر الأصلي.':r.summary)):r.summary;}
+function recordSummary(r){return lang==='ar'?(r.summaryAr|| (r.collection==='automatic'?'مهارات وردت في وصف الوظيفة: '+(r.skills||[]).join('، ')+'. تحقق من المسؤوليات في المصدر الأصلي.':r.summary)):r.summary;}
 const badge=(text,color='')=>`<span class="chip ${color}">${esc(text)}</span>`;
 function relevanceBadge(r){return badge(reLabel(r),r.relevance==='Core KE'?'green':r.relevance==='Applied KG / AI'?'blue':'');}
 function evidenceBadge(r){const key=({employer:'Employer disclosure',reposted:'Secondary evidence',estimate:'Salary estimate',user:'Unverified'})[r.evidenceType]||'Source record';return badge(t(key),r.evidenceType==='employer'?'green':r.evidenceType==='estimate'?'blue':'amber');}
@@ -384,6 +412,7 @@ function applyLanguage(){
   node.textContent=t(key);
  });
  $('#lang-switch').textContent=lang==='ar'?'English':'العربية';
+ $('#lang-switch').lang=lang==='ar'?'en':'ar';
  $('#lang-switch').setAttribute('aria-label',lang==='ar'?'Switch to English':'التبديل إلى العربية');
 }
 function renderShell(){

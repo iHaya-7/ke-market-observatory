@@ -9,10 +9,18 @@
 .chart-role{text-align:left}
 
 /* Bilingual layout and accessible review/status controls */
+/* IBM Plex Sans Arabic, IBM/plex commit 71f558992315a12ca1f06a2215d57962a1992162.
+   Original WOFF2 files and SIL Open Font License are bundled in web/fonts.
+   The build embeds these fonts and their license in the offline dashboard. */
+@font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/IBMPlexSansArabic-Regular.woff2') format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-089F,U+08A0-08FF,U+200C-200F,U+FB50-FDFF,U+FE70-FEFF}
+@font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:500;font-display:swap;src:url('fonts/IBMPlexSansArabic-Medium.woff2') format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-089F,U+08A0-08FF,U+200C-200F,U+FB50-FDFF,U+FE70-FEFF}
+@font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:600;font-display:swap;src:url('fonts/IBMPlexSansArabic-SemiBold.woff2') format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-089F,U+08A0-08FF,U+200C-200F,U+FB50-FDFF,U+FE70-FEFF}
+@font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:700;font-display:swap;src:url('fonts/IBMPlexSansArabic-Bold.woff2') format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-089F,U+08A0-08FF,U+200C-200F,U+FB50-FDFF,U+FE70-FEFF}
 .lang-switch{min-width:68px;border-color:#bcd4c4;color:#195b48;background:#f0f7f0;font-weight:750}
 .lang-switch:hover{background:#e3f1e6}
-.creator-credit{display:block!important;margin-top:15px!important;color:#d0e8d4!important;line-height:1.7!important}
-.creator-credit strong{font-weight:700;color:#f1fff0;font-size:11px}
+.side-footer .creator-credit{display:flex;flex-direction:column;align-items:center;gap:4px;margin:16px 0 0;color:#d0e8d4;font:8px/1.7 'Segoe UI',Arial,sans-serif;text-align:center;direction:ltr;unicode-bidi:isolate}
+.creator-credit-label{display:block;white-space:nowrap}
+.creator-credit strong{display:block;font-weight:700;color:#f1fff0;font-size:12px;white-space:nowrap}
 .review-list{display:grid;gap:11px}
 .review-card{padding:18px 21px;background:white;border:1px solid var(--line);border-radius:12px;display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
 .review-card h3{font-size:14px;margin:6px 0}
@@ -21,7 +29,24 @@
 .review-note{padding:15px 19px;margin-top:16px;background:#fff9ee;border:1px solid #ebddc6;border-radius:11px;color:#866b35;font-size:12px;line-height:1.8}
 .pay-note{display:block;font-size:9px;color:#8d6c35;white-space:normal;font-weight:550;line-height:1.55;margin-top:4px}
 .status-legend{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0 20px;font-size:11px;color:var(--muted)}
-[dir="rtl"] body{font-family:Tahoma,'Segoe UI',Arial,sans-serif}
+html[lang="ar"] body,.lang-switch[lang="ar"]{font-family:'IBM Plex Sans Arabic','Segoe UI',Tahoma,Arial,sans-serif;letter-spacing:normal}
+html[lang="ar"] body{line-height:1.85}
+.lang-switch[lang="ar"]{font-weight:600;line-height:1.7}
+html[lang="ar"] :is(h1,h2,h3,.eyebrow,.nav-caption,.brand,.brand small,.crumb,.nav-icon,.stat .value,.stat .value small,.field label,th,.job-facts small,.detail-grid strong,.junior-money,.detail-title,.amount){letter-spacing:normal}
+html[lang="ar"] h1{font-weight:600;line-height:1.45}
+html[lang="ar"] h2{font-weight:600;line-height:1.6}
+html[lang="ar"] h3{font-weight:600;line-height:1.65}
+html[lang="ar"] :is(.page-heading p,.job-summary,.detail-grid p){font-size:13px;line-height:1.95}
+html[lang="ar"] :is(.panel-header p,.evidence-card p,.junior-card p,.source-card p,.method-card p,.method-card li,.review-card p,.research-ranges p,.detail-salary p){font-size:12px;line-height:1.9}
+html[lang="ar"] :is(.button,.text-button,.title-link){font-weight:600;line-height:1.75}
+html[lang="ar"] .button{font-size:13px}
+html[lang="ar"] :is(.button.small,.text-button){font-size:12px}
+html[lang="ar"] :is(.sidebar nav button,.field input,.field select,td){font-size:13px}
+html[lang="ar"] .sidebar nav button{font-weight:500;line-height:1.65}
+html[lang="ar"] :is(.field label,th,.stat .label,.stat .foot,.subline,.job-facts small,.job-dates,.source-facts,.pay-note,.connection-notice,.check-label,.result-count){font-size:11px;line-height:1.8}
+html[lang="ar"] :is(.eyebrow,.nav-caption,.brand small,.crumb){font-size:10px;line-height:1.8;font-weight:500}
+html[lang="ar"] .chip{font-size:11px;font-weight:500;line-height:1.7}
+html[lang="ar"] .sidebar{overflow-y:auto}
 [dir="rtl"] .sidebar{inset:0 0 0 auto}
 [dir="rtl"] .app{margin-left:0;margin-right:244px}
 [dir="rtl"] .sidebar nav button,[dir="rtl"] .title-link,[dir="rtl"] .chart-role{text-align:right}
@@ -38,9 +63,6 @@
 [dir="rtl"] .source-url{direction:ltr;text-align:left;unicode-bidi:plaintext}
 [dir="rtl"] .compare-tray{left:calc(50% - 110px)}
 [dir="rtl"] .money,[dir="rtl"] .mono{unicode-bidi:plaintext}
-[dir="rtl"] .creator-credit{text-align:right;direction:ltr;unicode-bidi:isolate}
-[dir="rtl"] .eyebrow{letter-spacing:.5px}
-[dir="rtl"] h1{letter-spacing:-.5px}
 [dir="rtl"] .job-card .job-dates{line-height:1.9}
 [dir="rtl"] th{text-align:right}
 [dir="rtl"] footer{direction:rtl}
