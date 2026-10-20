@@ -1,208 +1,212 @@
-# Knowledge Engineering - Market Observatory
+# Knowledge Engineering Market Observatory
 
-A deployable online dashboard combining global salary evidence and a separate **Knowledge Engineering in Saudi Arabia** opportunity register.
+A Knowledge Engineering market intelligence platform that brings together global salary evidence and Saudi Arabian job opportunities in a bilingual dashboard.
 
-**Delivery status:** implemented and packaged, **not deployed**. No public URL, scheduled cloud job, external account or credential was created. Network access to the source APIs was unavailable in the build environment, so adapters were tested against representative fixtures, not live feeds. The first hosted workflow run is the live integration check.
+**[View the live dashboard](https://ihaya-7.github.io/ke-market-observatory/)**
 
-## Start here: publish a fixed URL
+## Overview
 
-Use a permitted personal or organizational GitHub account. This starter uses **GitHub Pages + GitHub Actions**. It contains public job information only and requires no job-search API key.
+The observatory helps Knowledge Engineering professionals, researchers, and job seekers explore compensation, role requirements, and opportunities involving ontologies, knowledge graphs, and semantic technologies. It combines curated references with automated collection from selected public applicant tracking system (ATS) feeds.
 
-1. Create a repository named `ke-market-observatory`, with default branch **main**. Choose **Public** for the simple GitHub Free Pages route. A public repository and Pages site are visible to others: do not add internal notes, personal contact data or confidential compensation details.
-2. Upload the **contents** of this project, not the outer folder and not just `public/index.html`. Include the hidden `.github/workflows/refresh-and-deploy.yml` file. On Windows, display hidden items or create this path explicitly using **Add file > Create new file**. GitHub does not unpack a ZIP uploaded as one file.
-3. Under **Settings > Pages > Build and deployment**, set **Source = GitHub Actions**.
-4. If your account permits it, go to **Settings > Actions > General > Workflow permissions** and allow the workflow to write repository contents. Its own job-level permissions are restricted to the steps that need them. A branch policy may still block its history commit; ask the repository owner rather than weakening organization controls without approval.
-5. Open **Actions > Refresh and deploy KE Observatory > Run workflow** and choose **main**. A push may have started the first run before Pages was enabled; simply rerun after configuration.
-6. Open the actual URL shown in **Settings > Pages** or the successful `github-pages` deployment. The expected shape is `https://YOUR-USERNAME.github.io/ke-market-observatory/` (an example, not an activated URL).
+The platform keeps global compensation research separate from Saudi job tracking. Source links, evidence dates, verification labels, and review notes make it possible to assess each record before drawing conclusions about the market.
 
-After activation, the workflow attempts collection daily at about **08:17 Asia/Riyadh**. GitHub schedules are best effort; delays and missed runs are possible. Public-repository schedules may be disabled after 60 days of inactivity. Check **Sources & updates** and the workflow logs; the dashboard marks stale data after 48 hours.
+## Key Features
 
-If a work GitHub account, Pages or Actions is restricted, use only an account and deployment route your organization permits. This package does not bypass those controls. For private sharing, use an approved authenticated host rather than assuming a private repository makes the Pages site private.
+### Global Salary Benchmarking
 
-## What automatically changes
+- Explore international salary references by country, career level, evidence type, company, role, or skill.
+- Compare supported annual and monthly salaries as gross monthly Saudi riyal (SAR) equivalents while retaining original amounts, currencies, and pay periods.
+- View salary charts and summary statistics based only on eligible employer disclosures explicitly identified as verified base salary.
+- Distinguish base salary, total compensation, secondary evidence, and platform estimates.
+- Compare selected roles side by side, including experience requirements, role scope, and source limitations.
 
-| Data | Behavior after deployment |
-|---|---|
-| New matching posts on configured boards | Collected into the shared dataset automatically. Titles, location, detected skills and source links are preserved. |
-| Existing posts still present | Source-observation dates and listing status update after a successful complete fetch. |
-| Explicit supported structured salaries | Retained with currency and period. Only explicit base pay is eligible for employer benchmark statistics. |
-| Ambiguous salaries / multiple pay bands | Routed to review; never filled with invented amounts. |
-| GBP/EUR FX | Frankfurter reference rates are cross-converted through the configured USD/SAR assumption. Source rate date is preserved, including weekends. |
-| Saved manual references | Historical salary evidence remains. If the same canonical URL appears in a feed, status and supported salary changes can be updated. |
-| Open browser | Polls the same-origin `data/market.json` every five minutes, and when returning to the tab. |
+Currency conversion supports USD, GBP, EUR, and SAR. The collector refreshes GBP and EUR reference rates through [Frankfurter](https://frankfurter.dev/) and cross-converts using the configured USD/SAR assumption. Rate dates and calculation details are visible in the dashboard.
 
-**Refresh data** reloads the published snapshot. It does **not** run the job collector or scrape LinkedIn.
+### Saudi Job Tracking
 
-## What does not happen automatically
+- Maintain a separate register of Saudi postings related to Knowledge Engineering, applied knowledge graphs and AI, and adjacent metadata or semantic work.
+- Search and filter by location, relevance, career level, listing status, and exact Knowledge Engineer title.
+- Inspect source links, detected skills, experience requirements, available salary evidence, publication dates, and observation dates.
+- Distinguish recently confirmed feed listings from saved references, records needing rechecking, and archived or absent postings.
 
-- There is no exhaustive web or LinkedIn search. The default coverage is six configured employer/recruiter boards.
-- LinkedIn login sessions, private recruiting systems, blocked pages and site access controls are not bypassed.
-- A hidden client name is not inferred from a similar description. Recruiter and employer listings may overlap; counts are posting counts, not unique requisitions.
-- Years not specified is not converted to Junior. A skill-specific experience sentence still needs source context.
-- Free-text salary platforms and the existing estimates are not continuously refreshed.
-- There is no email notification or CV/application submission.
-- The public dashboard is read-only; it does not provide a shared authenticated editor. Edits are made centrally in repository data.
+For automatically collected records, Saudi classification uses the posting's location fields rather than mentions of Saudi Arabia elsewhere in the description. A recently observed feed listing is evidence of source availability, not a guarantee that applications remain open.
 
-## Configured sources
+### Job Relevance Validation
 
-- Samba TV: Lever
-- Nearform: Greenhouse
-- Tamara: Greenhouse
-- Sapience AI: Greenhouse
-- Envision Employment Solutions: Workable
-- Robusta / RTG: Workable
+The collector applies explicit title and description rules. It accepts core titles such as Knowledge Engineer, Ontology Engineer, and Knowledge Graph Engineer. Related technical roles require implementation or modeling language alongside complementary semantic technology evidence. Recruiting, HR, sales, and marketing titles are excluded even when their descriptions contain relevant keywords.
 
-Identifiers come from public career-page URLs. Access and schema behavior must be confirmed by the first hosted collection. If a board fails, the dataset keeps last-good records and exposes the error. Additional companies can be added in `config/sources.json` using a supported ATS and a verified public board identifier.
+Uncertain adjacent roles are staged for human review and excluded from published job totals and salary metrics until approved. These rules support screening; they do not replace assessment of the original posting.
 
-## Data quality and provenance
+### Salary Verification
 
-The starter includes **13 imported global salary references** and **8 Saudi posting references**. Some are historic or not independently reverified; per-record labels distinguish this. Two Saudi URLs redirected away from their original jobs during research and are archived. This is a source register, not a guaranteed-open job list.
+Structured salary ranges are checked for supported currency, pay period, valid amounts, and explicit base-versus-total compensation wording. Only employer records with `salaryBasis: "base"`, `salaryBasisVerified: true`, and `salaryEligible: true` can enter the global base-salary benchmark.
 
-- `postedAt`: source publication date only. Not backfilled from collection time.
-- `firstSeenAt`: first observation by this collector. A newly tracked label is not a newly posted claim.
-- `lastSeenAt`: latest successful observation in a source feed.
-- `evidenceDate` / `salaryVerifiedAt`: underlying evidence date; not reset by browser refresh or FX updates.
-- `lastAttemptAt` / `lastSuccessAt`: source health, kept separate.
-- `salaryEligible`: base-pay comparability flag; unknown or ambiguous amounts do not drive statistics.
-- `missingChecks`: counts complete successful absences; errors do not count as absences.
+Verified total compensation is displayed separately. Unknown pay basis, multiple pay bands, and potential free-text salary evidence require review. Missing or ambiguous amounts are not replaced with inferred salaries, and an automated verification label reflects the parser's evidence rules rather than an independent employer audit.
 
-Only an exact canonical URL or durable API ID is used for automated deduplication. Cross-company similarity is not proof of identical jobs. Canonicalization preserves query-based requisition IDs.
+### Experience Classification
 
-Keep the international and Saudi sections separate. A converted monthly international salary is gross nominal currency equivalence, not Saudi market pricing, take-home pay or employer total cost. No market-wide average or artificial Junior pay band is calculated.
+The collector assigns **Junior**, **Mid**, **Senior**, or **Not specified** using explicit seniority titles and supported experience patterns. It preserves the classification basis and any extracted year requirements. A title can establish seniority without supplying a numeric experience requirement; missing years are never treated as evidence of a junior role.
 
-## Editing and review
+A dedicated Junior evidence view separates available entry-level references from broader salary data. Curated records retain their documented experience evidence and analyst notes.
 
-- Correct an approved reference in `data/curated.json`, commit to `main`, and let the workflow rebuild.
-- Add/remove monitored employers in `config/sources.json`.
-- Review ambiguous rows in the dashboard's **Sources & updates** section. To approve a pay record, copy its record into `data/curated.json`, use the same canonical `sourceUrl`, correct the fields from the source, set `salaryEligible: true` only when supported, and record an evidence date and method.
-- Do not edit `public/data/market.json` as a permanent override; it is generated.
-- Git commits retain the change history. Revert a bad data commit or correct the source record.
-- Saved HTML and exported JSON/CSV are portable snapshots, not synchronized collaborative copies.
+### Review Queue
 
-## Local preview and tests
+The Review Queue surfaces uncertain role relevance, unverified employer pay basis, and Saudi listings needing a current status check. Each item links to its source and explains why review is needed.
 
-Python 3.12 is sufficient for collection, validation and building; no pip packages are required.
+The public dashboard is read-only. Review decisions and evidence corrections are maintained in repository JSON files; approving a role does not independently verify its salary or vacancy status.
+
+### Bilingual Arabic and English Support
+
+The interface includes an Arabic/English language switch, right-to-left layout for Arabic, translated navigation and interface labels, and Arabic summaries for curated references. Automatically collected records use an Arabic skills summary rather than a full translation of the posting. Original job titles and source links are retained, and the language preference is saved locally in the browser.
+
+### Data Access and Portability
+
+- Export records as CSV or download the published dataset as JSON.
+- Save a self-contained HTML snapshot for offline viewing.
+- Print dashboard views with a source appendix.
+- Reload the published dataset through **Refresh data**, automatic polling every five minutes while the tab is visible, and refreshes when returning to the tab or reconnecting.
+
+## Collection Coverage and Limitations
+
+**Automatic collection is limited to configured public ATS boards. It does not comprehensively monitor LinkedIn or the wider job market.** LinkedIn URLs in curated records are saved research references, not evidence of an automated LinkedIn search or continuous monitoring.
+
+The current source configuration includes:
+
+| Employer or recruiter | ATS integration |
+| --- | --- |
+| Samba TV | Lever |
+| Nearform | Greenhouse |
+| Tamara | Greenhouse |
+| Sapience AI | Greenhouse |
+| Envision Employment Solutions | Workable |
+| Robusta / RTG | Workable |
+
+Additional boards can be configured in [`config/sources.json`](config/sources.json) using a supported ATS type and public board identifier. Source availability, API changes, incomplete descriptions, and collection limits can affect coverage. The collector does not use LinkedIn credentials, browser scraping, private recruiting systems, or access-control bypasses.
+
+Other interpretation limits include:
+
+- Historical and archived references may remain available for research; tracked posting counts are not counts of confirmed open vacancies.
+- Recruiter and employer listings may overlap. Canonical URLs and stable source IDs support deduplication, but similar descriptions do not establish a unique requisition or reveal an undisclosed client.
+- Rule-based relevance and experience extraction can misinterpret context. Original postings remain the primary evidence.
+- Free-text salary evidence and platform estimates are not continuously refreshed or automatically converted into verified base pay.
+- International salary equivalents are nominal, gross comparisons. They do not represent Saudi market salaries, take-home pay, purchasing-power adjustments, or guaranteed offers.
+- The selected references are not a representative market sample. The dashboard does not calculate a market-wide average or infer a junior salary band from missing evidence.
+
+## Data Pipeline and Provenance
+
+1. `scripts/refresh.py` reads the source configuration, curated records, previous collection history, and review decisions.
+2. Public ATS records are collected, normalized, classified, and merged with existing evidence. Unreviewed candidates remain outside the published record set.
+3. The collector writes persistent automatic records to `data/auto_records.json` and the dashboard dataset to `public/data/market.json`.
+4. `scripts/build_site.py` embeds the dataset, styles, and JavaScript into `public/index.html`.
+5. GitHub Actions publishes the `public/` directory to GitHub Pages.
+
+Failed source checks retain previously collected records and their observation dates. Missing-posting checks advance only after complete successful feed checks; two successful absences mark a record as **Not in latest feed**, which is not a confirmed closure. Failed exchange-rate updates retain the previous rates.
+
+The dataset separates source publication dates (`postedAt`), collector observations (`firstSeenAt`, `lastSeenAt`), salary evidence dates (`evidenceDate`, `salaryVerifiedAt`), and source health (`lastAttemptAt`, `lastSuccessAt`). Browser refreshes do not renew source evidence dates. The dashboard exposes collection health and uses a configured 48-hour freshness threshold.
+
+**Refresh data reloads the published snapshot; it does not start collection.** Saved and exported copies are independent snapshots.
+
+## Technology Stack
+
+| Layer | Technology |
+| --- | --- |
+| Dashboard | HTML5, CSS3, and vanilla JavaScript; responsive layout and Arabic RTL support |
+| Collection and validation | Python 3.12 standard library, including `urllib`, `json`, `re`, and concurrent source fetching |
+| Data storage | Repository-managed JSON for curated evidence, collection history, review decisions, and published data |
+| Source integrations | Lever, Greenhouse, and Workable public job endpoints; Frankfurter exchange rates |
+| Build | Python script generating a self-contained HTML dashboard |
+| Automation and hosting | GitHub Actions and GitHub Pages |
+| Verification | Python `unittest`, dataset validation, and Node.js syntax checking |
+
+No third-party Python packages, frontend build framework, database server, or job-search API keys are required. The dashboard uses no external JavaScript packages, remote fonts, or analytics.
+
+## Repository Structure
+
+```text
+.github/workflows/
+    refresh-and-deploy.yml  # Collection, validation, build, and Pages deployment
+config/
+    sources.json           # Public ATS boards and collection settings
+data/
+    curated.json           # Curated references and evidence metadata
+    auto_records.json      # Persistent automatic collection history
+    review_decisions.json  # Approved and rejected automatic record IDs
+scripts/
+    refresh.py             # Collection, classification, merging, and validation
+    build_site.py          # Self-contained HTML generation
+web/
+    template.html          # Dashboard layout
+    app.css                # Responsive styles and RTL support
+    app.js                 # Views, filters, translations, exports, and polling
+public/
+    index.html             # Generated dashboard
+    data/market.json       # Published dataset
+tests/
+    test_refresh.py        # Adapter, classification, validation, and preservation tests
+README.md
+```
+
+## Local Setup
+
+### Prerequisites
+
+- Git to clone the repository.
+- Python 3.12, matching the GitHub Actions environment.
+- A modern browser.
+- Node.js for the JavaScript syntax check; it is not required to serve the dashboard.
+- Network access when collecting public feeds or refreshing exchange rates.
+
+### Preview the Dashboard
 
 ```bash
-python -m unittest discover -s tests -p 'test_*.py' -v
-node --check web/app.js
+git clone https://github.com/iHaya-7/ke-market-observatory.git
+cd ke-market-observatory
 python scripts/refresh.py --validate-only
 python scripts/build_site.py
 python -m http.server 8000 --directory public
 ```
 
-Open `http://localhost:8000`. This tests HTTP snapshot loading, but does not create a permanent website. Opening `public/index.html` directly displays the embedded offline snapshot.
+Open [http://localhost:8000](http://localhost:8000). This builds from the existing published JSON without collecting new jobs. Opening `public/index.html` directly also displays its embedded offline snapshot.
 
-To manually test public feeds from a network-enabled machine:
+### Refresh Source Data
 
 ```bash
 python scripts/refresh.py
 python scripts/build_site.py
 ```
 
-The collector deliberately retains data when network checks fail. Look at `sources[*].status` and `meta.lastRunSummary`, not just the process exit code, to know whether collection succeeded.
+Collection updates `data/auto_records.json` and `public/data/market.json`; building updates `public/index.html`. Inspect source statuses and `meta.lastRunSummary` to assess collection success: a completed process can still report failed feeds while retaining previous data.
 
-## Project layout
+### Run Checks
 
-```
-.github/workflows/refresh-and-deploy.yml   Daily collection + deployment
-config/sources.json                     Public board registry
-scripts/refresh.py                      Collection, normalization, safeguards
-scripts/build_site.py                   Single-file HTML build
-web/template.html                       Layout
-web/app.css                             Responsive styles
-web/app.js                              Client-side UI and polling
-data/curated.json                       Approved seed/reference records
-data/auto_records.json                  Persistent collected records
-public/index.html                       Published dashboard
-public/data/market.json                  Published shared dataset
-tests/test_refresh.py                   Parser and failure-preservation tests
+```bash
+python -m unittest discover -s tests -p 'test_*.py' -v
+python scripts/refresh.py --validate-only
+node --check web/app.js
 ```
 
-## Official implementation references
+The Python tests use deterministic fixtures and temporary directories without external network requests. They cover parsing, relevance screening, salary eligibility, experience classification, review handling, and preservation of data after collection failures. Live feed health must be assessed separately.
 
-- GitHub Pages custom workflows: https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages
-- GitHub schedule behavior and inactivity: https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule
-- Lever public Postings API: https://github.com/lever/postings-api
-- Greenhouse public Job Board API: https://docs.greenhouse.io/job-board.html
-- Workable public jobs endpoint: https://workable.readme.io/reference/jobs-1
-- Frankfurter exchange-rate API: https://frankfurter.dev/
+## GitHub Pages Deployment
 
-No external fonts, analytics, remote JavaScript packages or secret keys are embedded in the dashboard. The source code is provided for modification; source job content remains the property of its respective owner.
+The repository includes the [`Refresh and Deploy KE Observatory`](.github/workflows/refresh-and-deploy.yml) workflow.
 
----
+1. In the repository's **Settings > Pages > Build and deployment**, select **GitHub Actions** as the source.
+2. Ensure repository policies allow GitHub Actions to commit generated data to `main` and deploy to Pages. The collection job requests `contents: write`; deployment requests `pages: write` and `id-token: write`.
+3. Open **Actions > Refresh and Deploy KE Observatory > Run workflow** and select `main`.
+4. Check the collection and deployment jobs, then open the [live dashboard](https://ihaya-7.github.io/ke-market-observatory/).
 
-## v3: Quality safeguards, review workflow, and Arabic / English
+The workflow runs tests and syntax checks, collects sources and exchange rates, validates data, builds the dashboard, commits generated changes, and deploys `public/`. It is configured for daily collection at **05:17 UTC / 08:17 Asia/Riyadh**, manual dispatch, and pushes to `main` affecting the configured source, script, test, curated-data, or workflow paths. Scheduled execution is best effort.
 
-This dashboard includes user-switchable **English / العربية**. Arabic mirrors the
-layout (RTL), translates navigation, methodology and interface labels, and uses
-Arabic summaries for curated references; official job titles and URLs remain in
-their original form. The language preference is saved locally in the browser.
+Changes only to `README.md` or `data/review_decisions.json` do not match the current push filters. Run the workflow manually to publish review-decision changes without waiting for the scheduled run. Review collection results in the dashboard's **Sources & updates** section and the workflow logs.
 
-### Strict role relevance (automated collection)
+## Maintaining Evidence and Reviews
 
-- Explicit **Knowledge Engineer / Ontology Engineer / Knowledge Graph Engineer**
-  titles are accepted as core KE.
-- A different technical title is accepted only if job responsibilities show
-  concrete implementation using ontology, knowledge graphs, and complementary
-  semantic technology evidence.
-- Recruiting / sales / HR roles are excluded even when their descriptions quote
-  knowledge graph vocabulary.
-- Adjacent but uncertain technical roles are **staged for human review**, not
-  included in published job totals or salary metrics.
+- Update curated records in [`data/curated.json`](data/curated.json), retaining the original source URL, evidence date, and verification notes.
+- After inspecting an automatic candidate's original posting, add its `AUTO-*` ID to either `approved` or `rejected` in [`data/review_decisions.json`](data/review_decisions.json), never both. Approval controls role inclusion; salary and listing verification remain separate checks.
+- For confirmed employer base pay, record `salaryBasis: "base"`, `salaryBasisVerified: true`, and `salaryEligible: true`. For verified total compensation, use `salaryBasis: "total"`, `salaryBasisVerified: true`, and `salaryEligible: false`.
+- Rebuild and publish after updating evidence. `public/data/market.json` and `public/index.html` are generated outputs; permanent corrections belong in the source data or collection logic.
 
-### Salary basis
+## Credits
 
-The top-line salary chart and employer-salary statistics include **only an
-employer disclosure explicitly verified as base salary**. Verified total
-compensation is labelled but excluded from the base-only benchmark. An
-advertised range whose base-vs-total nature is unknown is shown as research
-reference with a clear warning, and is queued for review. Reposts and platform
-estimates remain in separate evidence categories.
-
-The original curated dataset has one strictly verified base-salary reference.
-This is a conservative evidence rule rather than a conclusion that other
-employers offer no base salary. When an employer discloses base pay explicitly,
-update its pay-basis flags and original source evidence before including it.
-
-### Experience and Saudi posting verification
-
-- Seniority: **Junior**, **Mid**, **Senior**, or **Not specified**; no years are
-  invented when missing. An explicit seniority title may be classified without
-  inventing numeric experience.
-- **Feed confirmed** means present in a successfully checked public ATS feed
-  within the configured freshness window.
-- Old saved LinkedIn/job-page references are **Needs recheck** (or Archived)
-  unless they have a fresh direct source check; a working link alone is not
-  proof that applications are accepted.
-
-### Review queue and manual decisions
-
-The **Review queue** section lists uncertain role relevance, unclear employer
-salary basis, and older Saudi posting statuses. **Visitors cannot approve
-records through the public website.** To approve/reject an automatically
-identified candidate:
-
-1. Review its original job posting and copy the unique record ID (`AUTO-*`).
-2. In GitHub, edit `data/review_decisions.json` and add that ID to either
-   `"approved"` or `"rejected"` (never both).
-3. Commit; GitHub Actions will refresh and publish the site. Approving a role
-   does **not** verify its pay basis or open listing status.
-
-For **curated** salary basis correction, edit `data/curated.json` after
-confirming the company's original documentation. When a genuine employer base
-salary is established, set `salaryBasis="base"`,
-`salaryBasisVerified=true`, `salaryEligible=true`, and retain the source URL,
-evidence date and the note explaining the proof. For verified total
-compensation, use `salaryBasis="total"`, `salaryBasisVerified=true`, and
-`salaryEligible=false` so total pay stays distinct from base pay.
-
-### Safe in-place upgrade on GitHub
-
-Upload only the files in `KE_GitHub_Update_v3.zip` into the root of the existing
-repository (`iHaya-7/ke-market-observatory`). They overwrite source files while
-preserving `data/auto_records.json` and `public/data/market.json`, which are
-managed by the scheduled collector. **Never upload an old copy of those two
-runtime files over newer live data.** The workflow rebuilds and publishes them
-on push. `.github/workflows/refresh-and-deploy.yml` must remain in its nested
-folder, not the repository root.
+**Developed by Knowledge Engineers Haya & Lubna**

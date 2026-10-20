@@ -456,8 +456,9 @@ def refresh(root:Path=ROOT,fetch=fetch_json) -> dict:
   elif old.get('listingStatus')!=row.get('listingStatus'):
    events.append({'at':now,'type':'Source status changed','id':row['id'],'title':row['title'],'company':row['company']})
  def digest(data):
+  # Older published review items predate v3 categories; hash them without migration.
   snap={'records':content_hash(data['records']),
-        'review':[(r['id'],r['category']) for r in data.get('reviewQueue',[])]}
+        'review':[(r['id'],r.get('category','')) for r in data.get('reviewQueue',[])]}
   return hashlib.sha256(json.dumps(snap,sort_keys=True).encode()).hexdigest()[:16]
  version=digest(payload)
  if version!=digest(previous):meta['lastContentChangeAt']=now

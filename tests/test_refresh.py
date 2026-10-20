@@ -143,6 +143,34 @@ class CollectorTests(unittest.TestCase):
  def test_explicitly_rejected_candidate_not_reviewed(self):
   rows=[{'id':'x','company':'C','title':'Data Engineer','sourceUrl':'https://a.com/x','roleDecision':'pending','salaryMin':None}]
   self.assertEqual(build_review_queue([],rows,{'approved':[],'rejected':['x']}),[])
+ def test_refresh_accepts_legacy_review_queue_without_category(self):
+  seed=json.loads((ROOT/'data/curated.json').read_text())
+  row=seed['records'][0]
+  legacy={k:row[k] for k in ('id','company','title','sourceUrl')}
+  legacy['reason']='Historical pay requires review.'
+  modern=build_review_queue(seed['records'],[],{'approved':[],'rejected':[]})
+  self.assertTrue(modern)
+  for queue in ([legacy],[legacy]+modern):
+   with self.subTest(mixed_categories=len(queue)>1),tempfile.TemporaryDirectory() as td:
+    root=Path(td)
+    for folder in ('config','data','public/data'):(root/folder).mkdir(parents=True,exist_ok=True)
+    previous=copy.deepcopy(seed);previous['reviewQueue']=queue
+    (root/'data/curated.json').write_text(json.dumps(seed))
+    (root/'public/data/market.json').write_text(json.dumps(previous))
+    (root/'data/auto_records.json').write_text('[]')
+    (root/'config/sources.json').write_text(json.dumps({'sources':[],'fxEnabled':False}))
+    def no_fetch(url,timeout):raise AssertionError('Unexpected network request')
+    published=refresh(root,no_fetch)
+    self.assertEqual(published['records'],seed['records'])
+    self.assertEqual(published['fx'],seed['fx'])
+    self.assertEqual(published['reviewQueue'],modern)
+    self.assertEqual(json.loads((root/'public/data/market.json').read_text()),published)
+    self.assertEqual(json.loads((root/'data/curated.json').read_text()),seed)
+    self.assertEqual(json.loads((root/'data/auto_records.json').read_text()),[])
+    self.assertNotIn('category',legacy)
+    repeated=refresh(root,no_fetch)
+    self.assertEqual(repeated['meta']['dataVersion'],published['meta']['dataVersion'])
+    self.assertEqual(repeated['meta']['lastContentChangeAt'],published['meta']['lastContentChangeAt'])
  def test_end_to_end_strict_publish_review_and_salary(self):
   with tempfile.TemporaryDirectory() as td:
    root=Path(td)
