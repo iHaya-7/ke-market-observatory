@@ -1,40 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="An evidence-led knowledge engineering salary reference and Saudi Arabia opportunity tracker.">
+<meta name="description" content="Evidence-led Knowledge Engineering salary benchmark and Saudi Arabia opportunity tracker.">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>Knowledge Engineering | Market Observatory</title>
 <style>__APP_CSS__</style>
 </head>
 <body>
-<noscript><div class="notice">Enable JavaScript to use this interactive reference. Source links and data are also available in the downloadable JSON.</div></noscript>
+<noscript><div class="notice">Enable JavaScript to view this dashboard. Source data is also provided in the project JSON.</div></noscript>
 <aside class="sidebar">
- <a class="brand" href="#overview"><span class="brand-mark">k<span>e</span>.</span><span>Knowledge<br>Engineering<small>MARKET OBSERVATORY</small></span></a>
- <div class="nav-caption">THE REFERENCE DESK</div>
- <nav aria-label="Main navigation">
-  <button data-view="overview" class="active"><span class="nav-icon">01</span>Market overview</button>
-  <button data-view="global"><span class="nav-icon">02</span>Global salaries<span class="nav-count" id="global-count"></span></button>
-  <button data-view="saudi"><span class="nav-icon">03</span>Saudi Arabia<span class="nav-count" id="saudi-count"></span></button>
-  <button data-view="junior"><span class="nav-icon">04</span>Junior evidence</button>
-  <button data-view="sources"><span class="nav-icon">05</span>Sources &amp; updates</button>
- </nav>
- <div class="side-card"><span class="eyebrow">EVIDENCE OVER ASSUMPTIONS</span><p>Compare the work.<br>Not just the title.</p><small>Ontology &middot; Knowledge Graphs<br>Semantics &middot; Knowledge Engineering</small></div>
- <div class="side-footer"><span class="status-dot"></span><span id="side-mode">Prepared for deployment</span><small>Public sources only.<br>No personal or Ministry data.</small></div>
+  <a class="brand" href="#overview"><span class="brand-mark" dir="ltr">k<span>e</span>.</span><span><span data-i18n="Knowledge Engineering">Knowledge Engineering</span><small data-i18n="MARKET OBSERVATORY">MARKET OBSERVATORY</small></span></a>
+  <div class="nav-caption" data-i18n="THE REFERENCE DESK">THE REFERENCE DESK</div>
+  <nav aria-label="Main navigation">
+    <button data-view="overview" class="active"><span class="nav-icon">01</span><span data-i18n="Market overview">Market overview</span></button>
+    <button data-view="global"><span class="nav-icon">02</span><span data-i18n="Global salaries">Global salaries</span><span class="nav-count" id="global-count"></span></button>
+    <button data-view="saudi"><span class="nav-icon">03</span><span data-i18n="Saudi Arabia">Saudi Arabia</span><span class="nav-count" id="saudi-count"></span></button>
+    <button data-view="junior"><span class="nav-icon">04</span><span data-i18n="Junior evidence">Junior evidence</span></button>
+    <button data-view="sources"><span class="nav-icon">05</span><span data-i18n="Sources & updates">Sources & updates</span></button>
+    <button data-view="review"><span class="nav-icon">06</span><span data-i18n="Review queue">Review queue</span><span class="nav-count" id="review-count"></span></button>
+  </nav>
+  <div class="side-card"><span class="eyebrow" data-i18n="EVIDENCE OVER ASSUMPTIONS">EVIDENCE OVER ASSUMPTIONS</span>
+    <p data-i18n="Compare the work. Not just the title.">Compare the work.<br>Not just the title.</p>
+    <small>Ontology · Knowledge Graphs<br>Semantics · Knowledge Engineering</small>
+  </div>
+  <div class="side-footer"><span class="status-dot"></span><span id="side-mode">Prepared for deployment</span>
+    <small><span data-i18n="Public sources only.">Public sources only.</span><br><span data-i18n="No personal data.">No personal data.</span></small>
+    <small class="creator-credit" dir="ltr">© 2026 · Made by Knowledge Engineers<br><strong>Haya &amp; Lubna</strong></small>
+  </div>
 </aside>
 <div class="app">
- <header class="topbar"><div class="crumb">MARKET INTELLIGENCE <span>/</span> <strong id="crumb-title">OVERVIEW</strong></div><div class="top-actions"><span class="sync-pill" id="sync-pill">Prepared snapshot</span><button class="button small" id="refresh-data">&#8635; Refresh data</button><button class="button small" id="save-snapshot">&#8595; Save copy</button></div></header>
- <main>
-  <div id="connection-notice" class="connection-notice" aria-live="polite"></div>
-  <section id="view-content" aria-label="Dashboard content"></section>
-  <footer><span>Knowledge Engineering &middot; Market Observatory</span><span id="footer-evidence">Source-level dates are preserved.</span><button class="text-button" id="print-view">Print view</button></footer>
- </main>
+  <header class="topbar"><div class="crumb"><span data-i18n="MARKET INTELLIGENCE">MARKET INTELLIGENCE</span> <span>/</span> <strong id="crumb-title">OVERVIEW</strong></div>
+    <div class="top-actions"><button class="button small lang-switch" id="lang-switch" type="button" aria-label="Switch language">العربية</button><span class="sync-pill" id="sync-pill">Prepared snapshot</span><button class="button small" id="refresh-data" type="button"><span aria-hidden="true">↻</span> <span data-i18n="Refresh data">Refresh data</span></button><button class="button small" id="save-snapshot" type="button"><span aria-hidden="true">↓</span> <span data-i18n="Save copy">Save copy</span></button></div>
+  </header>
+  <main>
+    <div id="connection-notice" class="connection-notice" aria-live="polite"></div>
+    <section id="view-content" aria-label="Dashboard content"></section>
+    <footer><span data-i18n="Knowledge Engineering · Market Observatory">Knowledge Engineering · Market Observatory</span><span id="footer-evidence">Source-level dates are preserved.</span><span class="footer-credit" dir="ltr">© 2026 · Made by Knowledge Engineers Haya &amp; Lubna</span><button class="text-button" id="print-view" data-i18n="Print view">Print view</button></footer>
+  </main>
 </div>
-<div id="compare-tray" class="compare-tray" hidden><span id="compare-label"></span><button class="button primary small" id="compare-open">Compare roles</button><button class="button small" id="compare-clear">Clear</button></div>
-<dialog id="detail-dialog" aria-labelledby="detail-heading"><header class="dialog-header"><span class="eyebrow">ROLE &amp; SOURCE RECORD</span><button class="button square" data-close="detail-dialog" aria-label="Close details">&times;</button></header><div id="detail-body"></div></dialog>
-<dialog id="compare-dialog" aria-labelledby="compare-heading"><header class="dialog-header"><h2 id="compare-heading">Compare the evidence</h2><button class="button square" data-close="compare-dialog" aria-label="Close comparison">&times;</button></header><div id="compare-body"></div></dialog>
+<div id="compare-tray" class="compare-tray" hidden><span id="compare-label"></span><button class="button primary small" id="compare-open" data-i18n="Compare roles">Compare roles</button><button class="button small" id="compare-clear" data-i18n="Clear">Clear</button></div>
+<dialog id="detail-dialog" aria-labelledby="detail-heading"><header class="dialog-header"><span class="eyebrow" data-i18n="ROLE & SOURCE RECORD">ROLE &amp; SOURCE RECORD</span><button class="button square" data-close="detail-dialog" aria-label="Close details">×</button></header><div id="detail-body"></div></dialog>
+<dialog id="compare-dialog" aria-labelledby="compare-heading"><header class="dialog-header"><h2 id="compare-heading" data-i18n="Compare the evidence">Compare the evidence</h2><button class="button square" data-close="compare-dialog" aria-label="Close comparison">×</button></header><div id="compare-body"></div></dialog>
 <div class="toast" id="toast" role="status" hidden></div>
 <script type="application/json" id="seed-data">__MARKET_SEED__</script>
 <script>__APP_JS__</script>

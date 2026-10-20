@@ -7,3 +7,56 @@
 @media print{@page{size:landscape;margin:13mm}.sidebar,.topbar,.connection-notice,.filters,.actions,.compare-tray,dialog,.toast,.button,.text-button{display:none!important}body{background:white;font-size:10px}.app{margin:0}main{padding:0;max-width:none}h1{font-size:26px}.page-heading p{font-size:10px}.stats{grid-template-columns:repeat(4,1fr)}.stat{padding:12px}.stat .value{font-size:23px}.overview-grid{display:block}.overview-aside{display:none}.panel,.job-card{box-shadow:none;break-inside:avoid}.chart-row{grid-template-columns:250px 1fr 160px;break-inside:avoid}.cards-grid{grid-template-columns:1fr 1fr}.table-scroll{overflow:visible}table{min-width:0;font-size:9px;table-layout:fixed}td,th{padding:9px;overflow-wrap:anywhere}.money{font-size:10px;white-space:normal}.chip{font-size:8px}.source-grid,.method-grid{grid-template-columns:1fr 1fr}.junior-grid{grid-template-columns:repeat(3,1fr)}.bar-range,.hero-card,.stat.emph,.chip{-webkit-print-color-adjust:exact;print-color-adjust:exact}.print-appendix{display:block;break-before:page}.print-appendix .source-url{font-size:8px}footer{font-size:8px}.print-appendix article{break-inside:avoid;margin:10px 0}}
 
 .chart-role{text-align:left}
+
+/* Bilingual layout and accessible review/status controls */
+.lang-switch{min-width:68px;border-color:#bcd4c4;color:#195b48;background:#f0f7f0;font-weight:750}
+.lang-switch:hover{background:#e3f1e6}
+.creator-credit{display:block!important;margin-top:15px!important;color:#d0e8d4!important;line-height:1.7!important}
+.creator-credit strong{font-weight:700;color:#f1fff0;font-size:11px}
+.review-list{display:grid;gap:11px}
+.review-card{padding:18px 21px;background:white;border:1px solid var(--line);border-radius:12px;display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.review-card h3{font-size:14px;margin:6px 0}
+.review-card p{font-size:11px;color:var(--muted);margin:6px 0;line-height:1.7;max-width:750px}
+.review-card .review-actions{flex-shrink:0;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.review-note{padding:15px 19px;margin-top:16px;background:#fff9ee;border:1px solid #ebddc6;border-radius:11px;color:#866b35;font-size:12px;line-height:1.8}
+.pay-note{display:block;font-size:9px;color:#8d6c35;white-space:normal;font-weight:550;line-height:1.55;margin-top:4px}
+.status-legend{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0 20px;font-size:11px;color:var(--muted)}
+[dir="rtl"] body{font-family:Tahoma,'Segoe UI',Arial,sans-serif}
+[dir="rtl"] .sidebar{inset:0 0 0 auto}
+[dir="rtl"] .app{margin-left:0;margin-right:244px}
+[dir="rtl"] .sidebar nav button,[dir="rtl"] .title-link,[dir="rtl"] .chart-role{text-align:right}
+[dir="rtl"] .nav-count{margin-left:0;margin-right:auto}
+[dir="rtl"] .status-dot{margin-left:7px;margin-right:0}
+[dir="rtl"] .connection-notice{border-left:0;border-right:2px solid #cab688}
+[dir="rtl"] .connection-notice.ok{border-color:#89bda1}
+[dir="rtl"] .heading-note{text-align:left}
+[dir="rtl"] .chart-value{text-align:left}
+[dir="rtl"] .chart-legend{margin-left:144px;margin-right:194px}
+[dir="rtl"] .bar-track{direction:ltr}
+[dir="rtl"] .check-label{margin-right:0;margin-left:15px}
+[dir="rtl"] .method-card ol{padding-left:0;padding-right:19px}
+[dir="rtl"] .source-url{direction:ltr;text-align:left;unicode-bidi:plaintext}
+[dir="rtl"] .compare-tray{left:calc(50% - 110px)}
+[dir="rtl"] .money,[dir="rtl"] .mono{unicode-bidi:plaintext}
+[dir="rtl"] .creator-credit{text-align:right;direction:ltr;unicode-bidi:isolate}
+[dir="rtl"] .eyebrow{letter-spacing:.5px}
+[dir="rtl"] h1{letter-spacing:-.5px}
+[dir="rtl"] .job-card .job-dates{line-height:1.9}
+[dir="rtl"] th{text-align:right}
+[dir="rtl"] footer{direction:rtl}
+@media(max-width:1280px){[dir="rtl"] .app{margin-right:217px}[dir="rtl"] .chart-legend{margin-left:164px;margin-right:259px}[dir="rtl"] .compare-tray{left:calc(50% - 108px)}}
+@media(max-width:900px){[dir="rtl"] .sidebar{position:static}[dir="rtl"] .app{margin:0}[dir="rtl"] .compare-tray{left:50%}}
+@media(max-width:600px){.review-card{display:block}.review-card .review-actions{margin-top:12px}.top-actions{flex-wrap:wrap}.lang-switch{min-width:62px}[dir="rtl"] .chart-legend{margin-left:145px;margin-right:0}}
+@media print{[dir="rtl"] .app{margin:0}.lang-switch{display:none!important}}
+
+/* Distinguish unverified disclosed pay from the approved primary benchmark. */
+.research-ranges{border-top:1px solid var(--line);padding:18px 24px 22px}
+.research-ranges h3{font-size:13px;font-weight:700;margin-bottom:7px}
+.research-ranges p{font-size:11px;line-height:1.7;color:var(--muted);margin-bottom:12px}
+.research-row{border-bottom:1px solid #edf0eb;display:flex;justify-content:space-between;align-items:center;gap:18px;padding:10px 0}
+.research-row:last-of-type{border-bottom:0;margin-bottom:10px}
+.research-row .text-button{font-size:10px;text-align:start}
+.research-row small{display:block;font-weight:400;color:var(--muted);font-size:9px}
+.research-row strong{font-size:11px;white-space:nowrap;color:#947342}
+.footer-credit{font-size:9px;color:#79907f;white-space:nowrap}
+@media(max-width:600px){.research-ranges{padding:17px}.research-row{gap:8px}.research-row strong{font-size:10px}.footer-credit{width:100%;text-align:center;white-space:normal;margin-top:5px}}

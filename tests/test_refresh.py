@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 import sys
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
-from refresh import canonical, classify, experience_info, salary_info, normalize, merge_feed, assemble_records, validate_market, get_board, refresh
+from refresh import canonical, classify, assess_role, experience_info, salary_info, normalize, merge_feed, assemble_records, build_review_queue, validate_market, get_board, refresh
 ROOT=Path(__file__).resolve().parents[1]
 NOW='2026-10-20T12:00:00Z'
 
@@ -91,7 +91,7 @@ class CollectorTests(unittest.TestCase):
   got=assemble_records(c,a);self.assertEqual(len(got),1);self.assertEqual(got[0]['salaryMin'],80000);self.assertEqual(got[0]['salaryVerifiedAt'],'2026-10-01')
  def test_known_salary_change_updates(self):
   c=[{'id':'c','sourceUrl':'https://x.com/job/1','salaryMin':80000}]
-  a=[{'id':'a','sourceUrl':'https://x.com/job/1','salaryMin':90000,'salaryMax':120000,'salaryEligible':True,'currency':'USD','period':'Annual','compensation':'Base salary','salaryVerifiedAt':NOW}]
+  a=[{'id':'a','sourceUrl':'https://x.com/job/1','salaryMin':90000,'salaryMax':120000,'salaryEligible':True,'salaryBasis':'base','salaryBasisVerified':True,'evidenceType':'employer','currency':'USD','period':'Annual','compensation':'Base salary','salaryVerifiedAt':NOW}]
   self.assertEqual(assemble_records(c,a)[0]['salaryMin'],90000)
  def test_complete_lever_pagination(self):
   calls=[]
@@ -102,6 +102,76 @@ class CollectorTests(unittest.TestCase):
  def test_truncated_lever_feed_fails(self):
   def fetch(url,timeout):return [{'id':str(i)} for i in range(100)]
   with self.assertRaises(ValueError):get_board({'type':'lever','account':'x'},{'maxPages':1},fetch)
+ def test_recruiter_with_many_semantic_keywords_excluded(self):
+  decision=assess_role('Associate GTM Recruiter','Design ontologies, RDF, OWL, SHACL and Neo4j knowledge graphs')
+  self.assertEqual(decision['decision'],'excluded')
+ def test_strong_non_ke_title_match_accepted(self):
+  decision=assess_role('Senior Data Engineer','Build ontology models with RDF and SHACL and maintain knowledge graph pipelines')
+  self.assertEqual(decision['decision'],'approved');self.assertEqual(decision['relevance'],'Core KE')
+ def test_metadata_only_candidate_staged_for_review(self):
+  decision=assess_role('Data Governance Specialist','Design metadata management, data catalogs, business glossaries and taxonomies')
+  self.assertEqual(decision['decision'],'pending')
+ def test_vague_ai_mention_staged_for_review(self):
+  decision=assess_role('AI Engineer','The company builds a knowledge graph. Familiar with Neo4j.')
+  self.assertEqual(decision['decision'],'pending')
+ def test_salary_total_not_base_benchmark(self):
+  raw={'salaryRange':{'currency':'USD','min':110000,'max':170000,'interval':'per-year'},'salaryDescriptionPlain':'Annual total compensation / OTE'}
+  s=salary_info(raw,'lever','')
+  self.assertEqual(s['salaryBasis'],'total');self.assertTrue(s['salaryBasisVerified']);self.assertFalse(s['salaryEligible'])
+ def test_salary_ambiguous_held_for_review(self):
+  raw={'salaryRange':{'currency':'USD','min':90000,'max':105000,'interval':'per-year'},'salaryDescriptionPlain':'Pay range'}
+  s=salary_info(raw,'lever','')
+  self.assertEqual(s['salaryBasis'],'unknown');self.assertFalse(s['salaryEligible']);self.assertTrue(s['salaryReview'])
+ def test_unverified_pay_cannot_be_flagged_eligible(self):
+  data=json.loads((ROOT/'data/curated.json').read_text())
+  r=data['records'][0];r.update(salaryEligible=True,salaryBasis='unknown',salaryBasisVerified=False)
+  with self.assertRaises(ValueError):validate_market(data)
+ def test_no_years_mid_is_not_assumed(self):
+  r=experience_info('Data Engineer','Knowledge graph knowledge and ontology experience')
+  self.assertEqual(r['level'],'Not specified')
+ def test_mid_experience_classification(self):
+  r=experience_info('Data Engineer','3 years of experience in ontology engineering')
+  self.assertEqual(r['level'],'Mid');self.assertEqual(r['expMin'],3)
+ def test_senior_title_with_missing_years(self):
+  r=experience_info('Senior Knowledge Engineer','Experience with Neo4j')
+  self.assertEqual(r['level'],'Senior');self.assertIsNone(r['expMin'])
+ def test_review_queue_stages_unknown_pay_and_status(self):
+  curated=[{'id':'c','company':'Employer','title':'Knowledge Engineer','sourceUrl':'https://a.com/job1','evidenceType':'employer','salaryMin':100000,'salaryBasisVerified':False,'region':'global'}]
+  automatic=[{'id':'x','company':'Company','title':'Data Governance Specialist','sourceUrl':'https://b.com/job2','roleDecision':'pending','roleReviewReason':'Needs human relevance review','salaryMin':None}]
+  queue=build_review_queue(curated,automatic,{'approved':[],'rejected':[]})
+  self.assertEqual({x['category'] for x in queue},{'Pay basis','Role relevance'})
+ def test_explicitly_rejected_candidate_not_reviewed(self):
+  rows=[{'id':'x','company':'C','title':'Data Engineer','sourceUrl':'https://a.com/x','roleDecision':'pending','salaryMin':None}]
+  self.assertEqual(build_review_queue([],rows,{'approved':[],'rejected':['x']}),[])
+ def test_end_to_end_strict_publish_review_and_salary(self):
+  with tempfile.TemporaryDirectory() as td:
+   root=Path(td)
+   for folder in ('config','data','public/data'):(root/folder).mkdir(parents=True,exist_ok=True)
+   seed=json.loads((ROOT/'data/curated.json').read_text())
+   seed['records']=[];seed['reviewQueue']=[]
+   (root/'data/curated.json').write_text(json.dumps(seed));(root/'public/data/market.json').write_text(json.dumps(seed))
+   (root/'data/auto_records.json').write_text('[]')
+   (root/'data/review_decisions.json').write_text('{"approved":[],"rejected":[]}')
+   cfg={'sources':[{'id':'lever-test','type':'lever','account':'example','company':'Example','enabled':True}],'fxEnabled':False}
+   (root/'config/sources.json').write_text(json.dumps(cfg))
+   jobs=[
+     {'id':'recruit','text':'Associate GTM Recruiter','hostedUrl':'https://jobs.lever.co/example/recruit',
+      'descriptionPlain':'Build RDF OWL ontology and knowledge graph using Neo4j',
+      'categories':{'location':'New York'}},
+     {'id':'specialist','text':'Knowledge Engineer','hostedUrl':'https://jobs.lever.co/example/specialist',
+      'descriptionPlain':'Design ontologies with RDF and SHACL',
+      'salaryRange':{'currency':'USD','min':110000,'max':145000,'interval':'per-year'},
+      'salaryDescriptionPlain':'Base salary; annual USD','categories':{'location':'New York'}},
+     {'id':'adjacent','text':'Data Governance Specialist','hostedUrl':'https://jobs.lever.co/example/adjacent',
+      'descriptionPlain':'Design metadata management, business glossary, data catalog, taxonomy',
+      'categories':{'location':'New York'}}]
+   def fake_fetch(url,timeout):return jobs
+   published=refresh(root,fake_fetch)
+   self.assertEqual(len(published['records']),1)
+   self.assertEqual(published['records'][0]['title'],'Knowledge Engineer')
+   self.assertTrue(published['records'][0]['salaryEligible'])
+   self.assertEqual(len([q for q in published['reviewQueue'] if q['category']=='Role relevance']),1)
+   self.assertEqual(published['reviewQueue'][0]['title'],'Data Governance Specialist')
  def test_full_refresh_failure_retains_records_and_fx(self):
   with tempfile.TemporaryDirectory() as td:
    root=Path(td)

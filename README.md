@@ -129,3 +129,80 @@ tests/test_refresh.py                   Parser and failure-preservation tests
 - Frankfurter exchange-rate API: https://frankfurter.dev/
 
 No external fonts, analytics, remote JavaScript packages or secret keys are embedded in the dashboard. The source code is provided for modification; source job content remains the property of its respective owner.
+
+---
+
+## v3: Quality safeguards, review workflow, and Arabic / English
+
+This dashboard includes user-switchable **English / العربية**. Arabic mirrors the
+layout (RTL), translates navigation, methodology and interface labels, and uses
+Arabic summaries for curated references; official job titles and URLs remain in
+their original form. The language preference is saved locally in the browser.
+
+### Strict role relevance (automated collection)
+
+- Explicit **Knowledge Engineer / Ontology Engineer / Knowledge Graph Engineer**
+  titles are accepted as core KE.
+- A different technical title is accepted only if job responsibilities show
+  concrete implementation using ontology, knowledge graphs, and complementary
+  semantic technology evidence.
+- Recruiting / sales / HR roles are excluded even when their descriptions quote
+  knowledge graph vocabulary.
+- Adjacent but uncertain technical roles are **staged for human review**, not
+  included in published job totals or salary metrics.
+
+### Salary basis
+
+The top-line salary chart and employer-salary statistics include **only an
+employer disclosure explicitly verified as base salary**. Verified total
+compensation is labelled but excluded from the base-only benchmark. An
+advertised range whose base-vs-total nature is unknown is shown as research
+reference with a clear warning, and is queued for review. Reposts and platform
+estimates remain in separate evidence categories.
+
+The original curated dataset has one strictly verified base-salary reference.
+This is a conservative evidence rule rather than a conclusion that other
+employers offer no base salary. When an employer discloses base pay explicitly,
+update its pay-basis flags and original source evidence before including it.
+
+### Experience and Saudi posting verification
+
+- Seniority: **Junior**, **Mid**, **Senior**, or **Not specified**; no years are
+  invented when missing. An explicit seniority title may be classified without
+  inventing numeric experience.
+- **Feed confirmed** means present in a successfully checked public ATS feed
+  within the configured freshness window.
+- Old saved LinkedIn/job-page references are **Needs recheck** (or Archived)
+  unless they have a fresh direct source check; a working link alone is not
+  proof that applications are accepted.
+
+### Review queue and manual decisions
+
+The **Review queue** section lists uncertain role relevance, unclear employer
+salary basis, and older Saudi posting statuses. **Visitors cannot approve
+records through the public website.** To approve/reject an automatically
+identified candidate:
+
+1. Review its original job posting and copy the unique record ID (`AUTO-*`).
+2. In GitHub, edit `data/review_decisions.json` and add that ID to either
+   `"approved"` or `"rejected"` (never both).
+3. Commit; GitHub Actions will refresh and publish the site. Approving a role
+   does **not** verify its pay basis or open listing status.
+
+For **curated** salary basis correction, edit `data/curated.json` after
+confirming the company's original documentation. When a genuine employer base
+salary is established, set `salaryBasis="base"`,
+`salaryBasisVerified=true`, `salaryEligible=true`, and retain the source URL,
+evidence date and the note explaining the proof. For verified total
+compensation, use `salaryBasis="total"`, `salaryBasisVerified=true`, and
+`salaryEligible=false` so total pay stays distinct from base pay.
+
+### Safe in-place upgrade on GitHub
+
+Upload only the files in `KE_GitHub_Update_v3.zip` into the root of the existing
+repository (`iHaya-7/ke-market-observatory`). They overwrite source files while
+preserving `data/auto_records.json` and `public/data/market.json`, which are
+managed by the scheduled collector. **Never upload an old copy of those two
+runtime files over newer live data.** The workflow rebuilds and publishes them
+on push. `.github/workflows/refresh-and-deploy.yml` must remain in its nested
+folder, not the repository root.

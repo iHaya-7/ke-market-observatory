@@ -123,15 +123,59 @@ def get_board(source: dict, config: dict, fetch=fetch_json) -> tuple[list, list[
   return jobs,warnings
  raise ValueError('Unsupported ATS source')
 
-def classify(title: str, text: str) -> tuple[str | None,list[str]]:
+# A domain term mentioned in a job description is not sufficient to count the
+# job as Knowledge Engineering. Start with title relevance and then require
+# responsibilities with specialized semantic-technology evidence.
+CORE_TITLE = re.compile(r'\b(?:knowledge engineer(?:ing)?|knowledge graph engineer|ontology engineer|ontologist|semantic web engineer)\b',re.I)
+ADJACENT_TITLE = re.compile(r'\b(?:ai|llm|data|semantic|metadata|ontology|knowledge|graph|information|research|machine learning|ml|solution|enterprise|platform)\b',re.I)
+TECHNICAL_ROLE = re.compile(r'\b(?:engineer|architect|scientist|developer|specialist|consultant|model(?:l)?er|technical lead|principal|researcher)\b',re.I)
+EXCLUDED_TITLE = re.compile(r'\b(?:recruit(?:er|ing|ment)|talent acquisition|human resources|people operations|sales|business development|marketing|account executive|customer success|gtm|go.to.market|copywriter|graphic designer|internship coordinator)\b',re.I)
+SEMANTIC_ACTION = re.compile(r'\b(?:design|build|develop|implement|maintain|model|modelling|modeling|architect|create|curate|validate|engineer|construct|govern|integrate|define)\w*\b',re.I)
+ONTOLOGY_EVIDENCE = {'Ontology','Knowledge Graph','RDF','OWL','SPARQL','SHACL','SKOS','GraphRAG','Neo4j'}
+META_EVIDENCE = {'Metadata Management','Taxonomy','Business Glossary','Data Catalog','Semantic Layer','Semantic Modeling'}
+
+def assess_role(title: str, text: str) -> dict:
+ """Return a conservative machine decision, never a human validation."""
  hay=title+' '+text
  skills=[name for name,pattern in SKILLS.items() if re.search(pattern,hay,re.I)]
- if re.search(r'\b(?:knowledge engineer|knowledge graph engineer|ontology engineer|ontologist)\b',title,re.I):return 'Core KE',skills
- if 'Ontology' in skills and any(k in skills for k in ('RDF','OWL','SHACL','Semantic Modeling','Semantic Layer')):return 'Core KE',skills
- if any(k in skills for k in ('Knowledge Graph','GraphRAG','Neo4j')):return 'Applied KG / AI',skills
- if re.search(r'\b(data|semantic|metadata|taxonomy|ontology|information)\b',title,re.I) and len(set(skills)&{'Semantic Layer','Semantic Modeling','Metadata Management','Taxonomy','Business Glossary','Data Catalog'})>=2:
-  return 'Metadata / Semantic',skills
- return None,skills
+ matching=set(skills)
+ if EXCLUDED_TITLE.search(title):
+  return {'decision':'excluded','relevance':None,'skills':skills,
+          'reason':'Non-technical recruiting, HR, sales or marketing title. Keywords in the description do not override this exclusion.'}
+ if CORE_TITLE.search(title):
+  return {'decision':'approved','relevance':'Core KE','skills':skills,
+          'reason':'Explicit Knowledge / Ontology / Knowledge Graph engineering job title.'}
+ if not (ADJACENT_TITLE.search(title) and TECHNICAL_ROLE.search(title)):
+  if len(matching & ONTOLOGY_EVIDENCE)>=2:
+   return {'decision':'pending','relevance':'Applied KG / AI','skills':skills,
+           'reason':'Semantic terms occur in the description but the job title is not a confirmed engineering role.'}
+  return {'decision':'excluded','relevance':None,'skills':skills,'reason':'No relevant engineering role title.'}
+ actions=bool(SEMANTIC_ACTION.search(text))
+ core=len(matching & ONTOLOGY_EVIDENCE)
+ semantic=len(matching & META_EVIDENCE)
+ if not actions:
+  if core>=2 or semantic>=2:
+   return {'decision':'pending','relevance':'Applied KG / AI','skills':skills,
+           'reason':'Relevant technology words are present, but no explicit implementation or modeling responsibility was found.'}
+  return {'decision':'excluded','relevance':None,'skills':skills,'reason':'No semantic implementation responsibilities found.'}
+ if 'Ontology' in matching and (matching & {'Knowledge Graph','RDF','OWL','SPARQL','SHACL','SKOS','Semantic Modeling'}):
+  return {'decision':'approved','relevance':'Core KE','skills':skills,
+          'reason':'Related technical title with an ontology and complementary semantic-technology implementation scope.'}
+ if 'Knowledge Graph' in matching and ((matching & {'GraphRAG','RDF','OWL','SPARQL','SHACL','Semantic Modeling','Ontology'}) or ('Neo4j' in matching and 'GraphRAG' in matching)):
+  return {'decision':'approved','relevance':'Applied KG / AI','skills':skills,
+          'reason':'Related technical title with knowledge-graph implementation responsibilities and complementary technology.'}
+ if re.search(r'\b(?:metadata|semantic|data (?:architect|model)|information architect)\b',title,re.I) and semantic>=3:
+  return {'decision':'pending','relevance':'Metadata / Semantic','skills':skills,
+          'reason':'Strong metadata / semantic adjacency, but no explicit ontology or knowledge-graph implementation. Requires manual relevance review.'}
+ if core or semantic>=2:
+  return {'decision':'pending','relevance':'Applied KG / AI' if core else 'Metadata / Semantic','skills':skills,
+          'reason':'Related role mentions semantic concepts, but does not meet the strict automatic acceptance criteria.'}
+ return {'decision':'excluded','relevance':None,'skills':skills,'reason':'Insufficient knowledge engineering evidence.'}
+
+def classify(title: str, text: str) -> tuple[str | None,list[str]]:
+ """Compatibility helper; pending matches are kept for review, not published."""
+ outcome=assess_role(title,text)
+ return outcome['relevance'],outcome['skills']
 
 def location_info(raw: dict,kind: str) -> tuple[str,str,str]:
  if kind=='lever':
@@ -158,34 +202,44 @@ def location_info(raw: dict,kind: str) -> tuple[str,str,str]:
  return country,loc or 'Not specified','saudi' if country=='Saudi Arabia' else 'global'
 
 def experience_info(title: str,text: str) -> dict:
- # Do not convert a contract duration or a skill-specific year count into total experience.
+ # An exact year value is never inferred from title or employment duration.
+ # Title-based seniority may be known even when minimum years remain unspecified.
  patt=r'(?:(?:minimum|at least|over)\s+)?(\d{1,2})\s*(?:[-\u2013]\s*(\d{1,2})|(\+))?\s+years?\s+(?:of\s+)?(?:total\s+|professional\s+|proven\s+|relevant\s+|hands[- ]on\s+)?experience\b'
  match=re.search(patt,text,re.I)
- expr='Not specified';lo=hi=None;basis='Not specified in a recognized total-experience pattern.'
+ expr='Not specified';lo=hi=None;basis='No minimum years stated in an unambiguous overall-experience pattern.'
  if match:
-  candidate=int(match.group(1)); end=int(match.group(2)) if match.group(2) else None
+  candidate=int(match.group(1));end=int(match.group(2)) if match.group(2) else None
   if 0<=candidate<=60 and (end is None or candidate<=end<=60):
    lo,hi=candidate,end;expr=f'{lo}-{hi} years' if hi is not None else f'{lo}+ years'
-   basis='Automatic text match; check original context: '+match.group(0)
- if re.search(r'\b(junior|entry[- ]level|graduate)\b',title,re.I):level='Junior'
- elif re.search(r'\b(senior|sr\.?|lead|principal|staff|director|manager)\b',title,re.I):level='Senior / Lead'
- else:level='Not specified'
- return {'experience':expr,'expMin':lo,'expMax':hi,'level':level,'levelBasis':'Explicit title label, where present. '+basis}
+   basis='Detected experience wording (verify context): '+match.group(0)
+ if re.search(r'\b(junior|entry[- ]level|graduate)\b',title,re.I):level='Junior';source='Explicit junior title.'
+ elif re.search(r'\b(senior|sr\.?|lead|principal|staff|director|head of|chief)\b',title,re.I):level='Senior';source='Explicit senior/lead title.'
+ elif re.search(r'\bmid[- ]level\b',title,re.I):level='Mid';source='Explicit mid-level title.'
+ elif lo is not None and hi is not None and lo<=2 and hi<=2:level='Junior';source='Explicit experience range of 0-2 years.'
+ elif lo is not None and lo>=6:level='Senior';source='Explicit experience minimum of 6+ years.'
+ elif lo is not None and lo>=2:level='Mid';source='Explicit experience minimum of 2-5 years.'
+ else:level='Not specified';source='No reliable seniority evidence.'
+ return {'experience':expr,'expMin':lo,'expMax':hi,'level':level,'levelBasis':source+' '+basis}
 
 def salary_info(raw:dict,kind:str,text:str) -> dict:
- result={'salaryMin':None,'salaryMax':None,'currency':None,'period':None,'compensation':'Not disclosed','salaryEligible':False,'salaryReview':None}
+ result={'salaryMin':None,'salaryMax':None,'currency':None,'period':None,
+         'compensation':'Not disclosed','salaryBasis':'none','salaryBasisVerified':False,
+         'salaryEligible':False,'salaryReview':None}
  ranges=[]
  if kind=='lever' and isinstance(raw.get('salaryRange'),dict):
-  s=raw['salaryRange'];ranges=[{'min':s.get('min'),'max':s.get('max'),'currency':s.get('currency'),'interval':s.get('interval'),'title':clean(raw.get('salaryDescriptionPlain') or raw.get('salaryDescription'))}]
+  row=raw['salaryRange'];ranges=[{'min':row.get('min'),'max':row.get('max'),'currency':row.get('currency'),
+   'interval':row.get('interval'),'title':clean(raw.get('salaryDescriptionPlain') or raw.get('salaryDescription'))}]
  elif kind=='greenhouse' and raw.get('pay_input_ranges'):
-  for s in raw['pay_input_ranges']:
-   ranges.append({'min':s.get('min_cents',0)/100 if isinstance(s.get('min_cents'),(int,float)) else None,
-    'max':s.get('max_cents',0)/100 if isinstance(s.get('max_cents'),(int,float)) else None,
-    'currency':s.get('currency_type'),'interval':None,'title':clean(str(s.get('title',''))+' '+str(s.get('blurb','')))})
+  for row in raw['pay_input_ranges']:
+   ranges.append({'min':row.get('min_cents')/100 if isinstance(row.get('min_cents'),(int,float)) else None,
+    'max':row.get('max_cents')/100 if isinstance(row.get('max_cents'),(int,float)) else None,
+    'currency':row.get('currency_type'),'interval':None,
+    'title':clean(str(row.get('title',''))+' '+str(row.get('blurb','')))})
  if len(ranges)>1:
-  result['salaryReview']='Multiple location/pay ranges: manual review required; not collapsed into one band.';return result
+  result['salaryReview']='Multiple pay ranges or geographies: review each range individually. No band was inferred.'
+  return result
  if ranges:
-  s=ranges[0];lo=s['min'];hi=s['max'];interval=str(s['interval'] or '').lower();label=s['title']
+  row=ranges[0];lo=row['min'];hi=row['max'];label=row['title'];interval=str(row['interval'] or '').lower()
   if not isinstance(lo,(int,float)) or not math.isfinite(lo) or lo<0:return result
   if hi is not None and (not isinstance(hi,(int,float)) or not math.isfinite(hi) or hi<lo):return result
   if interval in ('per-year','year','yearly','annual','annually'):period='Annual'
@@ -193,16 +247,27 @@ def salary_info(raw:dict,kind:str,text:str) -> dict:
   elif re.search(r'\b(annual|annually|per year|yearly)\b',label,re.I):period='Annual'
   elif re.search(r'\b(monthly|per month)\b',label,re.I):period='Monthly'
   else:period=None
-  currency=str(s['currency'] or '').upper()
+  currency=str(row['currency'] or '').upper()
   if not period or currency not in ('USD','GBP','EUR','SAR'):
-   result['salaryReview']='Structured pay found, but period/currency is unsupported or ambiguous. No annualization assumed.';return result
-  comp='Base salary' if re.search(r'\bbase\s+(salary|pay)\b',label,re.I) else 'Advertised pay (basis unspecified)'
-  if re.search(r'\b(total compensation|on[- ]target earnings|OTE)\b',label,re.I):comp='Total compensation / OTE'
-  result.update(salaryMin=lo,salaryMax=hi,currency=currency,period=period,compensation=comp,
-   salaryEligible=comp=='Base salary')
-  if comp!='Base salary':result['salaryReview']='Pay interval is explicit; base-vs-total composition needs confirmation before benchmark inclusion.'
+   result['salaryReview']='Structured salary found but period or currency is ambiguous. Conversion is withheld.'
+   return result
+  # Do not equate pay or salary with *base salary* unless explicitly labelled.
+  # Evidence of both base and total in one label is ambiguous; review manually.
+  total=bool(re.search(r'\b(total compensation|total remuneration|on[- ]target earnings|OTE|base (?:salary|pay) (?:and|\+) (?:bonus|equity))\b',label,re.I))
+  base=bool(re.search(r'\b(base (?:salary|pay|compensation)|salary base|basic salary)\b',label,re.I))
+  if total and base:salary_basis='unknown'
+  elif total:salary_basis='total'
+  elif base:salary_basis='base'
+  else:salary_basis='unknown'
+  comp={'base':'Base salary','total':'Total compensation / OTE','unknown':'Advertised pay; basis not verified'}[salary_basis]
+  verified=salary_basis in ('base','total')
+  result.update(salaryMin=lo,salaryMax=hi,currency=currency,period=period,
+   compensation=comp,salaryBasis=salary_basis,salaryBasisVerified=verified,
+   salaryEligible=verified and salary_basis=='base')
+  if not verified:
+   result['salaryReview']='Employer advertises a numeric range, but does not explicitly identify base salary versus total compensation. Excluded from base-salary benchmarks.'
  elif re.search(r'(?:\$|USD|GBP|EUR|SAR|\u00a3|\u20ac)\s*\d[\d,.]*',text):
-  result['salaryReview']='Possible free-text compensation. Review the original page; no amount has been inferred or published.'
+  result['salaryReview']='Potential free-text pay; manual verification of amount, period and base-vs-total is needed.'
  return result
 
 def normalize(raw:dict,source:dict,now:str) -> dict | None:
@@ -216,8 +281,9 @@ def normalize(raw:dict,source:dict,now:str) -> dict | None:
   body=clean(str(raw.get('description',''))+' '+str(raw.get('full_description','')))
   url=raw.get('url') or raw.get('application_url') or raw.get('shortlink')
   job_id=raw.get('shortcode') or raw.get('code') or raw.get('id');posted=raw.get('published_on')
- relevance,skills=classify(title,body)
- if not relevance:return None
+ assessment=assess_role(title,body)
+ if assessment['decision']=='excluded':return None
+ relevance,skills=assessment['relevance'],assessment['skills']
  if not url or not job_id:raise ValueError('Matching role missing a durable ID or source URL')
  url=canonical(url)
  country,city,region=location_info(raw,kind)
@@ -227,7 +293,7 @@ def normalize(raw:dict,source:dict,now:str) -> dict | None:
  summary='Matched terms in the source description: '+', '.join(skills)+'. Review the original role for responsibilities and scope.'
  return {'id':rid,'company':source['company'],'title':title,'country':country,'city':city,'region':region,
   'family':'Knowledge Engineer' if title.lower()=='knowledge engineer' else 'Related title',
-  'relevance':relevance,'skills':skills,'summary':summary,'notes':'Automatically selected by explicit term rules, not a human fit assessment.',
+  'relevance':relevance,'skills':skills,'roleDecision':assessment['decision'],'roleReviewReason':assessment['reason'],'summary':summary,'notes':'Automatically selected by explicit term rules, not a human fit assessment.',
   'restrictions':'See the original posting; work authorization and clearance are not inferred.',
   **exp,**salary,'evidenceType':'employer','sourceLabel':source['type'].title()+' public job board',
   'sourceUrl':url,'extraUrl':'','evidenceMethod':'Public ATS record; rule-based extraction. No salary estimates.',
@@ -235,7 +301,8 @@ def normalize(raw:dict,source:dict,now:str) -> dict | None:
   'postedAt':posted,'firstSeenAt':now,'lastSeenAt':now,'listingStatus':'Open in feed',
   'statusNote':'Present in the public job feed at the last successful source check.',
   'collection':'automatic','sourceId':source['id'],'sourceJobId':str(job_id),
-  'exactTitle':title.lower()=='knowledge engineer','reviewRequired':bool(review),'reviewReason':review,
+  'exactTitle':title.lower()=='knowledge engineer','reviewRequired':bool(review) or assessment['decision']=='pending',
+  'reviewReason':review or (assessment['reason'] if assessment['decision']=='pending' else None),
   'missingChecks':0,'origin':'Automatic public ATS collection'}
 
 def merge_feed(old:list,new:list,source_id:str,success:bool,now:str) -> list:
@@ -262,12 +329,40 @@ def assemble_records(curated:list,automatic:list) -> list:
   row=rows[urls[key]]
   for k in ('listingStatus','statusNote','lastSeenAt','firstSeenAt','sourceId','missingChecks'):
    if k in auto:row[k]=auto[k]
-  if auto.get('salaryMin') is not None and auto.get('salaryEligible'):
-   for k in ('salaryMin','salaryMax','currency','period','compensation','salaryEligible','salaryVerifiedAt'):
+  if auto.get('salaryMin') is not None and auto.get('salaryEligible') and auto.get('salaryBasis')=='base' and auto.get('salaryBasisVerified') and auto.get('evidenceType')=='employer':
+   for k in ('salaryMin','salaryMax','currency','period','compensation','salaryEligible','salaryBasis','salaryBasisVerified','salaryVerifiedAt'):
     row[k]=auto[k]
    row['notes']=row.get('notes','')+' Latest explicit base-pay range refreshed from the public ATS.'
   # Human-curated salary/experience evidence is otherwise preserved, never re-dated by a page refresh.
  return rows
+
+def build_review_queue(curated_rows:list,automatic_rows:list,decisions:dict) -> list:
+ queue=[]
+ approved=set(decisions.get('approved',[]));rejected=set(decisions.get('rejected',[]))
+ for row in automatic_rows:
+  if row['id'] in rejected:continue
+  if row.get('roleDecision','pending')=='pending' and row['id'] not in approved:
+   queue.append({'id':row['id'],'category':'Role relevance','company':row['company'],
+     'title':row['title'],'sourceUrl':row['sourceUrl'],'reason':row.get('roleReviewReason') or 'Role relevance needs review.'})
+  if row.get('salaryMin') is not None and not row.get('salaryBasisVerified'):
+   queue.append({'id':row['id'],'category':'Pay basis','company':row['company'],
+     'title':row['title'],'sourceUrl':row['sourceUrl'],
+     'reason':row.get('reviewReason') or 'Unverified base versus total pay.'})
+ for row in curated_rows:
+  if row.get('salaryMin') is not None and row.get('evidenceType')=='employer' and not row.get('salaryBasisVerified'):
+   queue.append({'id':row['id'],'category':'Pay basis','company':row['company'],
+     'title':row['title'],'sourceUrl':row['sourceUrl'],
+     'reason':'Historical employer pay range: base versus total compensation is not explicitly verified.'})
+  if row.get('region')=='saudi' and row.get('listingStatus') in ('Needs recheck','Listing visible'):
+   queue.append({'id':row['id'],'category':'Saudi listing status','company':row['company'],
+     'title':row['title'],'sourceUrl':row['sourceUrl'],
+     'reason':'Previously observed listing; no current successful source check supports an open status.'})
+ # Stable keys deduplicate a salary-review entry if a candidate also entered from a curated record.
+ seen=set();out=[]
+ for item in queue:
+  key=(item['id'],item['category'])
+  if key not in seen:seen.add(key);out.append(item)
+ return out
 
 def validate_market(data:dict) -> None:
  if data.get('schemaVersion')!=2 or not isinstance(data.get('records'),list):raise ValueError('Invalid market schema')
@@ -283,6 +378,8 @@ def validate_market(data:dict) -> None:
    if row.get('salaryMax') is not None and row['salaryMax']<row['salaryMin']:raise ValueError('Invalid salary range')
    if row.get('period') not in ('Annual','Monthly') or row.get('currency') not in ('USD','GBP','EUR','SAR'):raise ValueError('Unsupported pay units')
   if row.get('region')=='saudi' and row.get('country')!='Saudi Arabia':raise ValueError('Saudi location mismatch')
+  if row.get('salaryEligible') and not (row.get('evidenceType')=='employer' and row.get('salaryBasis')=='base' and row.get('salaryBasisVerified')):
+   raise ValueError('Unverified or non-base salary must not enter employer benchmarks')
  if data['fx']['rates'].get('SAR')!=1:raise ValueError('SAR FX invariant failed')
  for val in data['fx']['rates'].values():
   if not isinstance(val,(int,float)) or not math.isfinite(val) or val<=0:raise ValueError('Invalid FX rate')
@@ -299,6 +396,8 @@ def refresh(root:Path=ROOT,fetch=fetch_json) -> dict:
  cfg=json.loads((root/'config/sources.json').read_text()); curated=json.loads((root/'data/curated.json').read_text())
  old_path=root/'public/data/market.json';previous=json.loads(old_path.read_text()) if old_path.exists() else copy.deepcopy(curated)
  auto_path=root/'data/auto_records.json';automatic=json.loads(auto_path.read_text()) if auto_path.exists() else []
+ decisions_path=root/'data/review_decisions.json'
+ decisions=json.loads(decisions_path.read_text()) if decisions_path.exists() else {'approved':[],'rejected':[]}
  now=stamp();payload=copy.deepcopy(curated);meta=payload['meta'];meta.update(copy.deepcopy(previous.get('meta',{})))
  meta['lastAttemptAt']=now
  if os.environ.get('GITHUB_ACTIONS')=='true':
@@ -325,8 +424,17 @@ def refresh(root:Path=ROOT,fetch=fetch_json) -> dict:
     success_count+=1;automatic=merge_feed(automatic,new,source['id'],True,now)
  if success_count:meta['lastSuccessfulCollectionAt']=now
  payload['sources']=health
- payload['records']=assemble_records(curated['records'],automatic)
- payload['reviewQueue']=[{'id':r['id'],'company':r['company'],'title':r['title'],'sourceUrl':r['sourceUrl'],'reason':r['reviewReason']} for r in automatic if r.get('reviewRequired')]
+ # Unreviewed adjacent job descriptions never enter the published job and salary dataset.
+ approved=set(decisions.get('approved',[]));rejected=set(decisions.get('rejected',[]))
+ visible=[]
+ for row in automatic:
+  if row['id'] in rejected:continue
+  if row.get('roleDecision','pending')=='approved' or row['id'] in approved:
+   candidate=copy.deepcopy(row)
+   if row['id'] in approved:candidate['roleDecision']='approved'
+   visible.append(candidate)
+ payload['records']=assemble_records(curated['records'],visible)
+ payload['reviewQueue']=build_review_queue(payload['records'],automatic,decisions)
  payload['fx']=copy.deepcopy(previous.get('fx',curated['fx']))
  if cfg.get('fxEnabled',True):
   payload['fx']['lastAttemptAt']=now
@@ -347,10 +455,14 @@ def refresh(root:Path=ROOT,fetch=fetch_json) -> dict:
    events.append({'at':now,'type':'Salary changed','id':row['id'],'title':row['title'],'company':row['company'],'previousSalaryMin':old.get('salaryMin'),'previousSalaryMax':old.get('salaryMax'),'previousCurrency':old.get('currency'),'previousPeriod':old.get('period')})
   elif old.get('listingStatus')!=row.get('listingStatus'):
    events.append({'at':now,'type':'Source status changed','id':row['id'],'title':row['title'],'company':row['company']})
- version=content_hash(payload['records'])
- if version!=content_hash(previous['records']):meta['lastContentChangeAt']=now
+ def digest(data):
+  snap={'records':content_hash(data['records']),
+        'review':[(r['id'],r['category']) for r in data.get('reviewQueue',[])]}
+  return hashlib.sha256(json.dumps(snap,sort_keys=True).encode()).hexdigest()[:16]
+ version=digest(payload)
+ if version!=digest(previous):meta['lastContentChangeAt']=now
  meta['dataVersion']=version;meta['publishedAt']=now if os.environ.get('GITHUB_ACTIONS')=='true' else meta.get('publishedAt')
- meta['lastRunSummary']={'sourcesOK':success_count,'sourcesTotal':sum(bool(s.get('enabled')) for s in cfg['sources']),'newRecords':sum(e['type']=='Newly tracked' for e in events),'changes':len(events)}
+ meta['lastRunSummary']={'reviewItems':len(payload['reviewQueue']),'sourcesOK':success_count,'sourcesTotal':sum(bool(s.get('enabled')) for s in cfg['sources']),'newRecords':sum(e['type']=='Newly tracked' for e in events),'changes':len(events)}
  payload['changes']=(events+previous.get('changes',[]))[:150]
  validate_market(payload)
  atomic_json(auto_path,automatic);atomic_json(old_path,payload)
