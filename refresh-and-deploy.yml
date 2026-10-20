@@ -1,5 +1,4 @@
-name: Refresh and deploy KE Observatory
-
+name: Refresh and Deploy KE Observatory
 on:
   workflow_dispatch:
   schedule:
