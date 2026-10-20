@@ -1,0 +1,62 @@
+{
+  "sources": [
+    {
+      "id": "lever-sambatv",
+      "company": "Samba TV",
+      "type": "lever",
+      "account": "sambatv",
+      "enabled": true,
+      "scope": "Global ontology roles",
+      "boardUrl": "https://jobs.lever.co/sambatv"
+    },
+    {
+      "id": "greenhouse-nearform",
+      "company": "Nearform",
+      "type": "greenhouse",
+      "account": "nearform",
+      "enabled": true,
+      "scope": "Global knowledge graph roles",
+      "boardUrl": "https://job-boards.greenhouse.io/nearform"
+    },
+    {
+      "id": "greenhouse-tamara",
+      "company": "Tamara",
+      "type": "greenhouse",
+      "account": "tamara",
+      "enabled": true,
+      "scope": "Saudi metadata and semantic roles",
+      "boardUrl": "https://job-boards.greenhouse.io/tamara"
+    },
+    {
+      "id": "greenhouse-sapience",
+      "company": "Sapience AI",
+      "type": "greenhouse",
+      "account": "sapienceaicorporation",
+      "enabled": true,
+      "scope": "Global knowledge graph roles",
+      "boardUrl": "https://job-boards.greenhouse.io/sapienceaicorporation"
+    },
+    {
+      "id": "workable-envision",
+      "company": "Envision Employment Solutions",
+      "type": "workable",
+      "account": "envisiones",
+      "enabled": true,
+      "scope": "Saudi / global semantic roles; recruiter client may be undisclosed",
+      "boardUrl": "https://apply.workable.com/envisiones/"
+    },
+    {
+      "id": "workable-robusta",
+      "company": "Robusta / RTG",
+      "type": "workable",
+      "account": "robusta",
+      "enabled": true,
+      "scope": "Saudi data / knowledge graph roles",
+      "boardUrl": "https://apply.workable.com/robusta/"
+    }
+  ],
+  "fxEnabled": true,
+  "maxPages": 20,
+  "maxDetailsPerBoard": 50,
+  "httpTimeoutSeconds": 20
+}

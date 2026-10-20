@@ -1,0 +1,80 @@
+name: Refresh and deploy KE Observatory
+
+on:
+  workflow_dispatch:
+  schedule:
+    # UTC: approximately 08:17 in Riyadh. GitHub scheduling is best effort.
+    - cron: '17 5 * * *'
+  push:
+    branches: [main]
+    paths:
+      - 'web/**'
+      - 'scripts/**'
+      - 'config/**'
+      - 'data/curated.json'
+      - 'tests/**'
+      - '.github/workflows/refresh-and-deploy.yml'
+
+concurrency:
+  group: ke-market-publication
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  collect:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          ref: main
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Test parsing and preservation rules
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Check JavaScript syntax
+        run: node --check web/app.js
+      - name: Collect public boards and refresh FX
+        run: python scripts/refresh.py
+      - name: Validate and build dashboard
+        run: |
+          python scripts/refresh.py --validate-only
+          python scripts/build_site.py
+      - name: Preserve source history in Git
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/auto_records.json public/data/market.json public/index.html
+          if ! git diff --cached --quiet; then
+            git commit -m 'Refresh knowledge engineering market evidence'
+            git push origin HEAD:main
+          fi
+      - name: Upload website artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: public
+
+  deploy:
+    needs: collect
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Publish fixed site URL
+        id: deployment
+        uses: actions/deploy-pages@v4
