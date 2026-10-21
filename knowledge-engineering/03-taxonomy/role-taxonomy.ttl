@@ -1,0 +1,40 @@
+@prefix role: <urn:ke-market-observatory:role:> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+role:scheme a skos:ConceptScheme .
+role:scheme skos:prefLabel "Observatory occupational role taxonomy"@en .
+role:scheme skos:scopeNote "Proposed small vocabulary of knowledge-representation engineering roles; team approval pending. Not a classification of postings or a complete occupation system."@en .
+role:scheme skos:editorialNote "Version 0.1 proposal, 2026-10-21. Local persistent URNs; no public resolution service implied. Core KE and Adjacent technical remain contextual assessments outside this scheme."@en .
+role:scheme skos:hasTopConcept role:knowledge-engineer .
+
+role:knowledge-engineer a skos:Concept .
+role:knowledge-engineer skos:inScheme role:scheme .
+role:knowledge-engineer skos:topConceptOf role:scheme .
+role:knowledge-engineer skos:prefLabel "Knowledge Engineer"@en .
+role:knowledge-engineer skos:definition "An engineering role concerned with creating, maintaining, or integrating explicit representations of knowledge and meaning for use in computational systems."@en .
+role:knowledge-engineer skos:scopeNote "Broad occupational concept in this scheme. A title alone does not establish these responsibilities. Excludes purely administrative knowledge management; does not imply a Core KE assessment for a posting."@en .
+role:knowledge-engineer skos:narrower role:ontology-engineer .
+role:knowledge-engineer skos:narrower role:knowledge-graph-engineer .
+role:knowledge-engineer skos:narrower role:semantic-web-engineer .
+
+role:ontology-engineer a skos:Concept .
+role:ontology-engineer skos:inScheme role:scheme .
+role:ontology-engineer skos:prefLabel "Ontology Engineer"@en .
+role:ontology-engineer skos:altLabel "Ontologist"@en .
+role:ontology-engineer skos:definition "A knowledge engineering role specializing in the design, maintenance, and validation of explicit conceptual models of entities, relationships, and constraints for computational use."@en .
+role:ontology-engineer skos:scopeNote "Ontologist is an alternative label only in the computational occupational sense. A vendor product called an ontology or a philosophical use of ontology does not establish this role. No specific representation language is required."@en .
+role:ontology-engineer skos:broader role:knowledge-engineer .
+
+role:knowledge-graph-engineer a skos:Concept .
+role:knowledge-graph-engineer skos:inScheme role:scheme .
+role:knowledge-graph-engineer skos:prefLabel "Knowledge Graph Engineer"@en .
+role:knowledge-graph-engineer skos:definition "A knowledge engineering role specializing in building, maintaining, or integrating graphs that explicitly represent domain entities and their meaningful relationships."@en .
+role:knowledge-graph-engineer skos:scopeNote "Includes representation and integration work on knowledge graphs; generic graph algorithms or graph-database operation alone do not establish the role. Does not require RDF or imply ontology-engineering duties."@en .
+role:knowledge-graph-engineer skos:broader role:knowledge-engineer .
+
+role:semantic-web-engineer a skos:Concept .
+role:semantic-web-engineer skos:inScheme role:scheme .
+role:semantic-web-engineer skos:prefLabel "Semantic Web Engineer"@en .
+role:semantic-web-engineer skos:definition "A knowledge engineering role specializing in engineering machine-interpretable linked data and semantic interoperability using Semantic Web technologies."@en .
+role:semantic-web-engineer skos:scopeNote "The specific Semantic Web engineering occupation, not all web development or anything described as semantic. Terminology is evidenced by the production title rule; no current posting assignment is asserted."@en .
+role:semantic-web-engineer skos:broader role:knowledge-engineer .
