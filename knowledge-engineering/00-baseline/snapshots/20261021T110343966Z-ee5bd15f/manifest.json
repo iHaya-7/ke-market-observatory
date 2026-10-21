@@ -1,0 +1,286 @@
+{
+  "schemaVersion": 1,
+  "snapshotId": "20261021T110343966Z-ee5bd15f",
+  "capturedAtUtc": "2026-10-21T11:03:43.966Z",
+  "repository": {
+    "name": "iHaya-7/ke-market-observatory",
+    "headCommit": "ee5bd15ff52b6a88e15a2dafab6886422980f557",
+    "headCommitShort": "ee5bd15f",
+    "workingTreeState": "clean before snapshot creation",
+    "uncommittedChanges": [],
+    "auditRecordedHead": "002525b2e08f610206b205374ad2244785b9c088",
+    "auditHeadMatchesCurrentHead": false
+  },
+  "preservedDataFiles": [
+    {
+      "sourcePath": "data/curated.json",
+      "snapshotPath": "data/curated.json",
+      "sourceBytes": 56944,
+      "copiedBytes": 56944,
+      "sourceSha256": "2fd14e04420fe94d62ce2952b0a3e04662709b27bd23d9134f2a2e7424884b46",
+      "copiedSha256": "2fd14e04420fe94d62ce2952b0a3e04662709b27bd23d9134f2a2e7424884b46",
+      "byteForByteMatch": true
+    },
+    {
+      "sourcePath": "data/auto_records.json",
+      "snapshotPath": "data/auto_records.json",
+      "sourceBytes": 45113,
+      "copiedBytes": 45113,
+      "sourceSha256": "6171360dee49f034efc0e60caa7ad136801d4ba89a35e1ae6243c77de1703795",
+      "copiedSha256": "6171360dee49f034efc0e60caa7ad136801d4ba89a35e1ae6243c77de1703795",
+      "byteForByteMatch": true
+    },
+    {
+      "sourcePath": "data/review_decisions.json",
+      "snapshotPath": "data/review_decisions.json",
+      "sourceBytes": 43,
+      "copiedBytes": 43,
+      "sourceSha256": "f425ac6675a1a1850c0f066971a97aadb3913670356b11860e85ce7e02cbd47d",
+      "copiedSha256": "f425ac6675a1a1850c0f066971a97aadb3913670356b11860e85ce7e02cbd47d",
+      "byteForByteMatch": true
+    },
+    {
+      "sourcePath": "public/data/market.json",
+      "snapshotPath": "public/data/market.json",
+      "sourceBytes": 92238,
+      "copiedBytes": 92238,
+      "sourceSha256": "17fa523c0e13341ca499750da7cac4958454ac4e1bf93a403cf6a6dc26ae27e0",
+      "copiedSha256": "17fa523c0e13341ca499750da7cac4958454ac4e1bf93a403cf6a6dc26ae27e0",
+      "byteForByteMatch": true
+    }
+  ],
+  "codeAndConfigurationChecksums": [
+    {
+      "path": "scripts/refresh.py",
+      "bytes": 32303,
+      "sha256": "e8ba9dde2539fe778e971b676a3bd4b8d8370b5669f88e4ba561af4e68e678bb"
+    },
+    {
+      "path": "scripts/build_site.py",
+      "bytes": 1304,
+      "sha256": "93f0c8fe70578789ef0c96f051c2eb483a95adb185c5ea29be580ce81144e5dd"
+    },
+    {
+      "path": "web/app.js",
+      "bytes": 71201,
+      "sha256": "a8bc00081d241b38cbc1a611be0368a5d4f89d7e29c839a449b0a4c9bc1ac998"
+    },
+    {
+      "path": "web/app.css",
+      "bytes": 26550,
+      "sha256": "ebd1e931b4af38d3a181a5c016a2f9108f2a2da9c90d5910e357e60e2248a855"
+    },
+    {
+      "path": "web/template.html",
+      "bytes": 5172,
+      "sha256": "3ac44c6779a5c18cea97810d4cf5182ff8ad4a80573554a800148e9cd27f0b14"
+    },
+    {
+      "path": "config/sources.json",
+      "bytes": 1821,
+      "sha256": "c5a2948b6cfb241c4e1dd7af4ff1d6e58d0e3e229cad080e2c62ecf1a0c4ad4b"
+    },
+    {
+      "path": ".github/workflows/refresh-and-deploy.yml",
+      "bytes": 2355,
+      "sha256": "d7eb605bf0f2513f116e5129daf2bf102ba1b778d3b00a5d1dcd7c20ae9c0613"
+    },
+    {
+      "path": "tests/test_refresh.py",
+      "bytes": 15932,
+      "sha256": "64e47453f134f700d00c976cd652e3b51e1ba6abd48bdd5f2e1303f03a91991f"
+    },
+    {
+      "path": "tests/test_build_site.py",
+      "bytes": 2352,
+      "sha256": "1725e40b83ff199a1416de0f65dcabc154d5f801050fe7495b7a1d59763f86bc"
+    }
+  ],
+  "publishedHtmlChecksum": {
+    "path": "public/index.html",
+    "bytes": 583060,
+    "sha256": "7909f14c57c8a3d35fbf21c2394e00785cda61a959188f2d6530c567da2a4c6f",
+    "copied": false
+  },
+  "auditDocumentChecksum": {
+    "path": "knowledge-engineering/00-baseline/AS_IS_AUDIT.md",
+    "bytes": 29358,
+    "sha256": "ad2fe2db576077f2b91cb792ce59ece4452d149574a561afb2588fb16737719f"
+  },
+  "publishedDataset": {
+    "dataVersion": "502461042f744e2d",
+    "preparedAt": "2026-10-20",
+    "publishedAt": "2026-10-21T10:13:37Z",
+    "lastAttemptAt": "2026-10-21T10:13:37Z",
+    "lastSuccessfulCollectionAt": "2026-10-21T10:13:37Z",
+    "lastContentChangeAt": "2026-10-20T19:20:27Z",
+    "storedLastRunSummary": {
+      "reviewItems": 30,
+      "sourcesOK": 6,
+      "sourcesTotal": 6,
+      "newRecords": 0,
+      "changes": 0
+    },
+    "storedSourceStatuses": [
+      {
+        "id": "lever-sambatv",
+        "status": "OK"
+      },
+      {
+        "id": "greenhouse-nearform",
+        "status": "OK"
+      },
+      {
+        "id": "greenhouse-tamara",
+        "status": "OK"
+      },
+      {
+        "id": "greenhouse-sapience",
+        "status": "OK"
+      },
+      {
+        "id": "workable-envision",
+        "status": "OK"
+      },
+      {
+        "id": "workable-robusta",
+        "status": "OK"
+      }
+    ]
+  },
+  "fx": {
+    "rates": {
+      "SAR": 1,
+      "USD": 3.75,
+      "GBP": 5.005005,
+      "EUR": 4.205639
+    },
+    "date": "2026-10-20",
+    "source": "https://frankfurter.dev/",
+    "label": "Frankfurter reference rates, cross-converted through the configured USD/SAR assumption.",
+    "usdSar": 3.75,
+    "usdSarBasis": "Fixed conversion assumption inherited from the original reference. Review periodically.",
+    "status": "Updated",
+    "lastAttemptAt": "2026-10-21T10:13:37Z",
+    "error": null
+  },
+  "baselineCounts": {
+    "curatedRecords": 21,
+    "retainedAutomaticRecords": 20,
+    "publishedRecords": 26,
+    "reviewQueueItems": 30,
+    "reviewQueueByCategory": {
+      "Role relevance": 13,
+      "Pay basis": 11,
+      "Saudi listing status": 6
+    },
+    "manualAutomaticDecisions": {
+      "approved": 0,
+      "rejected": 0
+    },
+    "automaticRoleDecisionDistribution": {
+      "(missing)": 6,
+      "approved": 7,
+      "pending": 7
+    },
+    "publishedRoleDecisionDistribution": {
+      "approved": 26
+    },
+    "curatedSalaryEligibilityDistribution": {
+      "false": 20,
+      "true": 1
+    },
+    "automaticSalaryEligibilityDistribution": {
+      "false": 20
+    },
+    "publishedSalaryEligibilityDistribution": {
+      "false": 25,
+      "true": 1
+    },
+    "frontendBaseBenchmarkEligibleRecords": 1,
+    "evidenceFieldCoverage": {
+      "sourceUrl": {
+        "present": 26,
+        "nonempty": 26,
+        "total": 26
+      },
+      "extraUrl": {
+        "present": 26,
+        "nonempty": 8,
+        "total": 26
+      },
+      "sourceLabel": {
+        "present": 26,
+        "nonempty": 26,
+        "total": 26
+      },
+      "sourceId": {
+        "present": 26,
+        "nonempty": 7,
+        "total": 26
+      },
+      "sourceJobId": {
+        "present": 5,
+        "nonempty": 5,
+        "total": 26
+      },
+      "evidenceType": {
+        "present": 26,
+        "nonempty": 26,
+        "total": 26
+      },
+      "evidenceMethod": {
+        "present": 26,
+        "nonempty": 26,
+        "total": 26
+      },
+      "origin": {
+        "present": 26,
+        "nonempty": 26,
+        "total": 26
+      },
+      "evidenceDate": {
+        "present": 26,
+        "nonempty": 24,
+        "total": 26
+      },
+      "salaryVerifiedAt": {
+        "present": 26,
+        "nonempty": 13,
+        "total": 26
+      },
+      "postedAt": {
+        "present": 26,
+        "nonempty": 3,
+        "total": 26
+      },
+      "firstSeenAt": {
+        "present": 26,
+        "nonempty": 7,
+        "total": 26
+      },
+      "lastSeenAt": {
+        "present": 26,
+        "nonempty": 7,
+        "total": 26
+      },
+      "listingStatus": {
+        "present": 26,
+        "nonempty": 26,
+        "total": 26
+      },
+      "statusNote": {
+        "present": 26,
+        "nonempty": 26,
+        "total": 26
+      }
+    }
+  },
+  "verification": {
+    "sourceJsonFilesParsed": true,
+    "copiedJsonFilesParsed": true,
+    "embeddedDashboardDataMatchesPublishedJson": true,
+    "embeddedDashboardAppMatchesCurrentWebApp": true,
+    "copiesByteForByte": true
+  }
+}
