@@ -1,0 +1,343 @@
+# Stage 4 schema only: no domain individuals, taxonomy copy, imports or executable rules.
+@prefix ke: <urn:ke-market-observatory:ontology:> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+
+<urn:ke-market-observatory:ontology> a owl:Ontology .
+<urn:ke-market-observatory:ontology> rdfs:label "Knowledge Engineering Market Observatory lightweight ontology"@en .
+<urn:ke-market-observatory:ontology> owl:versionInfo "0.1 - Stage 4 proposal, 2026-10-21; team approval pending" .
+<urn:ke-market-observatory:ontology> rdfs:comment "CQ-driven schema based on Stages 1-3. Open-world interpretation; no instance data, classification rules, verdicts or evaluation results. Reference the unchanged Stage 3 SKOS scheme separately."@en .
+
+ke:JobPosting a owl:Class .
+ke:JobPosting rdfs:label "job posting"@en .
+ke:JobPosting rdfs:comment "A source-published advertisement of offered work; not a unique hiring request or every legacy source record. CQs: 01,02,03,04,05,06."@en .
+
+ke:Requisition a owl:Class .
+ke:Requisition rdfs:label "requisition"@en .
+ke:Requisition rdfs:comment "An employer hiring request; link only with documented identity evidence. CQs: 04,06."@en .
+
+ke:JobRole a owl:Class .
+ke:JobRole rdfs:label "job role"@en .
+ke:JobRole rdfs:comment "A work function advertised through duties; not a title string, person or occupational SKOS concept. CQs: 01,02,04."@en .
+
+ke:Responsibility a owl:Class .
+ke:Responsibility rdfs:label "responsibility"@en .
+ke:Responsibility rdfs:comment "An activity expected of the advertised role; excludes qualifications, company descriptions and incidental terms. CQs: 01,02,05."@en .
+
+ke:KnowledgeRepresentation a owl:Class .
+ke:KnowledgeRepresentation rdfs:label "knowledge representation"@en .
+ke:KnowledgeRepresentation rdfs:comment "Explicit concepts, entities, relationships or meaning represented in the work; actual deployed artifact identity can remain unknown. CQs: 01,02."@en .
+
+ke:SalaryObservation a owl:Class .
+ke:SalaryObservation rdfs:label "salary observation"@en .
+ke:SalaryObservation rdfs:comment "An attributable compensation amount/range statement and context; not evidence, verified base pay or an eligibility judgment. CQs: 03,04,05."@en .
+ke:SalaryObservation rdfs:subClassOf prov:Entity .
+
+ke:EvidenceArtifact a owl:Class .
+ke:EvidenceArtifact rdfs:label "evidence artifact"@en .
+ke:EvidenceArtifact rdfs:comment "A preserved original source capture with original identity, capture time and byte checksum; not merely a live URL. CQs: 01,02,03,04,05,06."@en .
+ke:EvidenceArtifact rdfs:subClassOf prov:Entity .
+
+ke:EvidencePassage a owl:Class .
+ke:EvidencePassage rdfs:label "evidence passage"@en .
+ke:EvidencePassage rdfs:comment "A precisely located part of one capture with necessary context; linkage alone does not establish support. CQs: 01,02,03,04,05,06."@en .
+ke:EvidencePassage rdfs:subClassOf prov:Entity .
+
+ke:Claim a owl:Class .
+ke:Claim rdfs:label "claim"@en .
+ke:Claim rdfs:comment "A bounded attributable factual assertion with a stable version; its text may remain unresolved and membership does not assert truth. CQs: 05,06."@en .
+ke:Claim rdfs:subClassOf prov:Entity .
+
+ke:Assessment a owl:Class .
+ke:Assessment rdfs:label "assessment"@en .
+ke:Assessment rdfs:comment "A recorded determination about one scoped question, with target, origin, criteria, reasons and uncertainty; a result entity, not the evaluation activity. CQs: 01,02,03,04,05,06."@en .
+ke:Assessment rdfs:subClassOf prov:Entity .
+
+ke:MachineAssessment a owl:Class .
+ke:MachineAssessment rdfs:label "machine assessment"@en .
+ke:MachineAssessment rdfs:comment "An assessment produced by identified software; never automatically a human judgment or Ground Truth. CQs: 01,02,03,04,05,06."@en .
+ke:MachineAssessment rdfs:subClassOf ke:Assessment .
+
+ke:HumanAssessment a owl:Class .
+ke:HumanAssessment rdfs:label "human assessment"@en .
+ke:HumanAssessment rdfs:comment "A documented human determination, including review/adjudication; preserves independent initial judgments. CQs: 01,02,03,04,05,06."@en .
+ke:HumanAssessment rdfs:subClassOf ke:Assessment .
+
+ke:SalaryComparison a owl:Class .
+ke:SalaryComparison rdfs:label "salary comparison"@en .
+ke:SalaryComparison rdfs:comment "A record of two explicitly designated observations and declared endpoint/conversion policies; no automatic pairing or comparability follows. CQs: 04."@en .
+ke:SalaryComparison rdfs:subClassOf prov:Entity .
+
+ke:ReviewQueueEntry a owl:Class .
+ke:ReviewQueueEntry rdfs:label "review queue entry"@en .
+ke:ReviewQueueEntry rdfs:comment "An observed application queue item in a specific snapshot; distinct from a flag, assessed need or completed review. CQs: 06."@en .
+ke:ReviewQueueEntry rdfs:subClassOf prov:Entity .
+
+ke:advertisesRole a owl:ObjectProperty .
+ke:advertisesRole rdfs:label "advertises role"@en .
+ke:advertisesRole rdfs:comment "Relates an advertisement to a described work function. CQs: 01,02,04. Provenance: Original duties and interpretation; several functions may coexist."@en .
+ke:advertisesRole rdfs:domain ke:JobPosting .
+ke:advertisesRole rdfs:range ke:JobRole .
+
+ke:hasResponsibility a owl:ObjectProperty .
+ke:hasResponsibility rdfs:label "has responsibility"@en .
+ke:hasResponsibility rdfs:comment "Relates a work function to an advertised duty. CQs: 01,02,05. Provenance: Duty passage and context; no title/skill-hit derivation."@en .
+ke:hasResponsibility rdfs:domain ke:JobRole .
+ke:hasResponsibility rdfs:range ke:Responsibility .
+
+ke:actsOnRepresentation a owl:ObjectProperty .
+ke:actsOnRepresentation rdfs:label "acts on representation"@en .
+ke:actsOnRepresentation rdfs:comment "Relates a duty to explicit knowledge/meaning it acts on or substantively uses. CQs: 01,02. Provenance: Action/object passage and rationale; omit unresolved links."@en .
+ke:actsOnRepresentation rdfs:domain ke:Responsibility .
+ke:actsOnRepresentation rdfs:range ke:KnowledgeRepresentation .
+
+ke:roleConcept a owl:ObjectProperty .
+ke:roleConcept rdfs:label "role concept"@en .
+ke:roleConcept rdfs:comment "Describes a function with an existing occupational concept. CQs: 01,02,04. Provenance: Evidence-backed interpretation against Stage 3 definitions, with assessment provenance; no lexical auto-assignment."@en .
+ke:roleConcept rdfs:domain ke:JobRole .
+ke:roleConcept rdfs:range skos:Concept .
+
+ke:advertisesRequisition a owl:ObjectProperty .
+ke:advertisesRequisition rdfs:label "advertises requisition"@en .
+ke:advertisesRequisition rdfs:comment "Relates a posting to a substantiated employer hiring request. CQs: 04,06. Provenance: Documented identity decision and source identifiers; never similarity/URL inference."@en .
+ke:advertisesRequisition rdfs:domain ke:JobPosting .
+ke:advertisesRequisition rdfs:range ke:Requisition .
+
+ke:possibleSameRequisitionAs a owl:ObjectProperty .
+ke:possibleSameRequisitionAs rdfs:label "possible same requisition as"@en .
+ke:possibleSameRequisitionAs rdfs:comment "Records suspected identity overlap for review, without equality. CQs: 04,06. Provenance: Attributed identity-review assessment and evidence; not transitive or owl:sameAs."@en .
+ke:possibleSameRequisitionAs rdfs:domain ke:JobPosting .
+ke:possibleSameRequisitionAs rdfs:range ke:JobPosting .
+
+ke:hasSalaryObservation a owl:ObjectProperty .
+ke:hasSalaryObservation rdfs:label "has salary observation"@en .
+ke:hasSalaryObservation rdfs:comment "Relates a posting to a separately preserved compensation statement/band. CQs: 03,04,05. Provenance: Original structured/prose passage; retain each band separately."@en .
+ke:hasSalaryObservation rdfs:domain ke:JobPosting .
+ke:hasSalaryObservation rdfs:range ke:SalaryObservation .
+
+ke:salaryForRole a owl:ObjectProperty .
+ke:salaryForRole rdfs:label "salary for role"@en .
+ke:salaryForRole rdfs:comment "Relates a band to the advertised function it explicitly applies to. CQs: 03,04. Provenance: Band-to-role applicability evidence; no blanket applicability."@en .
+ke:salaryForRole rdfs:domain ke:SalaryObservation .
+ke:salaryForRole rdfs:range ke:JobRole .
+
+ke:evidencePassage a owl:ObjectProperty .
+ke:evidencePassage rdfs:label "evidence passage"@en .
+ke:evidencePassage rdfs:comment "Links a record to relevant candidate/contextual evidence, without asserting support. CQs: 01,02,03,04,05,06. Provenance: Resolvable passage chain; an Assessment explains support, contradiction or uncertainty."@en .
+ke:evidencePassage rdfs:range ke:EvidencePassage .
+
+ke:inArtifact a owl:ObjectProperty .
+ke:inArtifact rdfs:label "in artifact"@en .
+ke:inArtifact rdfs:comment "Locates a passage in its preserved capture. CQs: 01,02,03,04,05,06. Provenance: Exact artifact reference, checksum, capture time and locator."@en .
+ke:inArtifact rdfs:domain ke:EvidencePassage .
+ke:inArtifact rdfs:range ke:EvidenceArtifact .
+
+ke:contextPassage a owl:ObjectProperty .
+ke:contextPassage rdfs:label "context passage"@en .
+ke:contextPassage rdfs:comment "Points to another passage needed to interpret the first, including conflicting wording. CQs: 01,02,03,04,05,06. Provenance: Context with its own locator; no consistency assumption."@en .
+ke:contextPassage rdfs:domain ke:EvidencePassage .
+ke:contextPassage rdfs:range ke:EvidencePassage .
+
+ke:claimSubject a owl:ObjectProperty .
+ke:claimSubject rdfs:label "claim subject"@en .
+ke:claimSubject rdfs:comment "Identifies the subject of a bounded assertion. CQs: 05,06. Provenance: Fixed claim definition/version; omit unresolved subjects."@en .
+ke:claimSubject rdfs:domain ke:Claim .
+
+ke:assessmentTarget a owl:ObjectProperty .
+ke:assessmentTarget rdfs:label "assessment target"@en .
+ke:assessmentTarget rdfs:comment "Identifies the record, role, claim, observation, comparison or assessment being judged. CQs: 01,02,03,04,05,06. Provenance: Explicit target and question kind; no target-type inference or verdict."@en .
+ke:assessmentTarget rdfs:domain ke:Assessment .
+
+ke:comparisonMember a owl:ObjectProperty .
+ke:comparisonMember rdfs:label "comparison member"@en .
+ke:comparisonMember rdfs:comment "Identifies an observation in an already designated pair. CQs: 04. Provenance: Fixed pair reference; intended two distinct members, documented rather than OWL-enforced."@en .
+ke:comparisonMember rdfs:domain ke:SalaryComparison .
+ke:comparisonMember rdfs:range ke:SalaryObservation .
+
+ke:reviewsAssessment a owl:ObjectProperty .
+ke:reviewsAssessment rdfs:label "reviews assessment"@en .
+ke:reviewsAssessment rdfs:comment "Links later review/adjudication to an earlier determination. CQs: 01,02,03,04,05,06. Provenance: Reviewer, time, criteria, version and rationale; preserve initial judgments."@en .
+ke:reviewsAssessment rdfs:domain ke:HumanAssessment .
+ke:reviewsAssessment rdfs:range ke:Assessment .
+
+ke:queueTarget a owl:ObjectProperty .
+ke:queueTarget rdfs:label "queue target"@en .
+ke:queueTarget rdfs:comment "Identifies the actual record routed to this observed queue item. CQs: 06. Provenance: Application snapshot, original record identity and category; never fabricate membership from a flag."@en .
+ke:queueTarget rdfs:domain ke:ReviewQueueEntry .
+
+ke:actionText a owl:DatatypeProperty .
+ke:actionText rdfs:label "action text"@en .
+ke:actionText rdfs:comment "Advertised action wording. CQs: 01,02. Provenance: Duty passage; do not connect unrelated words."@en .
+ke:actionText rdfs:domain ke:Responsibility .
+ke:actionText rdfs:range xsd:string .
+
+ke:lowerAmount a owl:DatatypeProperty .
+ke:lowerAmount rdfs:label "lower amount"@en .
+ke:lowerAmount rdfs:comment "Original numeric amount or lower bound. CQs: 03,04. Provenance: Exact units/band; preserve malformed raw input in evidence instead of inventing valid amounts."@en .
+ke:lowerAmount rdfs:domain ke:SalaryObservation .
+ke:lowerAmount rdfs:range xsd:decimal .
+
+ke:upperAmount a owl:DatatypeProperty .
+ke:upperAmount rdfs:label "upper amount"@en .
+ke:upperAmount rdfs:comment "Original ceiling when disclosed. CQs: 03,04. Provenance: Explicit ceiling; no invented range."@en .
+ke:upperAmount rdfs:domain ke:SalaryObservation .
+ke:upperAmount rdfs:range xsd:decimal .
+
+ke:currency a owl:DatatypeProperty .
+ke:currency rdfs:label "currency"@en .
+ke:currency rdfs:comment "Explicit currency for this amount. CQs: 03,04. Provenance: Band-specific evidence; never transfer units from unrelated benefits/bands."@en .
+ke:currency rdfs:domain ke:SalaryObservation .
+ke:currency rdfs:range xsd:string .
+
+ke:payPeriod a owl:DatatypeProperty .
+ke:payPeriod rdfs:label "pay period"@en .
+ke:payPeriod rdfs:comment "Explicit pay period, preserving original meaning. CQs: 03,04. Provenance: Band-specific evidence; never infer Annual or Monthly."@en .
+ke:payPeriod rdfs:domain ke:SalaryObservation .
+ke:payPeriod rdfs:range xsd:string .
+
+ke:compensationBasis a owl:DatatypeProperty .
+ke:compensationBasis rdfs:label "compensation basis"@en .
+ke:compensationBasis rdfs:comment "Source-described base, total compensation, OTE, bonus, equity or other measure. CQs: 03,04. Provenance: Explicit wording; separate from evidence status and eligibility."@en .
+ke:compensationBasis rdfs:domain ke:SalaryObservation .
+ke:compensationBasis rdfs:range xsd:string .
+
+ke:grossNetBasis a owl:DatatypeProperty .
+ke:grossNetBasis rdfs:label "gross net basis"@en .
+ke:grossNetBasis rdfs:comment "Explicit gross/net measure when stated. CQs: 03,04. Provenance: Source passage; no tax or gross/net conversion assumed."@en .
+ke:grossNetBasis rdfs:domain ke:SalaryObservation .
+ke:grossNetBasis rdfs:range xsd:string .
+
+ke:payMarket a owl:DatatypeProperty .
+ke:payMarket rdfs:label "pay market"@en .
+ke:payMarket rdfs:comment "Evidenced country and geographic pay-market scope. CQs: 03,04. Provenance: Band geography; headquarters/city/remote eligibility alone are insufficient."@en .
+ke:payMarket rdfs:domain ke:SalaryObservation .
+ke:payMarket rdfs:range xsd:string .
+
+ke:bandApplicability a owl:DatatypeProperty .
+ke:bandApplicability rdfs:label "band applicability"@en .
+ke:bandApplicability rdfs:comment "Conditions determining who/where a particular band applies to. CQs: 03,04. Provenance: Original conditions; no pooling or favorable-band selection."@en .
+ke:bandApplicability rdfs:domain ke:SalaryObservation .
+ke:bandApplicability rdfs:range xsd:string .
+
+ke:careerLevel a owl:DatatypeProperty .
+ke:careerLevel rdfs:label "career level"@en .
+ke:careerLevel rdfs:comment "Explicitly evidenced career level of the advertised work. CQs: 02,04. Provenance: Contextual evidence; title-derived machine levels remain assessments, not this fact."@en .
+ke:careerLevel rdfs:domain ke:JobRole .
+ke:careerLevel rdfs:range xsd:string .
+
+ke:employerName a owl:DatatypeProperty .
+ke:employerName rdfs:label "employer name"@en .
+ke:employerName rdfs:comment "Name explicitly attributed to the hiring employer. CQs: 03,04,05. Provenance: Employer/client evidence; recruiter/ATS labels cannot fill missing identity."@en .
+ke:employerName rdfs:domain ke:SalaryObservation .
+ke:employerName rdfs:range xsd:string .
+
+ke:recruitingAgentName a owl:DatatypeProperty .
+ke:recruitingAgentName rdfs:label "recruiting agent name"@en .
+ke:recruitingAgentName rdfs:comment "Name explicitly attributed to the recruiting agent. CQs: 03,04,05. Provenance: Agency attribution; separate from publisher and employer."@en .
+ke:recruitingAgentName rdfs:domain ke:SalaryObservation .
+ke:recruitingAgentName rdfs:range xsd:string .
+
+ke:artifactLocation a owl:DatatypeProperty .
+ke:artifactLocation rdfs:label "artifact location"@en .
+ke:artifactLocation rdfs:comment "Resolvable preserved-capture location, distinct from original source URL. CQs: 01,02,03,04,05,06. Provenance: Capture manifest; private paths remain private, never automatically published."@en .
+ke:artifactLocation rdfs:domain ke:EvidenceArtifact .
+ke:artifactLocation rdfs:range xsd:anyURI .
+
+ke:sha256 a owl:DatatypeProperty .
+ke:sha256 rdfs:label "sha256"@en .
+ke:sha256 rdfs:comment "SHA-256 of exact captured artifact bytes. CQs: 01,02,03,04,05,06. Provenance: Capture-generated byte checksum; no implication of truth."@en .
+ke:sha256 rdfs:domain ke:EvidenceArtifact .
+ke:sha256 rdfs:range xsd:string .
+
+ke:capturedAt a owl:DatatypeProperty .
+ke:capturedAt rdfs:label "captured at"@en .
+ke:capturedAt rdfs:comment "UTC original-source capture time. CQs: 01,02,03,04,05,06. Provenance: Actual capture record; not publication, assessment or verification time."@en .
+ke:capturedAt rdfs:domain ke:EvidenceArtifact .
+ke:capturedAt rdfs:range xsd:dateTime .
+
+ke:passageLocator a owl:DatatypeProperty .
+ke:passageLocator rdfs:label "passage locator"@en .
+ke:passageLocator rdfs:comment "Exact pointer, page/section or bounded span with transform/offset convention. CQs: 01,02,03,04,05,06. Provenance: Must resolve against hashed capture; URLs/summaries alone are insufficient."@en .
+ke:passageLocator rdfs:domain ke:EvidencePassage .
+ke:passageLocator rdfs:range xsd:string .
+
+ke:passageText a owl:DatatypeProperty .
+ke:passageText rdfs:label "passage text"@en .
+ke:passageText rdfs:comment "Optional verbatim text retained alongside its locator. CQs: 01,02,03,04,05,06. Provenance: Must match capture under the stated transform; text alone is not a trace chain."@en .
+ke:passageText rdfs:domain ke:EvidencePassage .
+ke:passageText rdfs:range xsd:string .
+
+ke:claimText a owl:DatatypeProperty .
+ke:claimText rdfs:label "claim text"@en .
+ke:claimText rdfs:comment "Bounded assertion selected for support assessment. CQs: 05. Provenance: Approved/attributable definition and version; unresolved text is omitted, never synthesized."@en .
+ke:claimText rdfs:domain ke:Claim .
+ke:claimText rdfs:range xsd:string .
+
+ke:assessmentKind a owl:DatatypeProperty .
+ke:assessmentKind rdfs:label "assessment kind"@en .
+ke:assessmentKind rdfs:comment "Scoped question, separate from outcome and origin. CQs: 01,02,03,04,05,06. Provenance: Use question/target conventions below; retain legacy codes separately."@en .
+ke:assessmentKind rdfs:domain ke:Assessment .
+ke:assessmentKind rdfs:range xsd:string .
+
+ke:outcome a owl:DatatypeProperty .
+ke:outcome rdfs:label "outcome"@en .
+ke:outcome rdfs:comment "Recorded result under stated criteria, including Insufficient Evidence. CQs: 01,02,03,04,05,06. Provenance: Origin, evidence and rationale; absent outcome is unreviewed, never false."@en .
+ke:outcome rdfs:domain ke:Assessment .
+ke:outcome rdfs:range xsd:string .
+
+ke:rationale a owl:DatatypeProperty .
+ke:rationale rdfs:label "rationale"@en .
+ke:rationale rdfs:comment "Explanation of determination and material evidence/conflicts. CQs: 01,02,03,04,05,06. Provenance: Specific duty, band, claim or identity evidence; no invented facts."@en .
+ke:rationale rdfs:domain ke:Assessment .
+ke:rationale rdfs:range xsd:string .
+
+ke:unresolvedFact a owl:DatatypeProperty .
+ke:unresolvedFact rdfs:label "unresolved fact"@en .
+ke:unresolvedFact rdfs:comment "Specific missing/conflicting fact affecting the decision. CQs: 01,02,03,04,05,06. Provenance: Name field and impact; unrelated gaps need not force uncertainty."@en .
+ke:unresolvedFact rdfs:domain ke:Assessment .
+ke:unresolvedFact rdfs:range xsd:string .
+
+ke:dimensionReason a owl:DatatypeProperty .
+ke:dimensionReason rdfs:label "dimension reason"@en .
+ke:dimensionReason rdfs:comment "Dimension-named outcome and reason in a scoped assessment. CQs: 01,02,03,04,05,06. Provenance: Identify dimension, comparison member and passages; do not hide unknowns behind an aggregate verdict."@en .
+ke:dimensionReason rdfs:domain ke:Assessment .
+ke:dimensionReason rdfs:range xsd:string .
+
+ke:criteriaReference a owl:DatatypeProperty .
+ke:criteriaReference rdfs:label "criteria reference"@en .
+ke:criteriaReference rdfs:comment "Versioned criteria, pair specification or frozen-assumption reference. CQs: 01,02,03,04,05,06. Provenance: Stable document/version/checksum on Assessment or SalaryComparison; no domain that conflates their types."@en .
+ke:criteriaReference rdfs:range xsd:string .
+
+ke:endpointPolicy a owl:DatatypeProperty .
+ke:endpointPolicy rdfs:label "endpoint policy"@en .
+ke:endpointPolicy rdfs:comment "Declared floor or full-range endpoint policy. CQs: 04. Provenance: Fixed before judging; full ranges require both ceilings."@en .
+ke:endpointPolicy rdfs:domain ke:SalaryComparison .
+ke:endpointPolicy rdfs:range xsd:string .
+
+ke:conversionPolicy a owl:DatatypeProperty .
+ke:conversionPolicy rdfs:label "conversion policy"@en .
+ke:conversionPolicy rdfs:comment "Reference to frozen FX rates/date, period conversion and rounding. CQs: 04. Provenance: Immutable reference; preserve original units/amounts; conversion does not prove comparability."@en .
+ke:conversionPolicy rdfs:domain ke:SalaryComparison .
+ke:conversionPolicy rdfs:range xsd:string .
+
+ke:queueCategory a owl:DatatypeProperty .
+ke:queueCategory rdfs:label "queue category"@en .
+ke:queueCategory rdfs:comment "Original category of observed queue item. CQs: 06. Provenance: Actual snapshot field; not a human outcome."@en .
+ke:queueCategory rdfs:domain ke:ReviewQueueEntry .
+ke:queueCategory rdfs:range xsd:string .
+
+ke:internalReviewFlag a owl:DatatypeProperty .
+ke:internalReviewFlag rdfs:label "internal review flag"@en .
+ke:internalReviewFlag rdfs:comment "Recorded internal machine review flag on a source record/output snapshot. CQs: 06. Provenance: Run/snapshot attribution; absence is unknown; neither value proves membership or human need."@en .
+ke:internalReviewFlag rdfs:range xsd:boolean .
+
+ke:reviewQuestion a owl:DatatypeProperty .
+ke:reviewQuestion rdfs:label "review question"@en .
+ke:reviewQuestion rdfs:comment "Specific issue a reviewer must resolve for an assessed review need. CQs: 06. Provenance: Affected decision, material missing/conflicting fact and evidence; no automatic queue action."@en .
+ke:reviewQuestion rdfs:domain ke:Assessment .
+ke:reviewQuestion rdfs:range xsd:string .
