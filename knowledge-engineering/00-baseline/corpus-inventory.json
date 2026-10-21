@@ -1,0 +1,1411 @@
+{
+  "inventorySchemaVersion": 1,
+  "corpusId": "20261021T125408Z-ebb0b062",
+  "preparedAtUtc": "2026-10-21T12:58:00.361971Z",
+  "baseline": {
+    "head": "ee5bd15ff52b6a88e15a2dafab6886422980f557",
+    "gitBlobSha256": "207ef7426790d2a56ac24b06207e77b8ae50bc8a19b117d98d407f74c8118908",
+    "workingFileSha256AtBaseline": "e8ba9dde2539fe778e971b676a3bd4b8d8370b5669f88e4ba561af4e68e678bb",
+    "snapshotId": "20261021T110236218Z-ec7c36e4"
+  },
+  "captureWindowUtc": [
+    "2026-10-21T12:54:08.183Z",
+    "2026-10-21T12:54:33.287Z"
+  ],
+  "httpRequests": 83,
+  "candidateOccurrences": 300,
+  "uniqueUpstreamIdentities": 263,
+  "candidateMachineStrata": {
+    "excluded": 285,
+    "approved": 8,
+    "pending": 7
+  },
+  "uniqueIdentityMachineStrata": {
+    "excluded": 249,
+    "approved": 7,
+    "pending": 7
+  },
+  "sourceSummary": {
+    "lever-sambatv": {
+      "rawOccurrences": 61,
+      "uniqueUpstreamIds": 61,
+      "machineStrata": {
+        "excluded": 56,
+        "approved": 5
+      },
+      "detailsSucceeded": 0,
+      "completeBoardFeed": true
+    },
+    "greenhouse-nearform": {
+      "rawOccurrences": 20,
+      "uniqueUpstreamIds": 20,
+      "machineStrata": {
+        "excluded": 20
+      },
+      "detailsSucceeded": 20,
+      "completeBoardFeed": true
+    },
+    "greenhouse-tamara": {
+      "rawOccurrences": 44,
+      "uniqueUpstreamIds": 44,
+      "machineStrata": {
+        "excluded": 44
+      },
+      "detailsSucceeded": 44,
+      "completeBoardFeed": true
+    },
+    "greenhouse-sapience": {
+      "rawOccurrences": 13,
+      "uniqueUpstreamIds": 13,
+      "machineStrata": {
+        "approved": 1,
+        "excluded": 6,
+        "pending": 6
+      },
+      "detailsSucceeded": 13,
+      "completeBoardFeed": true
+    },
+    "workable-envision": {
+      "rawOccurrences": 55,
+      "uniqueUpstreamIds": 55,
+      "machineStrata": {
+        "excluded": 54,
+        "pending": 1
+      },
+      "detailsSucceeded": 0,
+      "completeBoardFeed": true
+    },
+    "workable-robusta": {
+      "rawOccurrences": 107,
+      "uniqueUpstreamIds": 70,
+      "machineStrata": {
+        "excluded": 105,
+        "approved": 2
+      },
+      "detailsSucceeded": 0,
+      "completeBoardFeed": true
+    }
+  },
+  "conservativeGroupCount": 241,
+  "eligibleRepresentativeMachineStrata": {
+    "approved": 5,
+    "pending": 7,
+    "excluded": 229
+  },
+  "groupsWithMultipleOccurrences": 38,
+  "selection": {
+    "target": 40,
+    "proposedStrata": {
+      "approved": 15,
+      "pending": 10,
+      "excluded": 15
+    },
+    "actualStrata": {
+      "approved": 5,
+      "pending": 7,
+      "excluded": 28
+    },
+    "selected": 40,
+    "seed": "ke-observatory-step-0.3B-2026-10-21-v1",
+    "splitCounts": {
+      "held_out": 30,
+      "development": 10
+    },
+    "splitMachineStrata": {
+      "development": {
+        "pending": 2,
+        "excluded": 7,
+        "approved": 1
+      },
+      "held_out": {
+        "approved": 4,
+        "excluded": 21,
+        "pending": 5
+      }
+    },
+    "sourcesSelected": {
+      "lever-sambatv": 10,
+      "greenhouse-sapience": 11,
+      "greenhouse-tamara": 4,
+      "workable-envision": 6,
+      "workable-robusta": 5,
+      "greenhouse-nearform": 4
+    },
+    "method": "Conservative ID/URL/same-board-title/identical-long-description groups; representative by SHA256(seed+caseID), artifact path tie-break. Take up to 15 approved and 10 pending representatives. Fill shortage from excluded with source coverage, three candidates per observed lexical pay/semantic-term feature, then least-used source and seeded order. Largest-remainder proportional split allocation, then independent seeded order within each machine stratum.",
+    "noHumanLabelsUsed": true,
+    "crossSplitDuplicateGroups": 0
+  },
+  "salaryCoverage": {
+    "candidates": {
+      "cases": 300,
+      "structuredBandPresent": 45,
+      "baseWordingPresent": 45,
+      "totalWordingPresent": 26,
+      "currencyNumberTextPresent": 59,
+      "noStructuredBandOrCurrencyNumberPattern": 219,
+      "frozenMachineNumericSalary": 22,
+      "frozenMachineSalaryEligible": 0,
+      "frozenMachineSalaryBases": {
+        "unknown": 22,
+        "none": 278
+      },
+      "noHumanEligibilityDecisions": true
+    },
+    "selected": {
+      "cases": 40,
+      "structuredBandPresent": 9,
+      "baseWordingPresent": 16,
+      "totalWordingPresent": 5,
+      "currencyNumberTextPresent": 20,
+      "noStructuredBandOrCurrencyNumberPattern": 15,
+      "frozenMachineNumericSalary": 4,
+      "frozenMachineSalaryEligible": 0,
+      "frozenMachineSalaryBases": {
+        "none": 36,
+        "unknown": 4
+      },
+      "noHumanEligibilityDecisions": true
+    }
+  },
+  "comparisonPairsAssigned": 0,
+  "limitations": [
+    "Prospective public API snapshot, not recovery of historical source descriptions.",
+    "Sampling strata and pay-word markers are machine/lexical data, not Ground Truth.",
+    "Same-title and exact-description grouping is conservative; real distinct requisitions may be grouped. Residual semantic duplicates remain possible.",
+    "No source expansion. Approved/pending quotas cannot be met after conservative grouping; excluded cases fill the 40-case target.",
+    "No independently verified base-pay positives, total-pay negatives, evidence-support labels, or comparison judgments exist yet.",
+    "No multiple structured bands were observed; no artificial multi-band or estimate/repost cases are added.",
+    "Comparison partners remain blank: source-only preparation does not establish eligibility, market or level comparability. Approve fixed pairs before labeling.",
+    "API fields are preserved in full as supplied; capture cannot establish whether the upstream publisher omitted content.",
+    "Shareable inventory omits titles, descriptions, source excerpts, contact data, and per-case machine strata to avoid exposing raw material and cueing reviewers."
+  ],
+  "cases": [
+    {
+      "caseId": "EVAL-017f9b803aff4ee2",
+      "sourceId": "lever-sambatv",
+      "sourceJobId": "24ff7e8b-bec7-453e-9356-3e5ff843431a",
+      "duplicateGroupId": "GROUP-e04007e5334bc77d",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-017f9b803aff4ee2/evidence.json",
+      "evidenceSha256": "dec16ace3f9357d24880c33a72f727b50f15e71f7c1003c49954caae79f29384",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-017f9b803aff4ee2/replay-input.json",
+      "replayInputSha256": "5e3f25147613e03b2f75db24267697a444e9c97c81923644f4f14e700535a904",
+      "originalArtifactSha256": "02629c510844c064a11b633ee1d2910624cea84956c0e3374997a9b7751625d0",
+      "detailArtifactSha256": null
+    },
+    {
+      "caseId": "EVAL-0d7b2c3f9f39cbcc",
+      "sourceId": "greenhouse-sapience",
+      "sourceJobId": "4409134009",
+      "duplicateGroupId": "GROUP-4bc6cb80eb7dad2c",
+      "split": "development",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-0d7b2c3f9f39cbcc/evidence.json",
+      "evidenceSha256": "128b5e783fa4abdc50d44ecf4d5d3d2bd0b9f98e5c5bc28dd8cf5c1af3a8673c",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-0d7b2c3f9f39cbcc/replay-input.json",
+      "replayInputSha256": "5bdcfe2e04329449529adf7df498b4383177647e80ad751c7056bd647d656cc0",
+      "originalArtifactSha256": "0145bf77b15db15e8855478803c49cb9d2f650482499cc44f42832e112925029",
+      "detailArtifactSha256": "f16238cf319bf50444ed7340d5575dcc34c9e527c738a9f5e4c96e03bf65e7ff"
+    },
+    {
+      "caseId": "EVAL-1dc856a41d2f7cc2",
+      "sourceId": "lever-sambatv",
+      "sourceJobId": "c3365607-3f39-46ea-b9d8-7e569a6e2d26",
+      "duplicateGroupId": "GROUP-8ba72460cfa03eb4",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-1dc856a41d2f7cc2/evidence.json",
+      "evidenceSha256": "298fe370f7a35ef5035fd8c75d299573bf6a2b38d7cbea289e7a7e273c284732",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-1dc856a41d2f7cc2/replay-input.json",
+      "replayInputSha256": "6129cb34a7ed24376a214e778be60db2dee656df4c7be65769375fc68434943d",
+      "originalArtifactSha256": "4aa5ff1eeb358c3f9a9061bc9fd274f003d59d3fd1b34d446451c4df7f61f2af",
+      "detailArtifactSha256": null
+    },
+    {
+      "caseId": "EVAL-2ad65cdb9282c914",
+      "sourceId": "greenhouse-tamara",
+      "sourceJobId": "5003408101",
+      "duplicateGroupId": "GROUP-d3cfc150b80c732e",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-2ad65cdb9282c914/evidence.json",
+      "evidenceSha256": "6bc0e301e808b87e5e41881d31395ba25f840fd03d452752334e96c2caa1a14c",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-2ad65cdb9282c914/replay-input.json",
+      "replayInputSha256": "31a9a2938fd1e60301cf88b3140c9ef95f36f3bb5951f0069cf7e3dd94af3be6",
+      "originalArtifactSha256": "d8fbc11319efc90a23b509a78763c3dfa5add100df9fda47caf69d27d3a15aab",
+      "detailArtifactSha256": "bf0f24beb291e61e2128910a76fc65997358b64bdfdfc7911ed597fc703c1613"
+    },
+    {
+      "caseId": "EVAL-31af8a786043d9e1",
+      "sourceId": "workable-envision",
+      "sourceJobId": "CCC90924B4",
+      "duplicateGroupId": "GROUP-89549e7703f56336",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-31af8a786043d9e1/evidence.json",
+      "evidenceSha256": "f2bc4d9fe3d795bbc07b1717f361df4071012ea6d721f85fa8727664698f20cf",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-31af8a786043d9e1/replay-input.json",
+      "replayInputSha256": "1801f4b538c187d49f20b5a090fccf4b6b62673c1334248f2f8975dba2774b70",
+      "originalArtifactSha256": "da97d38be5f67ee969ed5e2e95fc74c84dd296d9a17fb7273b7550804c4190f1",
+      "detailArtifactSha256": null
+    },
+    {
+      "caseId": "EVAL-36707052e3cea413",
+      "sourceId": "workable-envision",
+      "sourceJobId": "C48AC7698C",
+      "duplicateGroupId": "GROUP-913baf3b7e7d525e",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-36707052e3cea413/evidence.json",
+      "evidenceSha256": "de83143517c32dd4a423e13491817fe5fe81f4523873bf1879ba54ebf15103c2",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-36707052e3cea413/replay-input.json",
+      "replayInputSha256": "b679b269fb60fad3b9fc7285fec20a040b46d5202889fe79c8fe6edcc4b99f41",
+      "originalArtifactSha256": "94508c8d7c78130c3fa4c7970df3a238c020a0d770c049795c6842c9d83aa66b",
+      "detailArtifactSha256": null
+    },
+    {
+      "caseId": "EVAL-3dfa6491679e5c52",
+      "sourceId": "lever-sambatv",
+      "sourceJobId": "a189b0cd-7c6a-4da3-a0b6-8956d2700cd7",
+      "duplicateGroupId": "GROUP-75e5d2fee60a5414",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-3dfa6491679e5c52/evidence.json",
+      "evidenceSha256": "6f9b94c0e0b173eb97ad26b483f2a16389da345a9cc6d5c83ba4b0c375f3f45b",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-3dfa6491679e5c52/replay-input.json",
+      "replayInputSha256": "4293eb1b60b337d62d63d498f7a09b44605842b00e2bd8b85b79af49be93cc7a",
+      "originalArtifactSha256": "fc4cd5d8b90923779e5a21ab56393c033d1f4bafc91044cd42210009930d0268",
+      "detailArtifactSha256": null
+    },
+    {
+      "caseId": "EVAL-439ca061404674c2",
+      "sourceId": "lever-sambatv",
+      "sourceJobId": "7a82698a-05de-48bf-9977-eb90698c3158",
+      "duplicateGroupId": "GROUP-5948a5978996ae8b",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-439ca061404674c2/evidence.json",
+      "evidenceSha256": "7cc43af172602ecb55d2cb9b2bd81037c65275e8b623fb0fb9278297f7e62a36",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-439ca061404674c2/replay-input.json",
+      "replayInputSha256": "c1b8c3dde0cb6f337ae1c467c1b9ab53d0109d99481aebd4425eb5ab061ece47",
+      "originalArtifactSha256": "8bd51c5721343838c7ba07457abbd53a29379b53a34cf6fb26ba1197be9f06d8",
+      "detailArtifactSha256": null
+    },
+    {
+      "caseId": "EVAL-4847917fd586d111",
+      "sourceId": "lever-sambatv",
+      "sourceJobId": "13a63a76-78e9-4d12-8d8f-f8b98a81502f",
+      "duplicateGroupId": "GROUP-3ee2fb3348e03e99",
+      "split": "development",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-4847917fd586d111/evidence.json",
+      "evidenceSha256": "64a4e15901c426ad9a582e495f31d0fca268ef10b965d7dfa7f926382cbee39a",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-4847917fd586d111/replay-input.json",
+      "replayInputSha256": "72cddb3c86939060228aa96ee8c0e772d58ba2ed38a325a14c8a4a86b718b421",
+      "originalArtifactSha256": "7a515839e4e5df3b55e8adfd3d43e0c9fd5c9b15edff7323a128957b2e3b039e",
+      "detailArtifactSha256": null
+    },
+    {
+      "caseId": "EVAL-4944ef8ed5a21584",
+      "sourceId": "lever-sambatv",
+      "sourceJobId": "dd0e80d8-0c6a-4222-aef5-045662f279c7",
+      "duplicateGroupId": "GROUP-faf052c1656c7677",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-4944ef8ed5a21584/evidence.json",
+      "evidenceSha256": "b9266da10a8c5070fb671ec67712814fd5463f6d96860661c9bec040c6fef4c3",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-4944ef8ed5a21584/replay-input.json",
+      "replayInputSha256": "805822b323061d398b827365543f5106edb8b2df0430b846227ff876c3da2b11",
+      "originalArtifactSha256": "e42450033da8c389e77c16f8e23be5b63641f9a9486d051c7c1d497705359a52",
+      "detailArtifactSha256": null
+    },
+    {
+      "caseId": "EVAL-49b310c87a8d7de7",
+      "sourceId": "workable-robusta",
+      "sourceJobId": "1F6BE2753A",
+      "duplicateGroupId": "GROUP-eb597b1c894ed97c",
+      "split": "development",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-49b310c87a8d7de7/evidence.json",
+      "evidenceSha256": "d6098b772b3e6cd04fd9614208a2f1c664ef8e98d53de596ce9c797a7d43a674",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-49b310c87a8d7de7/replay-input.json",
+      "replayInputSha256": "2a51b9a9f28bd1b752d6377b9dfe104deca8221f0d4685d266ba89ff12942cb7",
+      "originalArtifactSha256": "6ed70d323a9a37f8afda91b9c23e3850dacb3475827417ccaedf8c8886754b7e",
+      "detailArtifactSha256": null
+    },
+    {
+      "caseId": "EVAL-4bc2915a9cd47faf",
+      "sourceId": "workable-robusta",
+      "sourceJobId": "72C393A7F3",
+      "duplicateGroupId": "GROUP-dece82ac1cac4058",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-4bc2915a9cd47faf/evidence.json",
+      "evidenceSha256": "e0ecd7d5a1828a41a9eee0af6cf7d0be55ef72a142dcefa8da448b1b9e7ff46f",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-4bc2915a9cd47faf/replay-input.json",
+      "replayInputSha256": "980001e713a9f4cc1444a75c9688e55bc8ad59ecaed76064bba66868c9def6cd",
+      "originalArtifactSha256": "e1943cb1edd1933995ae5e798a7980abffdb8025872f9a37df992580999f41df",
+      "detailArtifactSha256": null
+    },
+    {
+      "caseId": "EVAL-5808d42f328be89c",
+      "sourceId": "greenhouse-sapience",
+      "sourceJobId": "4409155009",
+      "duplicateGroupId": "GROUP-1c3082ce6b8d3ce0",
+      "split": "development",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-5808d42f328be89c/evidence.json",
+      "evidenceSha256": "0f837fa0968a8931fb9048d76b7cf0e27990f3183a383e84e2b19e2b2f52653b",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-5808d42f328be89c/replay-input.json",
+      "replayInputSha256": "deef9fc0ac00912c9329dcd9d378b9618be32230044229870c7ea01ee694469f",
+      "originalArtifactSha256": "9e19e7e671ec07c0dabe71bc2cca16529defeb6cf219b7ac5ed5fcdde3233094",
+      "detailArtifactSha256": "3aded489d7817f14e6bf1d1ba9effa12dcaffe526070b84ea9822d5ddbc03f33"
+    },
+    {
+      "caseId": "EVAL-582da882867d643d",
+      "sourceId": "lever-sambatv",
+      "sourceJobId": "31282a22-1387-412c-9ade-5a4812abdec2",
+      "duplicateGroupId": "GROUP-02806d3cf5d24e65",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-582da882867d643d/evidence.json",
+      "evidenceSha256": "994691b1fef0a7bbf749a7516586c75e0791d9cf33acabea4d8ed67d27b2e661",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-582da882867d643d/replay-input.json",
+      "replayInputSha256": "24416e07dbae44072d77a870787f37d8d1392f6a6bdc61ea7e064401ad58b9f7",
+      "originalArtifactSha256": "229c30478d6e4167b3dde5793ad32ea26a784779c3bb149fb01e22c6cca13f9e",
+      "detailArtifactSha256": null
+    },
+    {
+      "caseId": "EVAL-5af2e060050ee95a",
+      "sourceId": "lever-sambatv",
+      "sourceJobId": "7810c712-4c27-4161-9c1b-96353a210421",
+      "duplicateGroupId": "GROUP-fcd8639cfae18e04",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-5af2e060050ee95a/evidence.json",
+      "evidenceSha256": "233606cd21a55578aa848f980a2d4b258e2aac0ccc6c25c55494c44403cb257e",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-5af2e060050ee95a/replay-input.json",
+      "replayInputSha256": "97617e7dd17ff945823a0e3406f015daab79f8daab779aba2ae4f50a96283730",
+      "originalArtifactSha256": "f8b22cba2efabb3ecd27b29eaa08f9e0c7e9254bb32e9ebb73c2a35b3f456dad",
+      "detailArtifactSha256": null
+    },
+    {
+      "caseId": "EVAL-5cc434f061607dd4",
+      "sourceId": "workable-robusta",
+      "sourceJobId": "84E37611E2",
+      "duplicateGroupId": "GROUP-4db2dd5e3cbfd8e8",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-5cc434f061607dd4/evidence.json",
+      "evidenceSha256": "5fb5980d9a33d260fe3c283b68cd0dee8a05066a11dfd4d3bbaaf87e35a1ed31",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-5cc434f061607dd4/replay-input.json",
+      "replayInputSha256": "3619f680b17f7ab70964594dc2e72d0d689487102155ea72b585c1b8bbc8cae6",
+      "originalArtifactSha256": "a01f1c3ee2207373b750d6bcc9b9b4a25f51769eaf954fe7f9b064250a8383f4",
+      "detailArtifactSha256": null
+    },
+    {
+      "caseId": "EVAL-650a7e36f8e9ebc7",
+      "sourceId": "lever-sambatv",
+      "sourceJobId": "ced435ed-7dea-4312-b61a-9d5be2d34381",
+      "duplicateGroupId": "GROUP-1f748978fb58251c",
+      "split": "development",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-650a7e36f8e9ebc7/evidence.json",
+      "evidenceSha256": "450f543a4b04bc4a439d08eafaa3488d463c494d914a98744577f3b940dc225d",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-650a7e36f8e9ebc7/replay-input.json",
+      "replayInputSha256": "570c9d0fabae861856424b48f3d69a1e253e3ddcc3b06ebe8f62300962015971",
+      "originalArtifactSha256": "aaee39a24a5ca56459c85a3139a6162ecfecb7453ca90cc5c08d9878b6a8a66d",
+      "detailArtifactSha256": null
+    },
+    {
+      "caseId": "EVAL-66c11680641b7955",
+      "sourceId": "greenhouse-sapience",
+      "sourceJobId": "4425299009",
+      "duplicateGroupId": "GROUP-99ff27c13e5316e9",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-66c11680641b7955/evidence.json",
+      "evidenceSha256": "0b3ad5d195f7a3530933602aed3d60beb0aeffcc90907704dbe8879a9a2228d6",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-66c11680641b7955/replay-input.json",
+      "replayInputSha256": "cffa5dabdf28f90dbd417978a0234f457d2e1e522bf4e93303c8af86977bd68e",
+      "originalArtifactSha256": "f70ea503eadf1414100d9058878719f8f07898a532015daf0063d2e71a9ffefb",
+      "detailArtifactSha256": "5fbdf9cb96d9aa23ca6aec2da0cc36df2c27e9f59fd2b2ff067805c68b7fac12"
+    },
+    {
+      "caseId": "EVAL-727eedc183a19856",
+      "sourceId": "greenhouse-sapience",
+      "sourceJobId": "4425251009",
+      "duplicateGroupId": "GROUP-01c2b5c811369fc4",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-727eedc183a19856/evidence.json",
+      "evidenceSha256": "cc3e9a1678fdf48dc10d02a2f8b2e751a7f52a2452b5d96c1583e3f98aeb8cc4",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-727eedc183a19856/replay-input.json",
+      "replayInputSha256": "f5b3ce54b94de52d95fb014638b3a5754e7beb457c35d46bb9b8d7eb572d1be2",
+      "originalArtifactSha256": "04f6c92dee4e2c826331d7f1ec93344c0c55cfd69758109b274ae6cb2e2368c3",
+      "detailArtifactSha256": "39ff7acd67e841500ee54901790adf1caccf3cdee7c05fa8d91931e9dd45e5af"
+    },
+    {
+      "caseId": "EVAL-78b69dbc5f1ce9b9",
+      "sourceId": "greenhouse-nearform",
+      "sourceJobId": "7619114003",
+      "duplicateGroupId": "GROUP-cf339b2f850cf031",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-78b69dbc5f1ce9b9/evidence.json",
+      "evidenceSha256": "0e2aded6582d84b6543f03c77e362a725e47f3253b0e3308a3e5bbaeae0f5bdb",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-78b69dbc5f1ce9b9/replay-input.json",
+      "replayInputSha256": "257adc50c03dcabe3a0c3b17e344854c4ca5a771148820a286de32b28a17343a",
+      "originalArtifactSha256": "e907818d27a8dfa55984b87cb89934957374d3db368d37d9f4b43d4cf71ae6df",
+      "detailArtifactSha256": "e4c23391dacb7c1617fa6868f9601a994ce6a2b62419e5862948e08d790bde91"
+    },
+    {
+      "caseId": "EVAL-859b464d7ec70521",
+      "sourceId": "greenhouse-nearform",
+      "sourceJobId": "7614572003",
+      "duplicateGroupId": "GROUP-73fead3a5dca0769",
+      "split": "development",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-859b464d7ec70521/evidence.json",
+      "evidenceSha256": "5c90bda4e0836fc91ec08642024203ca711b935324835aa8d7757f2bb08ab583",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-859b464d7ec70521/replay-input.json",
+      "replayInputSha256": "d21ec44d0e77a975790455bfbe8d15497ec736b8cc8bc5f8acf58f5047926e1d",
+      "originalArtifactSha256": "a57a549d02d551f4acd2c8d28554df325cb4481eaed063e5c9df5b20c405ea3c",
+      "detailArtifactSha256": "112d90b651ed2a89c2e0551ce1573b841d52736c262c97458f1d3ea0ded9b97f"
+    },
+    {
+      "caseId": "EVAL-88e5a3055132360d",
+      "sourceId": "greenhouse-tamara",
+      "sourceJobId": "4975371101",
+      "duplicateGroupId": "GROUP-7b6a8624beee7172",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-88e5a3055132360d/evidence.json",
+      "evidenceSha256": "c0539cf46dcf5dd70e2f5f63fc1702cc9b34576d6843dfdbaf2c7a52593122ab",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-88e5a3055132360d/replay-input.json",
+      "replayInputSha256": "eb58bacb7f692d9c8c4b3837a70fa4b5cf044afd678b38029e1cb1e13a07e982",
+      "originalArtifactSha256": "3beb09ccdc8f38503aba208902d9d1d8e06a3311ed5916d613155d968cfe08ff",
+      "detailArtifactSha256": "6daccdf28b6b37168118d063bd77a4338525864011166b2af0e9178ecb7c6569"
+    },
+    {
+      "caseId": "EVAL-8ae988f379d45485",
+      "sourceId": "greenhouse-tamara",
+      "sourceJobId": "4849506101",
+      "duplicateGroupId": "GROUP-53dac65521b246b4",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-8ae988f379d45485/evidence.json",
+      "evidenceSha256": "f9cae43f43ec5488b33ec92ff9b4c049b9b9f555d0580c45d8877cf2507f3eff",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-8ae988f379d45485/replay-input.json",
+      "replayInputSha256": "45615969eb4d2fe7afd0157016379d4988a1283edc4266fa2ce554bb4ffd1038",
+      "originalArtifactSha256": "11ca1901f2bf11a45700dd41262d340bf4ce218d9e07b1cc7af0294e5bfb2141",
+      "detailArtifactSha256": "71874fa64885b30d9569d3d79200bde5dc8311410d11fcfefb233cc25dce6a89"
+    },
+    {
+      "caseId": "EVAL-934ded31907cd29b",
+      "sourceId": "workable-envision",
+      "sourceJobId": "1A4723F7A3",
+      "duplicateGroupId": "GROUP-f155806ac4ed9e2e",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-934ded31907cd29b/evidence.json",
+      "evidenceSha256": "10fd599bf1bb76ac5dd9875cdd2e937640bcf60c7e4c50ff084cbc5744b43c9e",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-934ded31907cd29b/replay-input.json",
+      "replayInputSha256": "3cfd54cd08008910c1315ccae7a27120b0e65272ee8a3fd41f5928b5f2b176ee",
+      "originalArtifactSha256": "7a27d66e68ed5a8328a58151047862849c89377509d685ae41607248622790b2",
+      "detailArtifactSha256": null
+    },
+    {
+      "caseId": "EVAL-953f881586ca4f3d",
+      "sourceId": "greenhouse-sapience",
+      "sourceJobId": "4409187009",
+      "duplicateGroupId": "GROUP-2783f43d737e43b3",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-953f881586ca4f3d/evidence.json",
+      "evidenceSha256": "c81af78d86a4af5873c7ef6fd6560d0cf61a69a9ac90516c42b897b7796b61ad",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-953f881586ca4f3d/replay-input.json",
+      "replayInputSha256": "447e6741b4dba0ab80da405a21dc8418de69bc0a12a68ee0d0be8cfaf980b025",
+      "originalArtifactSha256": "b728c799f20df99e11eee89d998b24f6cd38290907a213ac027ab58da5f02012",
+      "detailArtifactSha256": "4379e933c795f09c6125bf7140afeac51e9490e0b535e0c729aa91a25d439824"
+    },
+    {
+      "caseId": "EVAL-95e13d712cf8c19f",
+      "sourceId": "workable-envision",
+      "sourceJobId": "10249EC368",
+      "duplicateGroupId": "GROUP-863e5f2f1920c0e4",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-95e13d712cf8c19f/evidence.json",
+      "evidenceSha256": "8162e464bbdc2d45c0f3d673714a5f7fbbc1ca31ba6044c2a64cb4e5d6560f1a",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-95e13d712cf8c19f/replay-input.json",
+      "replayInputSha256": "9eb536f95044131eb54a897bd484879e15b3a8a9de5e33e3064242139d49982a",
+      "originalArtifactSha256": "273d8e12885c32885cd3653211138656e75cdcda60fe9c29852cdf763b186622",
+      "detailArtifactSha256": null
+    },
+    {
+      "caseId": "EVAL-96dbed73c1886ec2",
+      "sourceId": "greenhouse-sapience",
+      "sourceJobId": "4409077009",
+      "duplicateGroupId": "GROUP-bff4531a1eafadc2",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-96dbed73c1886ec2/evidence.json",
+      "evidenceSha256": "7c9a1649b4d3c0763ac16278c3c9ccfbae7a71110d5ea2a0c8c95648cef18616",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-96dbed73c1886ec2/replay-input.json",
+      "replayInputSha256": "7d91dc42d58306bdac1ec54debe4395572f6d9040fc8d110b82aaf5185c5c58c",
+      "originalArtifactSha256": "ad8e97e32840aea4d2521dc3b97a8ac36e3c69da0ddc4049ed04b5c80d5a8708",
+      "detailArtifactSha256": "007516e5596908342b8a6ba80fff07d770ffa514485c91876f042dfe4b198016"
+    },
+    {
+      "caseId": "EVAL-a263ee5d31a85961",
+      "sourceId": "lever-sambatv",
+      "sourceJobId": "c4197a68-54ad-400e-9060-6d291d051105",
+      "duplicateGroupId": "GROUP-8ad0d37b673f2237",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-a263ee5d31a85961/evidence.json",
+      "evidenceSha256": "e08c5d0e48f0b40f91a48324d18ed07b017f5965bc1d26dd1da05e694b850948",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-a263ee5d31a85961/replay-input.json",
+      "replayInputSha256": "d85f6b0f6bdb5b4cdc35cb3fa57c82465a48494cbcb4f98e697ef1b8fbb407cb",
+      "originalArtifactSha256": "9ee6cd2cccc29cdfbbeafbd5d783be8a647f6c089d85f4741ac9fc9f544c3c35",
+      "detailArtifactSha256": null
+    },
+    {
+      "caseId": "EVAL-bcc759c2ff1a0e4d",
+      "sourceId": "greenhouse-sapience",
+      "sourceJobId": "4454253009",
+      "duplicateGroupId": "GROUP-37f80b603c0b6ce1",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-bcc759c2ff1a0e4d/evidence.json",
+      "evidenceSha256": "6a386af3f4bdadc2cc8102baa830b72d8fb1e9a2b8041376de70328512af48be",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-bcc759c2ff1a0e4d/replay-input.json",
+      "replayInputSha256": "585097806bfe98c51dc7c3420922480b585ea201f5d04a1fa4cdeb59e4339b16",
+      "originalArtifactSha256": "5e5cdfc635a4915b7d6652efda2667714cfedfe6c49218f4c2700a2da64748c2",
+      "detailArtifactSha256": "eb8fb358c775f0ca1c1c4b05aa4028f8588b265ce869a3239a1961c3061287e1"
+    },
+    {
+      "caseId": "EVAL-d1d0a61c7b1ca072",
+      "sourceId": "greenhouse-tamara",
+      "sourceJobId": "4996307101",
+      "duplicateGroupId": "GROUP-358e6ebb73eb6dfb",
+      "split": "development",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-d1d0a61c7b1ca072/evidence.json",
+      "evidenceSha256": "612113f53c92979b6056f565327abae9bbae784d457d4abcfbebfbca12fa80cc",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-d1d0a61c7b1ca072/replay-input.json",
+      "replayInputSha256": "7115c05f5858a2a0df1084ed1bde3e8f61d89d818b5f13fa7849ff702b1c50e9",
+      "originalArtifactSha256": "1c05663778556c1fc924ba40e76432272bf09ae81bd5d81aae3e3b1cb9d708eb",
+      "detailArtifactSha256": "924bb4a7c2779e214481ca5b674f8cd3023fca73ae3825e0951a0fab23117bdf"
+    },
+    {
+      "caseId": "EVAL-d3e7c52d1ad61855",
+      "sourceId": "workable-envision",
+      "sourceJobId": "F9466EF37E",
+      "duplicateGroupId": "GROUP-8d9a868d0f9a7d20",
+      "split": "development",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-d3e7c52d1ad61855/evidence.json",
+      "evidenceSha256": "63fec10241a01748beb3488df4ed025709a9ebced0a7863b0099405fe37378ab",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-d3e7c52d1ad61855/replay-input.json",
+      "replayInputSha256": "23f981ef4406a08c3d1fbfb6a241ca93fc29ac551330cc3db1ce95cb2f2443dc",
+      "originalArtifactSha256": "5caaa996c4d6fa67380253e88ec8a53d1e3e76dc142a0b35f73cee28ffad3430",
+      "detailArtifactSha256": null
+    },
+    {
+      "caseId": "EVAL-d4068f29eae794a2",
+      "sourceId": "greenhouse-nearform",
+      "sourceJobId": "7732186003",
+      "duplicateGroupId": "GROUP-8130371e68bd1f34",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-d4068f29eae794a2/evidence.json",
+      "evidenceSha256": "883fd316839a4d6ec6b178b1e71b0a360d35376a8caaaaac6fe25e9801c21596",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-d4068f29eae794a2/replay-input.json",
+      "replayInputSha256": "4552417f2e90e7530b74068d17742aee166a5266500789080cfe0340b56b4c90",
+      "originalArtifactSha256": "2068efc84c9a6ee47a9d0c9352e283c21992251a41ba547ba2c728f76e8ec325",
+      "detailArtifactSha256": "1fecb22bd590181e64d4e17bd9e410f4cd5ea37560eb4e1c9634d5f3fb7e6f63"
+    },
+    {
+      "caseId": "EVAL-d59713c2dce0d763",
+      "sourceId": "greenhouse-sapience",
+      "sourceJobId": "4433900009",
+      "duplicateGroupId": "GROUP-6ec88bb840e3863d",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-d59713c2dce0d763/evidence.json",
+      "evidenceSha256": "48f6c74a1070c1ba8aa35d88689f2e8a6f962c93660d5715b1384756c8614475",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-d59713c2dce0d763/replay-input.json",
+      "replayInputSha256": "ff4ae13ba1e74c55153a736c0932e11b5cb2e5331ba874d58d61a572126d17c5",
+      "originalArtifactSha256": "6acbf2999441be0953c89d84107ca425627b23b6b8fa8c13684e3b42d8c12378",
+      "detailArtifactSha256": "603fb2db3e12e0985dd9c3dafe6f3171a2fa7265a501a3c245d2ab868f766a61"
+    },
+    {
+      "caseId": "EVAL-dafb394f04fdd989",
+      "sourceId": "greenhouse-sapience",
+      "sourceJobId": "4425322009",
+      "duplicateGroupId": "GROUP-20e342466fa3afdd",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-dafb394f04fdd989/evidence.json",
+      "evidenceSha256": "a25b15c575647ff623da214f40c2d3bccf1db5490b71f99e8b6a2b49a9f92ea2",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-dafb394f04fdd989/replay-input.json",
+      "replayInputSha256": "9b945713b0e337a57a0b3035b84e8907833816f1e1d46b8483e4f43278a397a0",
+      "originalArtifactSha256": "6e0775277607cbbb2584b913c3eb866b17dccf539cdaada2c659b7bbece217c8",
+      "detailArtifactSha256": "90e0e1dd18982d1a35ad4b9c34d1703ab435dbbca47775037a0fd0cdbaefbfde"
+    },
+    {
+      "caseId": "EVAL-e0f88fce2d2e186c",
+      "sourceId": "greenhouse-sapience",
+      "sourceJobId": "4426247009",
+      "duplicateGroupId": "GROUP-3d7c748f2ac1807c",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-e0f88fce2d2e186c/evidence.json",
+      "evidenceSha256": "b864ec21f07eccdbc2c1662a93411767b5062dd7fc2251a620f56179c7f81dbf",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-e0f88fce2d2e186c/replay-input.json",
+      "replayInputSha256": "e71695bf247b32dec99cba43ac288969a5e10e6e39f7c0ad06a4c3a2afdcc6a4",
+      "originalArtifactSha256": "368a96bf52453fe92b42b53fbe433992280343b688186a09b64cc89b67570925",
+      "detailArtifactSha256": "d1f158eee68747fcda598c0c94abe2e94307ab8a0862b2c4b0133541a99a5219"
+    },
+    {
+      "caseId": "EVAL-e4604c3b343c0f9c",
+      "sourceId": "greenhouse-nearform",
+      "sourceJobId": "7711879003",
+      "duplicateGroupId": "GROUP-d0e5d78d9689c559",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-e4604c3b343c0f9c/evidence.json",
+      "evidenceSha256": "1824b4bc5c9c8d8fd8163fa75165d266d1fadb5cf63de9e7db27826f8ae0c003",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-e4604c3b343c0f9c/replay-input.json",
+      "replayInputSha256": "cbcdaadfea263d02f47f7685cc4639d67da738ae83bd63fa90859c4e37302dfd",
+      "originalArtifactSha256": "d96571ebef40d3b1f05ad4480be7b59a495e2c6160b72e5af73566da09513948",
+      "detailArtifactSha256": "72b7e1c7970dcef7dcc9aa96aa659fa35ac1cbdfd951d4935ceba35d1077c7cc"
+    },
+    {
+      "caseId": "EVAL-ee7d1d903fd4c40a",
+      "sourceId": "greenhouse-sapience",
+      "sourceJobId": "4409177009",
+      "duplicateGroupId": "GROUP-22d19a4e5d772f24",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-ee7d1d903fd4c40a/evidence.json",
+      "evidenceSha256": "d44d3c6a03db2a5c51555d9f3372e283f60e0c147f5b2cb6fcf961ed00c87433",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-ee7d1d903fd4c40a/replay-input.json",
+      "replayInputSha256": "6d8c22582dbee63ef98cd639f862cda821c20940acc611844cf0d15e5ebfdef0",
+      "originalArtifactSha256": "1949dacbef6450a5ebc257b0446f2b3cdf8014a1f47d2c307ff6abfa5e2a8ebf",
+      "detailArtifactSha256": "f78af7f392f536b760e50d5033a01132baad8eb421ca184f6ddcf6d5421487a9"
+    },
+    {
+      "caseId": "EVAL-f41e6441d739ab74",
+      "sourceId": "workable-robusta",
+      "sourceJobId": "89EEB60A03",
+      "duplicateGroupId": "GROUP-a24b2204d9413d27",
+      "split": "development",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-f41e6441d739ab74/evidence.json",
+      "evidenceSha256": "085fdfcead8e051505efafd4bc10c2e2b1891bdc56c94dc9386095bce8103027",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-f41e6441d739ab74/replay-input.json",
+      "replayInputSha256": "98c5502c18dc9ac219106cfde19b5e9d2e9a81ef54ddfda16bca58a7487936a8",
+      "originalArtifactSha256": "609bdc5a5fed3bbe0e282d2e98f257f6d6243097cfccf41dc153606b40582e06",
+      "detailArtifactSha256": null
+    },
+    {
+      "caseId": "EVAL-f5abd1d8389ba873",
+      "sourceId": "workable-robusta",
+      "sourceJobId": "D8EA0BA357",
+      "duplicateGroupId": "GROUP-319482fdcb79c34c",
+      "split": "development",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-f5abd1d8389ba873/evidence.json",
+      "evidenceSha256": "ccc7be07a13f519c39138129015dddeda114610fe5de8191927b5013c21c207c",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-f5abd1d8389ba873/replay-input.json",
+      "replayInputSha256": "08c74fdc0a1beedcfa22beb3fad9e1227ceaa5775e6ee45cf03952f2955d4a5f",
+      "originalArtifactSha256": "93dc6f4dffa8f1bbe806e87dd02463847b03947b4469b491683d89975d84fc41",
+      "detailArtifactSha256": null
+    },
+    {
+      "caseId": "EVAL-fa95bb10fd034323",
+      "sourceId": "workable-envision",
+      "sourceJobId": "24692B9569",
+      "duplicateGroupId": "GROUP-7fad9e1db2db03d3",
+      "split": "held_out",
+      "evidenceArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-fa95bb10fd034323/evidence.json",
+      "evidenceSha256": "a37c26a0060560e64c7c6c8223adbb57ca2b936157df8f5858e73557e0d0d166",
+      "replayInputArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/selected/EVAL-fa95bb10fd034323/replay-input.json",
+      "replayInputSha256": "5e7ec60c2a6f84da187392a797652748abbe4e07b559138176a43fe00e9134d6",
+      "originalArtifactSha256": "88eb06cc48bd5ffa5b66cb4b9924cecc5518af32530943407c48d1ab0956193a",
+      "detailArtifactSha256": null
+    }
+  ],
+  "provenance": {
+    "captureTask": "Stage 0 Step 0.3B",
+    "repositoryHeadAtStart": "53b05f3ee34909c40e7290c56b3f9eb4c2085a83",
+    "configSourcePath": "config/sources.json",
+    "configSha256": "c5a2948b6cfb241c4e1dd7af4ff1d6e58d0e3e229cad080e2c62ecf1a0c4ad4b",
+    "approvedProtocolSha256": "c5e58ffea1facfd4a7340ef6b4b16256bbfcbe0123d33059826f0c8771ae0e05",
+    "originalTemplateSha256": "c8b37336654803254642e62c957cc054a5d6eec407a3e15e2fa5e9df0d63f981",
+    "localReviewCsvPath": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/evaluation-cases.csv",
+    "localReviewCsvSha256": "82e754da90b74cdec72b917a483d70089fbb268871b4553336c9a8068b19cd7d",
+    "localArtifactSealPath": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/SHA256SUMS",
+    "localArtifactSealSha256": "95ccf792916728d6c49a3059a9c053b6021db6c1a48c8c41353bdb295be13e9c",
+    "toolHashes": {
+      "capture.py": "9952f0a8410a8c0b6fa880bf8842afe457dcaa84dbc69a6750c0f52909c3fc17",
+      "prepare.py": "d307e313586b3749bdc39a2758236f595ad9f8e506a0fff456624acb0dd38a8d",
+      "verify.py": "7b073ac104d1a7336205597860304af3606fec492404c84a601f1b2e6e73b47b"
+    }
+  },
+  "rawResponseHashes": [
+    {
+      "sourceId": "lever-sambatv",
+      "purpose": "board",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0001.bin",
+      "sha256": "fc22389566907d470e839b099075f2011c078a8c558b36133ecef11cdfc31a93",
+      "bytes": 830994,
+      "capturedAtUtc": "2026-10-21T12:54:12.236Z"
+    },
+    {
+      "sourceId": "greenhouse-nearform",
+      "purpose": "board",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0002.bin",
+      "sha256": "0209a44df05357b1caa57ba5d049f4a0d19e593ccae4755aea569520928774ac",
+      "bytes": 237684,
+      "capturedAtUtc": "2026-10-21T12:54:10.800Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "board",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0003.bin",
+      "sha256": "a84e326507ba72ba7592a51ec54d7b2e0eb5a909868eed258f15f0e91c6310ed",
+      "bytes": 311321,
+      "capturedAtUtc": "2026-10-21T12:54:10.895Z"
+    },
+    {
+      "sourceId": "greenhouse-nearform",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0004.bin",
+      "sha256": "2f3ce238791216f1fc70b9984905160021856a43401b879426eea1de25c4ff62",
+      "bytes": 11386,
+      "capturedAtUtc": "2026-10-21T12:54:11.851Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0005.bin",
+      "sha256": "b99a50d57be167f655ba0acbb8713ecb488c237b7d45ef8ea0878f4563c5a37d",
+      "bytes": 5662,
+      "capturedAtUtc": "2026-10-21T12:54:12.012Z"
+    },
+    {
+      "sourceId": "greenhouse-nearform",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0006.bin",
+      "sha256": "4f6d9de29eb785c3df2a6345fd5e0034d4643a61ff63bdf1405daf8de5fe4531",
+      "bytes": 10136,
+      "capturedAtUtc": "2026-10-21T12:54:12.313Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0007.bin",
+      "sha256": "9e76b9399f7c01cf06f5d869f62aaffaeb24cdb5f76e150fcbbbd227d766fce1",
+      "bytes": 8041,
+      "capturedAtUtc": "2026-10-21T12:54:12.467Z"
+    },
+    {
+      "sourceId": "greenhouse-nearform",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0008.bin",
+      "sha256": "3dfa41317321fcb25c9af0d01956b41e92a084f192985737b80591d1e7cd1f27",
+      "bytes": 12740,
+      "capturedAtUtc": "2026-10-21T12:54:12.804Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0009.bin",
+      "sha256": "4687a6a81387c1137f3187c263441a198a4951054d159db71e6d365a27228186",
+      "bytes": 8011,
+      "capturedAtUtc": "2026-10-21T12:54:12.868Z"
+    },
+    {
+      "sourceId": "greenhouse-nearform",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0010.bin",
+      "sha256": "b31ffac5a9b2defb80d5e1d073b217ab00a640a28823f15ec2ec72d6bf000087",
+      "bytes": 9381,
+      "capturedAtUtc": "2026-10-21T12:54:13.626Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0011.bin",
+      "sha256": "37289b766c5da5f4e072a39f28913fcaacdb27af49660fa67b59d20ec460044a",
+      "bytes": 5836,
+      "capturedAtUtc": "2026-10-21T12:54:13.212Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0012.bin",
+      "sha256": "f8f3bf0c4136e05c56c94371a83fafe805f56e369e0d41031022c45ae45a235c",
+      "bytes": 5714,
+      "capturedAtUtc": "2026-10-21T12:54:13.791Z"
+    },
+    {
+      "sourceId": "greenhouse-sapience",
+      "purpose": "board",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0013.bin",
+      "sha256": "43d993a380cc73ac135ae517832683c9b1c0efa870adb324c66ba48ca03f5c1f",
+      "bytes": 402594,
+      "capturedAtUtc": "2026-10-21T12:54:14.334Z"
+    },
+    {
+      "sourceId": "greenhouse-nearform",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0014.bin",
+      "sha256": "d3025a7fa168b34a925c14f6a058536f6d983aa796d1d37c7612903e8ffde264",
+      "bytes": 12581,
+      "capturedAtUtc": "2026-10-21T12:54:13.975Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0015.bin",
+      "sha256": "cb30b3c4f8d2b7382af1a9c2c539361feb9cf6143fb6c3897f807f70e5d1f6bc",
+      "bytes": 7342,
+      "capturedAtUtc": "2026-10-21T12:54:14.145Z"
+    },
+    {
+      "sourceId": "greenhouse-nearform",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0016.bin",
+      "sha256": "89c8c88632d86d2f548176f02a25818c573efe1260d9c95e556352b993c4812e",
+      "bytes": 12977,
+      "capturedAtUtc": "2026-10-21T12:54:14.336Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0017.bin",
+      "sha256": "506bb491d0af6521edf02530716b4824a04cd26341677cc9974459fb6feea3bf",
+      "bytes": 5764,
+      "capturedAtUtc": "2026-10-21T12:54:14.571Z"
+    },
+    {
+      "sourceId": "greenhouse-nearform",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0018.bin",
+      "sha256": "75207ed7bc80a9146be1f1378ec56ca6aee1ecbaaaba9500d11acca37386786d",
+      "bytes": 10969,
+      "capturedAtUtc": "2026-10-21T12:54:14.752Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0019.bin",
+      "sha256": "b6c6fdc9316742f2c779054b2c644f09fe11849d7e697c4866e99c5d09277f63",
+      "bytes": 5844,
+      "capturedAtUtc": "2026-10-21T12:54:14.997Z"
+    },
+    {
+      "sourceId": "greenhouse-sapience",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0020.bin",
+      "sha256": "e18f95ede56427674efb409b3fddad034f358665943df044a93974162511290a",
+      "bytes": 34448,
+      "capturedAtUtc": "2026-10-21T12:54:15.169Z"
+    },
+    {
+      "sourceId": "greenhouse-nearform",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0021.bin",
+      "sha256": "1f36c79e20a297800da05bb0cfdbaded7ba0caf8e130baffafb002ef9dea9d25",
+      "bytes": 11654,
+      "capturedAtUtc": "2026-10-21T12:54:15.177Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0022.bin",
+      "sha256": "2c45c86879bfc28cc9ed7c82c5faf3174c98f46b1238b48085ae9e3735f18179",
+      "bytes": 5792,
+      "capturedAtUtc": "2026-10-21T12:54:15.433Z"
+    },
+    {
+      "sourceId": "greenhouse-sapience",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0023.bin",
+      "sha256": "14973f2a1b7a0dd1193ebed1aa49b1f46a4f50c8c3861b90ec1bfbfcc6a2a7c9",
+      "bytes": 33013,
+      "capturedAtUtc": "2026-10-21T12:54:15.578Z"
+    },
+    {
+      "sourceId": "greenhouse-nearform",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0024.bin",
+      "sha256": "2ad93c762b5f13aa313aead146378b7556986f9d8e4b5d178f3fc69a55ad65d1",
+      "bytes": 12007,
+      "capturedAtUtc": "2026-10-21T12:54:15.621Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0025.bin",
+      "sha256": "e9614e2d8f6d9012531b6ed5c36c30df62e541d1babf1ce936aa7fd3be71d2a7",
+      "bytes": 5498,
+      "capturedAtUtc": "2026-10-21T12:54:15.838Z"
+    },
+    {
+      "sourceId": "greenhouse-sapience",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0026.bin",
+      "sha256": "c407efa88cacdd57101c2fa8166b36621372d3c1d559f24268ab184667140d80",
+      "bytes": 30832,
+      "capturedAtUtc": "2026-10-21T12:54:16.305Z"
+    },
+    {
+      "sourceId": "greenhouse-nearform",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0027.bin",
+      "sha256": "11388ad166a62b577ad1271886bfba11b61756681f55361164526ab941fae29f",
+      "bytes": 12736,
+      "capturedAtUtc": "2026-10-21T12:54:16.398Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0028.bin",
+      "sha256": "9aa20473ebbc919af38731060c72a13034a1fd7f55a5eae66c61f501aeffd374",
+      "bytes": 5731,
+      "capturedAtUtc": "2026-10-21T12:54:16.776Z"
+    },
+    {
+      "sourceId": "greenhouse-sapience",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0029.bin",
+      "sha256": "a0e41d71f155976d5372eaaf29943862729c74a0faadbe34bd88100f715c90a7",
+      "bytes": 30758,
+      "capturedAtUtc": "2026-10-21T12:54:17.328Z"
+    },
+    {
+      "sourceId": "greenhouse-nearform",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0030.bin",
+      "sha256": "02fb1936832e1cd4d1f7876ec57ac649e4e2a1a64ab32cfbefd163351cf13235",
+      "bytes": 12933,
+      "capturedAtUtc": "2026-10-21T12:54:17.404Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0031.bin",
+      "sha256": "584cfded9bfdbf700323cb7649e0af5fc040863ceba75feeab53fca231701629",
+      "bytes": 8082,
+      "capturedAtUtc": "2026-10-21T12:54:17.824Z"
+    },
+    {
+      "sourceId": "greenhouse-sapience",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0032.bin",
+      "sha256": "66ada5e7e0bac093a950ae0831212339e59c0a7360e0ca9ee83156e5981112ce",
+      "bytes": 30277,
+      "capturedAtUtc": "2026-10-21T12:54:17.887Z"
+    },
+    {
+      "sourceId": "greenhouse-nearform",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0033.bin",
+      "sha256": "d51fa6ddb23d93c19b04623a8b2426e0b59bb24b2194d911e94eb31cd71463b2",
+      "bytes": 11809,
+      "capturedAtUtc": "2026-10-21T12:54:17.891Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0034.bin",
+      "sha256": "5aae92695977c09944de804a4d8bd35e768b7974ae31855562314a44841cfc63",
+      "bytes": 10011,
+      "capturedAtUtc": "2026-10-21T12:54:18.215Z"
+    },
+    {
+      "sourceId": "greenhouse-nearform",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0035.bin",
+      "sha256": "689f641f3d23aa8c8c727bb703990751c4362b55ee18c554d5c077d0b26f63fd",
+      "bytes": 13072,
+      "capturedAtUtc": "2026-10-21T12:54:18.285Z"
+    },
+    {
+      "sourceId": "greenhouse-sapience",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0036.bin",
+      "sha256": "5a8598484e4f8c18c33ff9b774a1588bd672a0345207e5205c0714a7bfc555b3",
+      "bytes": 34158,
+      "capturedAtUtc": "2026-10-21T12:54:18.289Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0037.bin",
+      "sha256": "9c23e1c5e44ec44919b9b1d8587d9377a0573de8bfe1d2f4f524e14cfaab158b",
+      "bytes": 12747,
+      "capturedAtUtc": "2026-10-21T12:54:18.644Z"
+    },
+    {
+      "sourceId": "greenhouse-nearform",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0038.bin",
+      "sha256": "913a38de94b6fa1cf2967f96273c076b32b2b156e81a26b0670faaf718d312d7",
+      "bytes": 13100,
+      "capturedAtUtc": "2026-10-21T12:54:18.791Z"
+    },
+    {
+      "sourceId": "greenhouse-sapience",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0039.bin",
+      "sha256": "1f9c0f73a519cb53107f6b0b9198cd82c8e24c58bcfdf21cdfa190a39862c0da",
+      "bytes": 32434,
+      "capturedAtUtc": "2026-10-21T12:54:18.771Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0040.bin",
+      "sha256": "264cba3328a297e333086480894e2e8d3220977ac12012455eec3a6b7dc2c832",
+      "bytes": 7328,
+      "capturedAtUtc": "2026-10-21T12:54:19.116Z"
+    },
+    {
+      "sourceId": "greenhouse-sapience",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0041.bin",
+      "sha256": "49a7bcbcd316f29a86f8f9ef54a156d8a7559a7a90d2aae53cc89e0c23443bf2",
+      "bytes": 32158,
+      "capturedAtUtc": "2026-10-21T12:54:19.209Z"
+    },
+    {
+      "sourceId": "greenhouse-nearform",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0042.bin",
+      "sha256": "e817316286c717cf398541818115708f7c9cdb8385e37c594ed2cabf7a727fca",
+      "bytes": 9584,
+      "capturedAtUtc": "2026-10-21T12:54:19.221Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0043.bin",
+      "sha256": "5902b672d7fcadd8b005a4a20e77872593f2f8a2b50719a3e3d0f18b607baa3b",
+      "bytes": 5573,
+      "capturedAtUtc": "2026-10-21T12:54:19.497Z"
+    },
+    {
+      "sourceId": "greenhouse-sapience",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0044.bin",
+      "sha256": "69617dc793e1199fd6540d902ca1b4acd3a01258218c2e43e7a34afba557606b",
+      "bytes": 24958,
+      "capturedAtUtc": "2026-10-21T12:54:19.625Z"
+    },
+    {
+      "sourceId": "greenhouse-nearform",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0045.bin",
+      "sha256": "a2c863f13eaec55cb91b14490008e08fd149a55d68d527f3b7af1e770f2f2a4c",
+      "bytes": 12756,
+      "capturedAtUtc": "2026-10-21T12:54:19.609Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0046.bin",
+      "sha256": "e798bf2b20428fe897d19964b4d827beb7779fab8a1a77fa4ae1daf5868b1112",
+      "bytes": 6349,
+      "capturedAtUtc": "2026-10-21T12:54:19.884Z"
+    },
+    {
+      "sourceId": "greenhouse-nearform",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0047.bin",
+      "sha256": "d7a5eb1403527f26540c9169d1ee2ef136d0c11896d5a9e4d5148babfa8b235b",
+      "bytes": 13454,
+      "capturedAtUtc": "2026-10-21T12:54:20.038Z"
+    },
+    {
+      "sourceId": "greenhouse-sapience",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0048.bin",
+      "sha256": "ed88c8b0b1d77f083ee371b88aa5329fdd71f29b08a1c2735f76fb123e60f6b3",
+      "bytes": 34160,
+      "capturedAtUtc": "2026-10-21T12:54:20.087Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0049.bin",
+      "sha256": "5a62789678fa98abc8f5ac8f67e4707cac15f1e9533fec836822b90a70e87b20",
+      "bytes": 5856,
+      "capturedAtUtc": "2026-10-21T12:54:20.319Z"
+    },
+    {
+      "sourceId": "greenhouse-nearform",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0050.bin",
+      "sha256": "df5000dc5b271bab0b4b6480f9c52d497f16d265b663d9604e827240eeb78dd1",
+      "bytes": 9887,
+      "capturedAtUtc": "2026-10-21T12:54:20.516Z"
+    },
+    {
+      "sourceId": "greenhouse-sapience",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0051.bin",
+      "sha256": "e0beb1b3841b6d376dcd87d246bc00e529465896d7ac3f39c85b5d18abfabc3a",
+      "bytes": 16171,
+      "capturedAtUtc": "2026-10-21T12:54:20.474Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0052.bin",
+      "sha256": "e176dd2915c1c9cc8ee27581d53283dbe6c11b40bc6971b9c74df89aeeb9e0c2",
+      "bytes": 6841,
+      "capturedAtUtc": "2026-10-21T12:54:20.717Z"
+    },
+    {
+      "sourceId": "greenhouse-sapience",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0053.bin",
+      "sha256": "74adef95e73ceed97a19cd8d00deea0ce1f58ed72928280ef255124efab3516d",
+      "bytes": 36027,
+      "capturedAtUtc": "2026-10-21T12:54:20.924Z"
+    },
+    {
+      "sourceId": "greenhouse-nearform",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0054.bin",
+      "sha256": "6cde149b3585ef9b1c922313c15ba545849ff8b439eb5b695bc051c2ef53c513",
+      "bytes": 9866,
+      "capturedAtUtc": "2026-10-21T12:54:20.993Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0055.bin",
+      "sha256": "6559bd5daedb82435f1f672d4c327783426f26eaa2fcb27178720d9fbc4cfb53",
+      "bytes": 6920,
+      "capturedAtUtc": "2026-10-21T12:54:21.144Z"
+    },
+    {
+      "sourceId": "greenhouse-sapience",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0056.bin",
+      "sha256": "e473081914a582760511824b5ed1e3b5529aa1661afd78970b1ab8014314a4cd",
+      "bytes": 33443,
+      "capturedAtUtc": "2026-10-21T12:54:21.353Z"
+    },
+    {
+      "sourceId": "greenhouse-nearform",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0057.bin",
+      "sha256": "c6ec8b02e1a49f7f7433159cbb7a25e9affa837ffff67969f8002205c31c80ee",
+      "bytes": 15046,
+      "capturedAtUtc": "2026-10-21T12:54:21.443Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0058.bin",
+      "sha256": "87c178c0afcaab3ab8bf9a25cdaec743af25b2f4dbbd450dfcb7bfd69178c1ea",
+      "bytes": 7354,
+      "capturedAtUtc": "2026-10-21T12:54:21.594Z"
+    },
+    {
+      "sourceId": "workable-envision",
+      "purpose": "board",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0059.bin",
+      "sha256": "8b1647c22148219d9e2be34583a0fd90a1549a68a0a372dbf7b67ec0d1c4f244",
+      "bytes": 213248,
+      "capturedAtUtc": "2026-10-21T12:54:22.795Z"
+    },
+    {
+      "sourceId": "workable-robusta",
+      "purpose": "board",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0060.bin",
+      "sha256": "dbe0e9c5fb621b92a5621c4dc267b4370101d8915a20cfdb1958c33c2a1e9961",
+      "bytes": 526546,
+      "capturedAtUtc": "2026-10-21T12:54:22.959Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0061.bin",
+      "sha256": "78245a0ac404c633afe75a622d4dd2079742368de8ff932c9226fc7c4db9568e",
+      "bytes": 7457,
+      "capturedAtUtc": "2026-10-21T12:54:22.003Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0062.bin",
+      "sha256": "2c5f79187ce1e11f05962aa6aad84392547579ab31fa498e2aa884ef027386d4",
+      "bytes": 5351,
+      "capturedAtUtc": "2026-10-21T12:54:22.451Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0063.bin",
+      "sha256": "3f2d0a26231c0647564cd4e4661df8af49f016cb89a668b16cf008175582881c",
+      "bytes": 8923,
+      "capturedAtUtc": "2026-10-21T12:54:22.844Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0064.bin",
+      "sha256": "a0b02ff3788b1b2024bbfe1e1919a17d9d80964a43eff4f0884a9ab8ddc5f9b7",
+      "bytes": 8077,
+      "capturedAtUtc": "2026-10-21T12:54:23.396Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0065.bin",
+      "sha256": "bafb522d3d919a70de08eb755cae98f9c3beb55554b1646306880c162b596d7b",
+      "bytes": 5406,
+      "capturedAtUtc": "2026-10-21T12:54:23.778Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0066.bin",
+      "sha256": "702e474594c3ccf279fa65b52cf0b80e5091baab171e8204c047f1cda9ef3848",
+      "bytes": 7319,
+      "capturedAtUtc": "2026-10-21T12:54:24.168Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0067.bin",
+      "sha256": "0f5f70fab45d7f9f001d31d9b9439b0b1ded27d146437195ac3e3ed1ae63d88f",
+      "bytes": 8863,
+      "capturedAtUtc": "2026-10-21T12:54:24.610Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0068.bin",
+      "sha256": "e160b3f3379a1848cdcc95bdd4f2ef1e6d11d9687698b72280f812a18fa1d603",
+      "bytes": 9506,
+      "capturedAtUtc": "2026-10-21T12:54:25.007Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0069.bin",
+      "sha256": "2a483c17020a46a0fad6d3b6150cd2f7b9dde9b23debdb2a7029e4ab160e17ba",
+      "bytes": 7149,
+      "capturedAtUtc": "2026-10-21T12:54:25.368Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0070.bin",
+      "sha256": "180835a27a023b4c8ad022d8bb5a6bf4d97bdf154c0d2da9bc89785be0e827f0",
+      "bytes": 5576,
+      "capturedAtUtc": "2026-10-21T12:54:25.841Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0071.bin",
+      "sha256": "1cec6d9b4a12117e1913cb4a1fc772e9c7050343221455078ecfd2c702ed4f75",
+      "bytes": 5406,
+      "capturedAtUtc": "2026-10-21T12:54:26.226Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0072.bin",
+      "sha256": "96d4d45a207304ed2f3fdf07fa26c9058a8ce52c378d3d6f0729c455a52ec075",
+      "bytes": 5406,
+      "capturedAtUtc": "2026-10-21T12:54:26.616Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0073.bin",
+      "sha256": "cfe05d1637d0ddd79fb510423e7ff786bc758dfe78ff8c6fed7086845bfc9169",
+      "bytes": 9494,
+      "capturedAtUtc": "2026-10-21T12:54:27.050Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0074.bin",
+      "sha256": "743a8605580a5d18e7ad1f7b7649e6bf0205a89f90f3efc4c7c8e833110a3763",
+      "bytes": 9139,
+      "capturedAtUtc": "2026-10-21T12:54:27.444Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0075.bin",
+      "sha256": "ae32dc2d442a84dfb303f15ead8746660982dba14ae5912c9f88e40f25f8cf05",
+      "bytes": 4729,
+      "capturedAtUtc": "2026-10-21T12:54:27.840Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0076.bin",
+      "sha256": "c14a3a3f3562854255afb2a1424282eddacd686cb4c3e773e9709fd38d8baa5c",
+      "bytes": 7123,
+      "capturedAtUtc": "2026-10-21T12:54:28.251Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0077.bin",
+      "sha256": "34971fef4e9b0ce24c1c2f17333f28aa8f1aafd093f6a25b77bb705a45ec6e4d",
+      "bytes": 8082,
+      "capturedAtUtc": "2026-10-21T12:54:28.639Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0078.bin",
+      "sha256": "b4566ca845b9353fc303517ba9d546085c22897ae6bad2d9c89bab1f8f146b04",
+      "bytes": 6309,
+      "capturedAtUtc": "2026-10-21T12:54:29.009Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0079.bin",
+      "sha256": "23cb0207c24cd450135c30db924112e72d595276da17ee522535caaf0d433970",
+      "bytes": 8062,
+      "capturedAtUtc": "2026-10-21T12:54:29.374Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0080.bin",
+      "sha256": "9bd1098e000b634e9bc71d0e16bb71fc36850c7798caf26429b7778e7c4d960f",
+      "bytes": 7867,
+      "capturedAtUtc": "2026-10-21T12:54:29.799Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0081.bin",
+      "sha256": "becdcd7bb92eddc92e0fce1a77f8a33ee577ea47e9fa990094e90516c78fa784",
+      "bytes": 5357,
+      "capturedAtUtc": "2026-10-21T12:54:30.206Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0082.bin",
+      "sha256": "e9ad0e848ae24bce79141fedf56b37a6a973cbe6152847dc766c3352b5f192cd",
+      "bytes": 5835,
+      "capturedAtUtc": "2026-10-21T12:54:32.593Z"
+    },
+    {
+      "sourceId": "greenhouse-tamara",
+      "purpose": "detail",
+      "localArtifact": "knowledge-engineering/00-baseline/local-corpus/20261021T125408Z-ebb0b062/raw/response-0083.bin",
+      "sha256": "3a1f080e680841bf4f260ffd63de8962badfa972dd00f7c0de8f5ac5050422b8",
+      "bytes": 9483,
+      "capturedAtUtc": "2026-10-21T12:54:33.264Z"
+    }
+  ],
+  "verification": {
+    "status": "PASS",
+    "rawResponsesVerified": 83,
+    "rawCandidateOccurrencesVerified": 300,
+    "uniqueUpstreamIdentities": 263,
+    "selectedCasesVerified": 40,
+    "humanAndReviewFieldsBlank": true,
+    "allLocalReferencesResolve": true,
+    "allSelectedInputsMatchCapturedOriginals": true,
+    "knownCrossSplitDuplicateGroups": 0,
+    "rawArtifactsIgnoredAndUntracked": true,
+    "originalResponsesPredateOfflineClassification": true,
+    "preexistingFilesExceptAuthorizedGitignoreUnchanged": 44,
+    "authorizedIgnoreChangeOnly": true,
+    "snapshotIntegritySealSha256": "6470fbb886bae2b4885e61d265f658209ad68130a2f88baaaa630325872810c1",
+    "verifiedAtUtc": "2026-10-21T13:15:47.636Z",
+    "scope": "Evidence/identity/hash/CSV/split/privacy checks; not Ground Truth or accuracy."
+  },
+  "privacy": {
+    "gitIgnoreRule": "/knowledge-engineering/00-baseline/local-corpus/",
+    "rawContentPublished": false,
+    "sharedFields": "Case/source/job IDs, split/group metadata, aggregate machine/lexical counts, relative artifact paths and checksums only; no titles, descriptions, excerpts, source contact information or per-case machine decisions.",
+    "reviewBlinding": "Give reviewers the local source-only CSV and evidence packets, not the machine candidate inventory or sampling ledger."
+  }
+}

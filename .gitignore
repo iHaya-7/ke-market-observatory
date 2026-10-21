@@ -9,3 +9,4 @@ node_modules/
 playwright-report/
 test-results/
 /learning-local/
+/knowledge-engineering/00-baseline/local-corpus/
