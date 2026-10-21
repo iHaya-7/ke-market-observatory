@@ -1,0 +1,1187 @@
+{
+  "manifestSchemaVersion": 1,
+  "snapshotId": "20261021T110236218Z-ec7c36e4",
+  "capturedAtUtc": "2026-10-21T11:02:36.218Z",
+  "repositoryRelativeSnapshotPath": "knowledge-engineering/00-baseline/snapshots/20261021T110236218Z-ec7c36e4",
+  "scope": "Stage 0 Step 0.2; frozen descriptive reference; no Ground Truth or model changes",
+  "git": {
+    "head": "ee5bd15ff52b6a88e15a2dafab6886422980f557",
+    "branch": "main",
+    "workingTreeStateBeforeSnapshot": "clean",
+    "porcelainBeforeSnapshot": "",
+    "uncommittedChangesBeforeSnapshot": [],
+    "snapshotArtifactsAreNewUntrackedFiles": true,
+    "committedByThisTask": false,
+    "pullPushOrFetchPerformed": false,
+    "coreAutocrlf": "true"
+  },
+  "auditReference": {
+    "path": "knowledge-engineering/00-baseline/AS_IS_AUDIT.md",
+    "sha256": "68c57932eee7016845a03a3d507e4c65bc095c03f97c130a272973226e928994",
+    "headNamedInAudit": "002525b2e08f610206b205374ad2244785b9c088",
+    "sourcePathsChangedBetweenAuditHeadAndCaptureHead": [
+      "data/auto_records.json",
+      "public/data/market.json",
+      "public/index.html"
+    ],
+    "note": "Stored collection/publication advanced since the approved audit. Current files are frozen; audit is unchanged."
+  },
+  "dataFiles": [
+    {
+      "sourcePath": "data/curated.json",
+      "snapshotPath": "data/curated.json",
+      "bytes": 56944,
+      "originalSha256": "2fd14e04420fe94d62ce2952b0a3e04662709b27bd23d9134f2a2e7424884b46",
+      "copySha256": "2fd14e04420fe94d62ce2952b0a3e04662709b27bd23d9134f2a2e7424884b46",
+      "byteForByteEqual": true
+    },
+    {
+      "sourcePath": "data/auto_records.json",
+      "snapshotPath": "data/auto_records.json",
+      "bytes": 45113,
+      "originalSha256": "6171360dee49f034efc0e60caa7ad136801d4ba89a35e1ae6243c77de1703795",
+      "copySha256": "6171360dee49f034efc0e60caa7ad136801d4ba89a35e1ae6243c77de1703795",
+      "byteForByteEqual": true
+    },
+    {
+      "sourcePath": "data/review_decisions.json",
+      "snapshotPath": "data/review_decisions.json",
+      "bytes": 43,
+      "originalSha256": "f425ac6675a1a1850c0f066971a97aadb3913670356b11860e85ce7e02cbd47d",
+      "copySha256": "f425ac6675a1a1850c0f066971a97aadb3913670356b11860e85ce7e02cbd47d",
+      "byteForByteEqual": true
+    },
+    {
+      "sourcePath": "public/data/market.json",
+      "snapshotPath": "public/data/market.json",
+      "bytes": 92238,
+      "originalSha256": "17fa523c0e13341ca499750da7cac4958454ac4e1bf93a403cf6a6dc26ae27e0",
+      "copySha256": "17fa523c0e13341ca499750da7cac4958454ac4e1bf93a403cf6a6dc26ae27e0",
+      "byteForByteEqual": true
+    }
+  ],
+  "implementationFiles": [
+    {
+      "path": ".github/workflows/refresh-and-deploy.yml",
+      "bytes": 2355,
+      "sha256": "d7eb605bf0f2513f116e5129daf2bf102ba1b778d3b00a5d1dcd7c20ae9c0613",
+      "headBlobObjectId": "2f14d7203e499265772e8fdd9a404d581e16b8d5",
+      "headBlobSha256": "2b6627eb39050570bdea95c74b2fe24df08ba6eeb3ec6d36d1ac04b02a0d8110",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": "config/sources.json",
+      "bytes": 1821,
+      "sha256": "c5a2948b6cfb241c4e1dd7af4ff1d6e58d0e3e229cad080e2c62ecf1a0c4ad4b",
+      "headBlobObjectId": "1c345e14b7eb82ff54bbaf4680fb567d892db75f",
+      "headBlobSha256": "3c65f4157b3451d6e887d69120f993f490de6d739a97c9c1ecb826eab6f83178",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": "scripts/build_site.py",
+      "bytes": 1304,
+      "sha256": "93f0c8fe70578789ef0c96f051c2eb483a95adb185c5ea29be580ce81144e5dd",
+      "headBlobObjectId": "242f245027b75c30cf9582f188f1a287f985acc0",
+      "headBlobSha256": "37face6d99be9e5430a6bb56204ffcef78edaa62aedd6424dba65e7af157de31",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": "scripts/refresh.py",
+      "bytes": 32303,
+      "sha256": "e8ba9dde2539fe778e971b676a3bd4b8d8370b5669f88e4ba561af4e68e678bb",
+      "headBlobObjectId": "da81c79e1afe929fbab88759aa5b0ef15754a812",
+      "headBlobSha256": "207ef7426790d2a56ac24b06207e77b8ae50bc8a19b117d98d407f74c8118908",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": "tests/test_build_site.py",
+      "bytes": 2295,
+      "sha256": "f50ab761bf4300e17571f170560319388305422a090aa8952da77b00bdaaca4f",
+      "headBlobObjectId": "69b85a9705ff5642e52bc6e678b7e556244bb116",
+      "headBlobSha256": "f50ab761bf4300e17571f170560319388305422a090aa8952da77b00bdaaca4f",
+      "workingBytesMatchHeadBlob": true,
+      "headToWorkingBytes": "identical"
+    },
+    {
+      "path": "tests/test_refresh.py",
+      "bytes": 15932,
+      "sha256": "64e47453f134f700d00c976cd652e3b51e1ba6abd48bdd5f2e1303f03a91991f",
+      "headBlobObjectId": "9411e654f3422fc825d50a8a313ad1a49aae017e",
+      "headBlobSha256": "ee53fd845cc4471e1b719296227bf3d8abf3a4c0502eefaa8a31f44642d1a79a",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": "web/app.css",
+      "bytes": 26550,
+      "sha256": "ebd1e931b4af38d3a181a5c016a2f9108f2a2da9c90d5910e357e60e2248a855",
+      "headBlobObjectId": "af3eda772e6c401b950047a0560be50ffde7f2eb",
+      "headBlobSha256": "f5f5303e16b171eb9c5e0b3ab00f3bc376712ee1ba64b16b3dc21b87b1bb8b5a",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": "web/app.js",
+      "bytes": 71201,
+      "sha256": "a8bc00081d241b38cbc1a611be0368a5d4f89d7e29c839a449b0a4c9bc1ac998",
+      "headBlobObjectId": "08b1380dea29b06e1e9649168923d129f27cb192",
+      "headBlobSha256": "42cbf1d95b933cfc2f52f5fad72de40c2c80e670815833ce44e9c78326fa0a8a",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": "web/fonts/IBMPlexSansArabic-Bold.woff2",
+      "bytes": 73788,
+      "sha256": "db6650a05969c144ab5ab9bb6c3beca6ca4dbb3537bb5f2311c878dd293875b4",
+      "headBlobObjectId": "08e2028e2971a41251f29046cdc15ccd229487a6",
+      "headBlobSha256": "db6650a05969c144ab5ab9bb6c3beca6ca4dbb3537bb5f2311c878dd293875b4",
+      "workingBytesMatchHeadBlob": true,
+      "headToWorkingBytes": "identical"
+    },
+    {
+      "path": "web/fonts/IBMPlexSansArabic-Medium.woff2",
+      "bytes": 75936,
+      "sha256": "c72f6986f50ded745d06e71e508096209c52a55a6b3a81029954e33c52ba1dd2",
+      "headBlobObjectId": "ced3646c77cdd8a054e0647ff46dc533e5419fa9",
+      "headBlobSha256": "c72f6986f50ded745d06e71e508096209c52a55a6b3a81029954e33c52ba1dd2",
+      "workingBytesMatchHeadBlob": true,
+      "headToWorkingBytes": "identical"
+    },
+    {
+      "path": "web/fonts/IBMPlexSansArabic-Regular.woff2",
+      "bytes": 71904,
+      "sha256": "74112e1b7bf2e2c547989a4e947a60cba6cd1f9156e0065670134636e717199d",
+      "headBlobObjectId": "695d303cc25104463a86fa0b42bad47b27d187bf",
+      "headBlobSha256": "74112e1b7bf2e2c547989a4e947a60cba6cd1f9156e0065670134636e717199d",
+      "workingBytesMatchHeadBlob": true,
+      "headToWorkingBytes": "identical"
+    },
+    {
+      "path": "web/fonts/IBMPlexSansArabic-SemiBold.woff2",
+      "bytes": 76408,
+      "sha256": "869b2acd0a9660607a2025f0fe1c640110bf23d33417509328f07722922b8063",
+      "headBlobObjectId": "eda08d3bb808cc95a73244992a8cee8ad7fbcb59",
+      "headBlobSha256": "869b2acd0a9660607a2025f0fe1c640110bf23d33417509328f07722922b8063",
+      "workingBytesMatchHeadBlob": true,
+      "headToWorkingBytes": "identical"
+    },
+    {
+      "path": "web/fonts/OFL.txt",
+      "bytes": 4362,
+      "sha256": "d741e57d5f865e294df801f96b7b5161a88b211df65887e4358d271c9fc5fb4f",
+      "headBlobObjectId": "670c6c04ec17a19131aefbb47472a11c2a5d831c",
+      "headBlobSha256": "d741e57d5f865e294df801f96b7b5161a88b211df65887e4358d271c9fc5fb4f",
+      "workingBytesMatchHeadBlob": true,
+      "headToWorkingBytes": "identical"
+    },
+    {
+      "path": "web/template.html",
+      "bytes": 5172,
+      "sha256": "3ac44c6779a5c18cea97810d4cf5182ff8ad4a80573554a800148e9cd27f0b14",
+      "headBlobObjectId": "0ec26f409bf9f595076ca4b1d68d033a17fcf446",
+      "headBlobSha256": "2094df49e610e41b56df88655d749382a6473a965a7c0577b3d81c5b0aaa0775",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    }
+  ],
+  "publishedHtml": {
+    "path": "public/index.html",
+    "bytes": 583060,
+    "sha256": "7909f14c57c8a3d35fbf21c2394e00785cda61a959188f2d6530c567da2a4c6f",
+    "headBlobObjectId": "982f4b8ce970c105dbaee8a2e1320c47ed4462b9",
+    "headBlobSha256": "a3ffdf0342ec6db296312d629de780db3b7fe518ef9229b9a9f562d004b4ef60",
+    "workingBytesMatchHeadBlob": false,
+    "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+  },
+  "trackedFilesAtCapture": [
+    {
+      "path": ".github/workflows/refresh-and-deploy.yml",
+      "bytes": 2355,
+      "sha256": "d7eb605bf0f2513f116e5129daf2bf102ba1b778d3b00a5d1dcd7c20ae9c0613",
+      "headBlobObjectId": "2f14d7203e499265772e8fdd9a404d581e16b8d5",
+      "headBlobSha256": "2b6627eb39050570bdea95c74b2fe24df08ba6eeb3ec6d36d1ac04b02a0d8110",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 133,
+      "sha256": "97101ddf0ef2d2fe747b643d37af9be73633bb3ae58d371d7c070923380997cf",
+      "headBlobObjectId": "0084132932c425331514a7e4c55e7ed5fa95898c",
+      "headBlobSha256": "55785d9d2e4b1a9b331f03eb0c942603f9ffb28c32305bb0628a3948cf39863a",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": "README.md",
+      "bytes": 15543,
+      "sha256": "55b43bffbf2f5f9613100d2961c2cacbea7c12d7bd396e68ea217fbbcc84085e",
+      "headBlobObjectId": "d38e8d548e16a1d27063a776e56c38a62645d4db",
+      "headBlobSha256": "c0eec8403cf115feab08af87268852af97408e316ddad5ee31f2398861340e11",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "other; see Git status and checksums"
+    },
+    {
+      "path": "START_HERE.html",
+      "bytes": 4764,
+      "sha256": "a010fbadc1203a99da181d7d0a16e32ab4896b87ed8dc7a72e44e15e22f3aeaa",
+      "headBlobObjectId": "813a0fdd59af667db97928f8fe02fcf6e40f5282",
+      "headBlobSha256": "3b48235415d446953de86ebbca47019d5cbbdd24ebf4582d3a83fba0da6d81fe",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": "TEST_REPORT.md",
+      "bytes": 2566,
+      "sha256": "027301a6b1dd59b70892b3bd7b54d8ea76f84bc8f62fe2ab6a46a20aac54b5b1",
+      "headBlobObjectId": "9ee10be8fb8263ddf2a4ab33b3fc19962a91dfcb",
+      "headBlobSha256": "66ada9d6676102e474478cfc0628c2099623f526a4844ab3fc1435d389c8d6ac",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": "TEST_REPORT_V3.md",
+      "bytes": 1364,
+      "sha256": "e96721b14637ff887911cc7a9a5866d86b8132fe52c38024e36202cf047d37cd",
+      "headBlobObjectId": "df1accd7fe965270a573e558c61f18a05d2fb109",
+      "headBlobSha256": "0ea2ce10a4e3be88f2ebb46affd678dcc6ae87af717960aaac5a7288922846ff",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": "config/sources.json",
+      "bytes": 1821,
+      "sha256": "c5a2948b6cfb241c4e1dd7af4ff1d6e58d0e3e229cad080e2c62ecf1a0c4ad4b",
+      "headBlobObjectId": "1c345e14b7eb82ff54bbaf4680fb567d892db75f",
+      "headBlobSha256": "3c65f4157b3451d6e887d69120f993f490de6d739a97c9c1ecb826eab6f83178",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": "data/auto_records.json",
+      "bytes": 45113,
+      "sha256": "6171360dee49f034efc0e60caa7ad136801d4ba89a35e1ae6243c77de1703795",
+      "headBlobObjectId": "19b483fb20017fac21a9ef9dbbb83fb6f42cab9f",
+      "headBlobSha256": "c903b9b38f99aa8329b6616f1507601278fff69e443d402aac0e8d4e2502a66c",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": "data/curated.json",
+      "bytes": 56944,
+      "sha256": "2fd14e04420fe94d62ce2952b0a3e04662709b27bd23d9134f2a2e7424884b46",
+      "headBlobObjectId": "c129efe08eaee4efb8ab38fc9bbad5dd6b9ba812",
+      "headBlobSha256": "0120363eb546b257f9a289c85fcce0d3db6a783698fd329be1c0242b03a66900",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": "data/review_decisions.json",
+      "bytes": 43,
+      "sha256": "f425ac6675a1a1850c0f066971a97aadb3913670356b11860e85ce7e02cbd47d",
+      "headBlobObjectId": "56472f32198770271bc3518cf34bf98f00d6bce4",
+      "headBlobSha256": "eeb639cd2456297f596db73e188f08aaa8ca97a65ff76b3664b9137be35fed1e",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": "knowledge-engineering/00-baseline/AS_IS_AUDIT.md",
+      "bytes": 29195,
+      "sha256": "68c57932eee7016845a03a3d507e4c65bc095c03f97c130a272973226e928994",
+      "headBlobObjectId": "332e688f0a70286364bfbc075d95a19007f7e359",
+      "headBlobSha256": "68c57932eee7016845a03a3d507e4c65bc095c03f97c130a272973226e928994",
+      "workingBytesMatchHeadBlob": true,
+      "headToWorkingBytes": "identical"
+    },
+    {
+      "path": "knowledge-engineering/01-scope/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "headBlobObjectId": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "headBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "workingBytesMatchHeadBlob": true,
+      "headToWorkingBytes": "identical"
+    },
+    {
+      "path": "knowledge-engineering/02-vocabulary-metadata/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "headBlobObjectId": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "headBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "workingBytesMatchHeadBlob": true,
+      "headToWorkingBytes": "identical"
+    },
+    {
+      "path": "knowledge-engineering/03-taxonomy/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "headBlobObjectId": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "headBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "workingBytesMatchHeadBlob": true,
+      "headToWorkingBytes": "identical"
+    },
+    {
+      "path": "knowledge-engineering/04-ontology/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "headBlobObjectId": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "headBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "workingBytesMatchHeadBlob": true,
+      "headToWorkingBytes": "identical"
+    },
+    {
+      "path": "knowledge-engineering/05-knowledge-graph/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "headBlobObjectId": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "headBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "workingBytesMatchHeadBlob": true,
+      "headToWorkingBytes": "identical"
+    },
+    {
+      "path": "knowledge-engineering/06-validation/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "headBlobObjectId": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "headBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "workingBytesMatchHeadBlob": true,
+      "headToWorkingBytes": "identical"
+    },
+    {
+      "path": "knowledge-engineering/07-evaluation/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "headBlobObjectId": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "headBlobSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "workingBytesMatchHeadBlob": true,
+      "headToWorkingBytes": "identical"
+    },
+    {
+      "path": "knowledge-engineering/DECISIONS.md",
+      "bytes": 239,
+      "sha256": "d9f13cf4c49396f349449168c3c97ccb700b6bdb2c4e6e2eb5d0ccad731510fa",
+      "headBlobObjectId": "d93159b58e70f9a009171855686dc0a107ff6e1d",
+      "headBlobSha256": "d9f13cf4c49396f349449168c3c97ccb700b6bdb2c4e6e2eb5d0ccad731510fa",
+      "workingBytesMatchHeadBlob": true,
+      "headToWorkingBytes": "identical"
+    },
+    {
+      "path": "knowledge-engineering/README.md",
+      "bytes": 2526,
+      "sha256": "4ae09f365c39b3efa3b777c7970089fa2aa90dbbf5b30eef9aa75c4c92327fa4",
+      "headBlobObjectId": "f3fe0249a333a91ea7a572e67f3dfd838ab8b533",
+      "headBlobSha256": "4ae09f365c39b3efa3b777c7970089fa2aa90dbbf5b30eef9aa75c4c92327fa4",
+      "workingBytesMatchHeadBlob": true,
+      "headToWorkingBytes": "identical"
+    },
+    {
+      "path": "public/data/market.json",
+      "bytes": 92238,
+      "sha256": "17fa523c0e13341ca499750da7cac4958454ac4e1bf93a403cf6a6dc26ae27e0",
+      "headBlobObjectId": "3939a04cf4a760c009d9297de412005ecf11b1fd",
+      "headBlobSha256": "e1c3418366e18075158bd5c2eb6a923522371a2598fbce4383dba68150532d4c",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": "public/index.html",
+      "bytes": 583060,
+      "sha256": "7909f14c57c8a3d35fbf21c2394e00785cda61a959188f2d6530c567da2a4c6f",
+      "headBlobObjectId": "982f4b8ce970c105dbaee8a2e1320c47ed4462b9",
+      "headBlobSha256": "a3ffdf0342ec6db296312d629de780db3b7fe518ef9229b9a9f562d004b4ef60",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": "scripts/build_site.py",
+      "bytes": 1304,
+      "sha256": "93f0c8fe70578789ef0c96f051c2eb483a95adb185c5ea29be580ce81144e5dd",
+      "headBlobObjectId": "242f245027b75c30cf9582f188f1a287f985acc0",
+      "headBlobSha256": "37face6d99be9e5430a6bb56204ffcef78edaa62aedd6424dba65e7af157de31",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": "scripts/refresh.py",
+      "bytes": 32303,
+      "sha256": "e8ba9dde2539fe778e971b676a3bd4b8d8370b5669f88e4ba561af4e68e678bb",
+      "headBlobObjectId": "da81c79e1afe929fbab88759aa5b0ef15754a812",
+      "headBlobSha256": "207ef7426790d2a56ac24b06207e77b8ae50bc8a19b117d98d407f74c8118908",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": "tests/test_build_site.py",
+      "bytes": 2295,
+      "sha256": "f50ab761bf4300e17571f170560319388305422a090aa8952da77b00bdaaca4f",
+      "headBlobObjectId": "69b85a9705ff5642e52bc6e678b7e556244bb116",
+      "headBlobSha256": "f50ab761bf4300e17571f170560319388305422a090aa8952da77b00bdaaca4f",
+      "workingBytesMatchHeadBlob": true,
+      "headToWorkingBytes": "identical"
+    },
+    {
+      "path": "tests/test_refresh.py",
+      "bytes": 15932,
+      "sha256": "64e47453f134f700d00c976cd652e3b51e1ba6abd48bdd5f2e1303f03a91991f",
+      "headBlobObjectId": "9411e654f3422fc825d50a8a313ad1a49aae017e",
+      "headBlobSha256": "ee53fd845cc4471e1b719296227bf3d8abf3a4c0502eefaa8a31f44642d1a79a",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": "web/app.css",
+      "bytes": 26550,
+      "sha256": "ebd1e931b4af38d3a181a5c016a2f9108f2a2da9c90d5910e357e60e2248a855",
+      "headBlobObjectId": "af3eda772e6c401b950047a0560be50ffde7f2eb",
+      "headBlobSha256": "f5f5303e16b171eb9c5e0b3ab00f3bc376712ee1ba64b16b3dc21b87b1bb8b5a",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": "web/app.js",
+      "bytes": 71201,
+      "sha256": "a8bc00081d241b38cbc1a611be0368a5d4f89d7e29c839a449b0a4c9bc1ac998",
+      "headBlobObjectId": "08b1380dea29b06e1e9649168923d129f27cb192",
+      "headBlobSha256": "42cbf1d95b933cfc2f52f5fad72de40c2c80e670815833ce44e9c78326fa0a8a",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    },
+    {
+      "path": "web/fonts/IBMPlexSansArabic-Bold.woff2",
+      "bytes": 73788,
+      "sha256": "db6650a05969c144ab5ab9bb6c3beca6ca4dbb3537bb5f2311c878dd293875b4",
+      "headBlobObjectId": "08e2028e2971a41251f29046cdc15ccd229487a6",
+      "headBlobSha256": "db6650a05969c144ab5ab9bb6c3beca6ca4dbb3537bb5f2311c878dd293875b4",
+      "workingBytesMatchHeadBlob": true,
+      "headToWorkingBytes": "identical"
+    },
+    {
+      "path": "web/fonts/IBMPlexSansArabic-Medium.woff2",
+      "bytes": 75936,
+      "sha256": "c72f6986f50ded745d06e71e508096209c52a55a6b3a81029954e33c52ba1dd2",
+      "headBlobObjectId": "ced3646c77cdd8a054e0647ff46dc533e5419fa9",
+      "headBlobSha256": "c72f6986f50ded745d06e71e508096209c52a55a6b3a81029954e33c52ba1dd2",
+      "workingBytesMatchHeadBlob": true,
+      "headToWorkingBytes": "identical"
+    },
+    {
+      "path": "web/fonts/IBMPlexSansArabic-Regular.woff2",
+      "bytes": 71904,
+      "sha256": "74112e1b7bf2e2c547989a4e947a60cba6cd1f9156e0065670134636e717199d",
+      "headBlobObjectId": "695d303cc25104463a86fa0b42bad47b27d187bf",
+      "headBlobSha256": "74112e1b7bf2e2c547989a4e947a60cba6cd1f9156e0065670134636e717199d",
+      "workingBytesMatchHeadBlob": true,
+      "headToWorkingBytes": "identical"
+    },
+    {
+      "path": "web/fonts/IBMPlexSansArabic-SemiBold.woff2",
+      "bytes": 76408,
+      "sha256": "869b2acd0a9660607a2025f0fe1c640110bf23d33417509328f07722922b8063",
+      "headBlobObjectId": "eda08d3bb808cc95a73244992a8cee8ad7fbcb59",
+      "headBlobSha256": "869b2acd0a9660607a2025f0fe1c640110bf23d33417509328f07722922b8063",
+      "workingBytesMatchHeadBlob": true,
+      "headToWorkingBytes": "identical"
+    },
+    {
+      "path": "web/fonts/OFL.txt",
+      "bytes": 4362,
+      "sha256": "d741e57d5f865e294df801f96b7b5161a88b211df65887e4358d271c9fc5fb4f",
+      "headBlobObjectId": "670c6c04ec17a19131aefbb47472a11c2a5d831c",
+      "headBlobSha256": "d741e57d5f865e294df801f96b7b5161a88b211df65887e4358d271c9fc5fb4f",
+      "workingBytesMatchHeadBlob": true,
+      "headToWorkingBytes": "identical"
+    },
+    {
+      "path": "web/template.html",
+      "bytes": 5172,
+      "sha256": "3ac44c6779a5c18cea97810d4cf5182ff8ad4a80573554a800148e9cd27f0b14",
+      "headBlobObjectId": "0ec26f409bf9f595076ca4b1d68d033a17fcf446",
+      "headBlobSha256": "2094df49e610e41b56df88655d749382a6473a965a7c0577b3d81c5b0aaa0775",
+      "workingBytesMatchHeadBlob": false,
+      "headToWorkingBytes": "LF-to-CRLF checkout expansion"
+    }
+  ],
+  "publishedDataset": {
+    "meta": {
+      "product": "Knowledge Engineering | Market Observatory",
+      "preparedAt": "2026-10-20",
+      "publishedAt": "2026-10-21T10:13:37Z",
+      "lastAttemptAt": "2026-10-21T10:13:37Z",
+      "lastSuccessfulCollectionAt": "2026-10-21T10:13:37Z",
+      "lastContentChangeAt": "2026-10-20T19:20:27Z",
+      "automationActivated": true,
+      "repositoryUrl": "https://github.com/iHaya-7/ke-market-observatory",
+      "dataVersion": "502461042f744e2d",
+      "schedule": "Daily, approximately 08:17 Asia/Riyadh",
+      "pollSeconds": 300,
+      "staleAfterHours": 48,
+      "coverage": "Configured public employer/recruiter boards only. Not an exhaustive search of LinkedIn or the entire market.",
+      "initialDatasetNote": "13 imported salary references and 8 Saudi saved postings. Sources differ in verification and availability; see individual records.",
+      "lastRunSummary": {
+        "reviewItems": 30,
+        "sourcesOK": 6,
+        "sourcesTotal": 6,
+        "newRecords": 0,
+        "changes": 0
+      }
+    },
+    "fx": {
+      "rates": {
+        "SAR": 1,
+        "USD": 3.75,
+        "GBP": 5.005005,
+        "EUR": 4.205639
+      },
+      "date": "2026-10-20",
+      "source": "https://frankfurter.dev/",
+      "label": "Frankfurter reference rates, cross-converted through the configured USD/SAR assumption.",
+      "usdSar": 3.75,
+      "usdSarBasis": "Fixed conversion assumption inherited from the original reference. Review periodically.",
+      "status": "Updated",
+      "lastAttemptAt": "2026-10-21T10:13:37Z",
+      "error": null
+    },
+    "sourceHealth": [
+      {
+        "id": "lever-sambatv",
+        "company": "Samba TV",
+        "type": "lever",
+        "account": "sambatv",
+        "enabled": true,
+        "scope": "Global ontology roles",
+        "boardUrl": "https://jobs.lever.co/sambatv",
+        "status": "OK",
+        "lastAttemptAt": "2026-10-21T10:13:37Z",
+        "lastSuccessAt": "2026-10-21T10:13:37Z",
+        "jobCount": 61,
+        "matchedCount": 5,
+        "error": null
+      },
+      {
+        "id": "greenhouse-nearform",
+        "company": "Nearform",
+        "type": "greenhouse",
+        "account": "nearform",
+        "enabled": true,
+        "scope": "Global knowledge graph roles",
+        "boardUrl": "https://job-boards.greenhouse.io/nearform",
+        "status": "OK",
+        "lastAttemptAt": "2026-10-21T10:13:37Z",
+        "lastSuccessAt": "2026-10-21T10:13:37Z",
+        "jobCount": 23,
+        "matchedCount": 0,
+        "error": null
+      },
+      {
+        "id": "greenhouse-tamara",
+        "company": "Tamara",
+        "type": "greenhouse",
+        "account": "tamara",
+        "enabled": true,
+        "scope": "Saudi metadata and semantic roles",
+        "boardUrl": "https://job-boards.greenhouse.io/tamara",
+        "status": "OK",
+        "lastAttemptAt": "2026-10-21T10:13:37Z",
+        "lastSuccessAt": "2026-10-21T10:13:37Z",
+        "jobCount": 43,
+        "matchedCount": 0,
+        "error": null
+      },
+      {
+        "id": "greenhouse-sapience",
+        "company": "Sapience AI",
+        "type": "greenhouse",
+        "account": "sapienceaicorporation",
+        "enabled": true,
+        "scope": "Global knowledge graph roles",
+        "boardUrl": "https://job-boards.greenhouse.io/sapienceaicorporation",
+        "status": "OK",
+        "lastAttemptAt": "2026-10-21T10:13:37Z",
+        "lastSuccessAt": "2026-10-21T10:13:37Z",
+        "jobCount": 13,
+        "matchedCount": 7,
+        "error": null
+      },
+      {
+        "id": "workable-envision",
+        "company": "Envision Employment Solutions",
+        "type": "workable",
+        "account": "envisiones",
+        "enabled": true,
+        "scope": "Saudi / global semantic roles; recruiter client may be undisclosed",
+        "boardUrl": "https://apply.workable.com/envisiones/",
+        "status": "OK",
+        "lastAttemptAt": "2026-10-21T10:13:37Z",
+        "lastSuccessAt": "2026-10-21T10:13:37Z",
+        "jobCount": 55,
+        "matchedCount": 1,
+        "error": null
+      },
+      {
+        "id": "workable-robusta",
+        "company": "Robusta / RTG",
+        "type": "workable",
+        "account": "robusta",
+        "enabled": true,
+        "scope": "Saudi data / knowledge graph roles",
+        "boardUrl": "https://apply.workable.com/robusta/",
+        "status": "OK",
+        "lastAttemptAt": "2026-10-21T10:13:37Z",
+        "lastSuccessAt": "2026-10-21T10:13:37Z",
+        "jobCount": 107,
+        "matchedCount": 2,
+        "error": null
+      }
+    ]
+  },
+  "curatedFx": {
+    "rates": {
+      "USD": 3.75,
+      "GBP": 4.99406,
+      "EUR": 4.20637,
+      "SAR": 1
+    },
+    "date": "2026-10-20",
+    "source": "https://sama.gov.sa/ar-sa/Currency/FinExc/Pages/Currency.aspx",
+    "label": "Imported SAMA snapshot from previous research HTML; not reverified in this build.",
+    "usdSar": 3.75,
+    "usdSarBasis": "Fixed conversion assumption inherited from the original reference. Review periodically.",
+    "status": "Curated snapshot",
+    "lastAttemptAt": null
+  },
+  "dashboardComparison": {
+    "method": "Parse #seed-data from existing public/index.html and deep-compare JSON with frozen public/data/market.json; no browser execution",
+    "embeddedJsonParsed": true,
+    "semanticMatch": true,
+    "htmlCopied": false,
+    "sourceAppJsIncludedInHtml": true
+  },
+  "frontendEvaluation": {
+    "sourcePath": "web/app.js",
+    "sourceSha256": "a8bc00081d241b38cbc1a611be0368a5d4f89d7e29c839a449b0a4c9bc1ac998",
+    "predicateFunctions": [
+      "isSalary",
+      "baseEligible",
+      "totalEligible",
+      "monthly"
+    ],
+    "predicateSource": "function isSalary(r){return r.salaryMin!=null&&Number.isFinite(market.fx.rates[r.currency])&&['Annual','Monthly'].includes(r.period);}\r\nconst baseEligible=r=>r.region!=='saudi'&&r.roleDecision!=='pending'&&r.evidenceType==='employer'&&r.salaryEligible===true&&r.salaryBasis==='base'&&r.salaryBasisVerified===true&&isSalary(r);\r\nconst totalEligible=r=>r.evidenceType==='employer'&&r.salaryBasis==='total'&&r.salaryBasisVerified===true&&isSalary(r);\r\nfunction monthly(r,key='salaryMin'){return isSalary(r)&&r[key]!=null?r[key]*market.fx.rates[r.currency]/(r.period==='Annual'?12:1):null;}\r\n",
+    "predicateSha256": "6c0b8140efddc5a5bbb6836c6814a5d27221af88e398a5a0e099930a12c72a8e",
+    "validatorParts": [
+      "const validUrl=value=>{try{const u=new URL(value);return ['https:','http:'].includes(u.protocol)?u.href:'#';}catch{return '#';}};\r\n",
+      "function validate(dataset){\r\n if(!dataset||dataset.schemaVersion!==2||!Array.isArray(dataset.records)||dataset.records.length>10000||!Array.isArray(dataset.sources)||!dataset.meta||!dataset.fx?.rates)throw Error('Unsupported dataset');\r\n const ids=new Set();for(const r of dataset.records){\r\n  if(!r||typeof r.id!=='string'||ids.has(r.id)||typeof r.company!=='string'||typeof r.title!=='string'||!Array.isArray(r.skills)||validUrl(r.sourceUrl)==='#')throw Error('Invalid record');\r\n  ids.add(r.id);\r\n  if(r.salaryMin!=null&&(!Number.isFinite(r.salaryMin)||r.salaryMin<0||!['Annual','Monthly'].includes(r.period)||!Number.isFinite(dataset.fx.rates[r.currency])))throw Error('Invalid salary');\r\n  if(r.salaryMax!=null&&(!Number.isFinite(r.salaryMax)||r.salaryMax<r.salaryMin))throw Error('Invalid range');\r\n  if(r.salaryEligible&&!(r.salaryBasis==='base'&&r.salaryBasisVerified&&r.evidenceType==='employer'))throw Error('Unverified base salary flagged eligible');\r\n }\r\n if(dataset.fx.rates.SAR!==1||Object.values(dataset.fx.rates).some(x=>!Number.isFinite(x)||x<=0))throw Error('Invalid FX');\r\n if(!Array.isArray(dataset.reviewQueue))dataset.reviewQueue=[];\r\n return dataset;\r\n}\r\n"
+    ],
+    "validatorSource": "const validUrl=value=>{try{const u=new URL(value);return ['https:','http:'].includes(u.protocol)?u.href:'#';}catch{return '#';}};\r\n\nfunction validate(dataset){\r\n if(!dataset||dataset.schemaVersion!==2||!Array.isArray(dataset.records)||dataset.records.length>10000||!Array.isArray(dataset.sources)||!dataset.meta||!dataset.fx?.rates)throw Error('Unsupported dataset');\r\n const ids=new Set();for(const r of dataset.records){\r\n  if(!r||typeof r.id!=='string'||ids.has(r.id)||typeof r.company!=='string'||typeof r.title!=='string'||!Array.isArray(r.skills)||validUrl(r.sourceUrl)==='#')throw Error('Invalid record');\r\n  ids.add(r.id);\r\n  if(r.salaryMin!=null&&(!Number.isFinite(r.salaryMin)||r.salaryMin<0||!['Annual','Monthly'].includes(r.period)||!Number.isFinite(dataset.fx.rates[r.currency])))throw Error('Invalid salary');\r\n  if(r.salaryMax!=null&&(!Number.isFinite(r.salaryMax)||r.salaryMax<r.salaryMin))throw Error('Invalid range');\r\n  if(r.salaryEligible&&!(r.salaryBasis==='base'&&r.salaryBasisVerified&&r.evidenceType==='employer'))throw Error('Unverified base salary flagged eligible');\r\n }\r\n if(dataset.fx.rates.SAR!==1||Object.values(dataset.fx.rates).some(x=>!Number.isFinite(x)||x<=0))throw Error('Invalid FX');\r\n if(!Array.isArray(dataset.reviewQueue))dataset.reviewQueue=[];\r\n return dataset;\r\n}\r\n",
+    "validatorSha256": "72582c400a0470fefa795260569264dd212756f99a088fb432010e6439505076",
+    "execution": "Exact existing fragments (including validUrl dependency) in a Node vm with cloned frozen data, URL constructor and 1000 ms timeout; no browser bootstrap, refresh, network or filesystem APIs in context."
+  },
+  "results": {
+    "populations": {
+      "curated": {
+        "total": 21,
+        "roleDecisions": {
+          "approved": 21
+        },
+        "missingRoleDecisionIds": [],
+        "salaryEligibilityFlags": {
+          "false": 20,
+          "true": 1
+        },
+        "numericSalaryMinimum": 13,
+        "salaryBases": {
+          "unknown": 8,
+          "base": 1,
+          "unverified": 2,
+          "estimate": 2,
+          "none": 8
+        },
+        "evidenceTypes": {
+          "employer": 10,
+          "reposted": 9,
+          "estimate": 2
+        },
+        "listingStatuses": {
+          "Historical reference": 13,
+          "Needs recheck": 6,
+          "Archived / unavailable": 2
+        },
+        "evidenceCoverage": {
+          "sourceUrl": {
+            "present": 21,
+            "nonNull": 21,
+            "nonEmpty": 21
+          },
+          "extraUrl": {
+            "present": 21,
+            "nonNull": 21,
+            "nonEmpty": 8
+          },
+          "sourceLabel": {
+            "present": 21,
+            "nonNull": 21,
+            "nonEmpty": 21
+          },
+          "sourceId": {
+            "present": 21,
+            "nonNull": 0,
+            "nonEmpty": 0
+          },
+          "sourceJobId": {
+            "present": 0,
+            "nonNull": 0,
+            "nonEmpty": 0
+          },
+          "evidenceType": {
+            "present": 21,
+            "nonNull": 21,
+            "nonEmpty": 21
+          },
+          "evidenceMethod": {
+            "present": 21,
+            "nonNull": 21,
+            "nonEmpty": 21
+          },
+          "origin": {
+            "present": 21,
+            "nonNull": 21,
+            "nonEmpty": 21
+          },
+          "collection": {
+            "present": 21,
+            "nonNull": 21,
+            "nonEmpty": 21
+          },
+          "evidenceDate": {
+            "present": 21,
+            "nonNull": 19,
+            "nonEmpty": 19
+          },
+          "salaryVerifiedAt": {
+            "present": 21,
+            "nonNull": 13,
+            "nonEmpty": 13
+          },
+          "postedAt": {
+            "present": 21,
+            "nonNull": 1,
+            "nonEmpty": 1
+          },
+          "firstSeenAt": {
+            "present": 21,
+            "nonNull": 0,
+            "nonEmpty": 0
+          },
+          "lastSeenAt": {
+            "present": 21,
+            "nonNull": 0,
+            "nonEmpty": 0
+          },
+          "listingStatus": {
+            "present": 21,
+            "nonNull": 21,
+            "nonEmpty": 21
+          },
+          "statusNote": {
+            "present": 21,
+            "nonNull": 21,
+            "nonEmpty": 21
+          }
+        },
+        "validHttpSourceUrls": 21,
+        "missingOrEmptyEvidenceDateIds": [
+          "SA-005",
+          "SA-008"
+        ]
+      },
+      "automatic": {
+        "total": 20,
+        "roleDecisions": {
+          "<missing>": 6,
+          "approved": 7,
+          "pending": 7
+        },
+        "missingRoleDecisionIds": [
+          "AUTO-lever-sambatv-bb5cb07f9d37",
+          "AUTO-lever-sambatv-d65dfe393f7c",
+          "AUTO-lever-sambatv-5450313a2992",
+          "AUTO-greenhouse-sapience-373797e10aa8",
+          "AUTO-greenhouse-sapience-adb59f02c267",
+          "AUTO-greenhouse-sapience-2cf1c891ba13"
+        ],
+        "salaryEligibilityFlags": {
+          "false": 20
+        },
+        "numericSalaryMinimum": 3,
+        "salaryBases": {
+          "<missing>": 6,
+          "none": 14
+        },
+        "evidenceTypes": {
+          "employer": 20
+        },
+        "listingStatuses": {
+          "Not in latest feed": 6,
+          "Open in feed": 14
+        },
+        "evidenceCoverage": {
+          "sourceUrl": {
+            "present": 20,
+            "nonNull": 20,
+            "nonEmpty": 20
+          },
+          "extraUrl": {
+            "present": 20,
+            "nonNull": 20,
+            "nonEmpty": 0
+          },
+          "sourceLabel": {
+            "present": 20,
+            "nonNull": 20,
+            "nonEmpty": 20
+          },
+          "sourceId": {
+            "present": 20,
+            "nonNull": 20,
+            "nonEmpty": 20
+          },
+          "sourceJobId": {
+            "present": 20,
+            "nonNull": 20,
+            "nonEmpty": 20
+          },
+          "evidenceType": {
+            "present": 20,
+            "nonNull": 20,
+            "nonEmpty": 20
+          },
+          "evidenceMethod": {
+            "present": 20,
+            "nonNull": 20,
+            "nonEmpty": 20
+          },
+          "origin": {
+            "present": 20,
+            "nonNull": 20,
+            "nonEmpty": 20
+          },
+          "collection": {
+            "present": 20,
+            "nonNull": 20,
+            "nonEmpty": 20
+          },
+          "evidenceDate": {
+            "present": 20,
+            "nonNull": 20,
+            "nonEmpty": 20
+          },
+          "salaryVerifiedAt": {
+            "present": 20,
+            "nonNull": 3,
+            "nonEmpty": 3
+          },
+          "postedAt": {
+            "present": 20,
+            "nonNull": 12,
+            "nonEmpty": 12
+          },
+          "firstSeenAt": {
+            "present": 20,
+            "nonNull": 20,
+            "nonEmpty": 20
+          },
+          "lastSeenAt": {
+            "present": 20,
+            "nonNull": 20,
+            "nonEmpty": 20
+          },
+          "listingStatus": {
+            "present": 20,
+            "nonNull": 20,
+            "nonEmpty": 20
+          },
+          "statusNote": {
+            "present": 20,
+            "nonNull": 20,
+            "nonEmpty": 20
+          }
+        },
+        "validHttpSourceUrls": 20,
+        "missingOrEmptyEvidenceDateIds": []
+      },
+      "published": {
+        "total": 26,
+        "roleDecisions": {
+          "approved": 26
+        },
+        "missingRoleDecisionIds": [],
+        "salaryEligibilityFlags": {
+          "false": 25,
+          "true": 1
+        },
+        "numericSalaryMinimum": 13,
+        "salaryBases": {
+          "unknown": 8,
+          "base": 1,
+          "unverified": 2,
+          "estimate": 2,
+          "none": 13
+        },
+        "evidenceTypes": {
+          "employer": 15,
+          "reposted": 9,
+          "estimate": 2
+        },
+        "listingStatuses": {
+          "Historical reference": 11,
+          "Open in feed": 7,
+          "Needs recheck": 6,
+          "Archived / unavailable": 2
+        },
+        "evidenceCoverage": {
+          "sourceUrl": {
+            "present": 26,
+            "nonNull": 26,
+            "nonEmpty": 26
+          },
+          "extraUrl": {
+            "present": 26,
+            "nonNull": 26,
+            "nonEmpty": 8
+          },
+          "sourceLabel": {
+            "present": 26,
+            "nonNull": 26,
+            "nonEmpty": 26
+          },
+          "sourceId": {
+            "present": 26,
+            "nonNull": 7,
+            "nonEmpty": 7
+          },
+          "sourceJobId": {
+            "present": 5,
+            "nonNull": 5,
+            "nonEmpty": 5
+          },
+          "evidenceType": {
+            "present": 26,
+            "nonNull": 26,
+            "nonEmpty": 26
+          },
+          "evidenceMethod": {
+            "present": 26,
+            "nonNull": 26,
+            "nonEmpty": 26
+          },
+          "origin": {
+            "present": 26,
+            "nonNull": 26,
+            "nonEmpty": 26
+          },
+          "collection": {
+            "present": 26,
+            "nonNull": 26,
+            "nonEmpty": 26
+          },
+          "evidenceDate": {
+            "present": 26,
+            "nonNull": 24,
+            "nonEmpty": 24
+          },
+          "salaryVerifiedAt": {
+            "present": 26,
+            "nonNull": 13,
+            "nonEmpty": 13
+          },
+          "postedAt": {
+            "present": 26,
+            "nonNull": 3,
+            "nonEmpty": 3
+          },
+          "firstSeenAt": {
+            "present": 26,
+            "nonNull": 7,
+            "nonEmpty": 7
+          },
+          "lastSeenAt": {
+            "present": 26,
+            "nonNull": 7,
+            "nonEmpty": 7
+          },
+          "listingStatus": {
+            "present": 26,
+            "nonNull": 26,
+            "nonEmpty": 26
+          },
+          "statusNote": {
+            "present": 26,
+            "nonNull": 26,
+            "nonEmpty": 26
+          }
+        },
+        "validHttpSourceUrls": 26,
+        "missingOrEmptyEvidenceDateIds": [
+          "SA-005",
+          "SA-008"
+        ]
+      }
+    },
+    "reviewQueue": {
+      "total": 30,
+      "byCategory": {
+        "Role relevance": 13,
+        "Pay basis": 11,
+        "Saudi listing status": 6
+      },
+      "uniqueRecordIds": 27,
+      "duplicateIdCategoryPairs": [],
+      "unresolvedRecordIds": [],
+      "approvedIds": [],
+      "rejectedIds": [],
+      "overlappingDecisionIds": []
+    },
+    "frontend": {
+      "eligibleIds": [
+        "KE-007"
+      ],
+      "totalPayIds": [],
+      "monthlySar": [
+        {
+          "id": "KE-007",
+          "min": 46625,
+          "max": 77812.5
+        }
+      ]
+    },
+    "evidenceFields": [
+      "sourceUrl",
+      "extraUrl",
+      "sourceLabel",
+      "sourceId",
+      "sourceJobId",
+      "evidenceType",
+      "evidenceMethod",
+      "origin",
+      "collection",
+      "evidenceDate",
+      "salaryVerifiedAt",
+      "postedAt",
+      "firstSeenAt",
+      "lastSeenAt",
+      "listingStatus",
+      "statusNote"
+    ],
+    "consistency": {
+      "publishedSchemaVersion": 2,
+      "curatedIdsMissingFromPublished": [],
+      "publishedIdsMissingFromInputs": [],
+      "publishedSourceIdsWithoutHealth": [],
+      "salaryReviewFlagsWithoutQueueIds": [
+        "AUTO-lever-sambatv-1a1da613ae7a",
+        "AUTO-lever-sambatv-6dd68a1c79e3",
+        "AUTO-lever-sambatv-6a969d39672e",
+        "AUTO-lever-sambatv-b11bfeae8d80",
+        "AUTO-greenhouse-sapience-e9a7dee0a057"
+      ],
+      "storedRunReviewCountMatches": true,
+      "enabledSourceCount": 6,
+      "storedSuccessfulSourceCount": 6,
+      "lastFeedMatchedCount": 15,
+      "knownPossibleDuplicate": {
+        "curated": {
+          "id": "SA-004",
+          "sourceUrl": "https://apply.workable.com/robusta/j/D8EA0BA357",
+          "country": "Saudi Arabia",
+          "city": "Jeddah"
+        },
+        "automatic": {
+          "id": "AUTO-workable-robusta-a033b6913e0c",
+          "sourceUrl": "https://apply.workable.com/j/D8EA0BA357",
+          "country": "Egypt",
+          "city": "Cairo, Cairo Governorate, Egypt"
+        },
+        "jobToken": "D8EA0BA357",
+        "resolved": false
+      }
+    }
+  },
+  "environment": {
+    "nodeCliVersion": "v24.16.0",
+    "platform": "win32",
+    "architecture": "x64",
+    "dependencyInstallation": false
+  },
+  "verificationAtCapture": {
+    "fourSourceCopiesByteEqual": true,
+    "allFourDataJsonParsed": true,
+    "allExistingTrackedFileHashesUnchanged": true,
+    "headUnchanged": true,
+    "checkedAtUtc": "2026-10-21T11:02:36.416Z",
+    "frontendValidatorPassed": true,
+    "noRefreshCollectionBuildOrDeploymentInvoked": true,
+    "noNetworkOrExternalSourceContact": true,
+    "existingTestsOrWorkflowsChanged": false
+  },
+  "integrity": {
+    "policy": "Create once under a unique directory; never overwrite. Verify SHA256SUMS before use. Future snapshots require a new directory.",
+    "sealFile": "SHA256SUMS",
+    "sealScope": "Four copied JSON files, both manifests, BASELINE_RESULTS.md and verify.cjs; seal excludes itself to avoid circular hashing.",
+    "enforcement": "Checksums detect changes against the seal; this is not WORM storage or an authenticated signature. Retain the reported seal digest outside the snapshot.",
+    "codeReproduction": "Recover implementation files from captured Git HEAD; verify HEAD-blob hashes and exact working-file hashes. Git core.autocrlf and per-file checkout expansion are recorded. Code and HTML are checksummed, not copied."
+  },
+  "observedDiscrepancies": {
+    "storedTotalMatchedCount": 15,
+    "retainedOpenAutomaticCount": 14,
+    "sourceComparisons": [
+      {
+        "sourceId": "lever-sambatv",
+        "storedMatchedCount": 5,
+        "retainedAutomaticCount": 8,
+        "retainedOpenCount": 5
+      },
+      {
+        "sourceId": "greenhouse-nearform",
+        "storedMatchedCount": 0,
+        "retainedAutomaticCount": 0,
+        "retainedOpenCount": 0
+      },
+      {
+        "sourceId": "greenhouse-tamara",
+        "storedMatchedCount": 0,
+        "retainedAutomaticCount": 0,
+        "retainedOpenCount": 0
+      },
+      {
+        "sourceId": "greenhouse-sapience",
+        "storedMatchedCount": 7,
+        "retainedAutomaticCount": 10,
+        "retainedOpenCount": 7
+      },
+      {
+        "sourceId": "workable-envision",
+        "storedMatchedCount": 1,
+        "retainedAutomaticCount": 1,
+        "retainedOpenCount": 1
+      },
+      {
+        "sourceId": "workable-robusta",
+        "storedMatchedCount": 2,
+        "retainedAutomaticCount": 1,
+        "retainedOpenCount": 1
+      }
+    ],
+    "mismatches": [
+      {
+        "sourceId": "workable-robusta",
+        "storedMatchedCount": 2,
+        "retainedAutomaticCount": 1,
+        "retainedOpenCount": 1
+      }
+    ],
+    "interpretation": "Stored matchedCount is reported before merge_feed collapses records by normalized ID. Raw feeds are not retained, so the exact cause of the Robusta difference cannot be established. Do not interpret source matchedCount as a unique retained-record denominator."
+  }
+}
