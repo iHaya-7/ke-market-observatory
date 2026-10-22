@@ -1,0 +1,4 @@
+PREFIX ke: <urn:ke-market-observatory:ontology:>
+SELECT ?comparison ?member WHERE {
+  ?comparison a ke:SalaryComparison; ke:comparisonMember ?member .
+} ORDER BY ?comparison ?member

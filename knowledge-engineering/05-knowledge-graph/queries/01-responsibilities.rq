@@ -1,0 +1,8 @@
+PREFIX ke: <urn:ke-market-observatory:ontology:>
+PREFIX dct: <http://purl.org/dc/terms/>
+SELECT ?case ?responsibility ?work ?passage ?locator WHERE {
+  ?posting a ke:JobPosting; dct:identifier ?case; ke:advertisesRole/ke:hasResponsibility ?responsibility .
+  FILTER(STRSTARTS(STR(?case), "EVAL-"))
+  ?responsibility ke:actionText ?work; ke:evidencePassage ?passage .
+  ?passage ke:passageLocator ?locator .
+} ORDER BY ?case ?responsibility ?passage

@@ -1,0 +1,14 @@
+PREFIX ke: <urn:ke-market-observatory:ontology:>
+PREFIX dct: <http://purl.org/dc/terms/>
+SELECT ?case ?observation ?lower ?upper ?currency ?period ?basis ?market ?passage ?context WHERE {
+  ?posting dct:identifier ?case; ke:hasSalaryObservation ?observation .
+  FILTER(STRSTARTS(STR(?case), "EVAL-"))
+  ?observation ke:evidencePassage ?passage .
+  OPTIONAL { ?observation ke:lowerAmount ?lower }
+  OPTIONAL { ?observation ke:upperAmount ?upper }
+  OPTIONAL { ?observation ke:currency ?currency }
+  OPTIONAL { ?observation ke:payPeriod ?period }
+  OPTIONAL { ?observation ke:compensationBasis ?basis }
+  OPTIONAL { ?observation ke:payMarket ?market }
+  OPTIONAL { ?passage ke:contextPassage ?context }
+} ORDER BY ?case ?observation ?passage ?context

@@ -1,0 +1,9 @@
+PREFIX ke: <urn:ke-market-observatory:ontology:>
+PREFIX dct: <http://purl.org/dc/terms/>
+SELECT ?assessment ?target ?kind ?outcome ?passage ?locator ?source ?location ?checksum ?capture WHERE {
+  ?assessment a ke:MachineAssessment; ke:assessmentTarget ?target;
+    ke:assessmentKind ?kind; ke:outcome ?outcome; ke:evidencePassage ?passage .
+  ?passage ke:passageLocator ?locator; ke:inArtifact ?artifact .
+  ?artifact dct:source ?source; ke:artifactLocation ?location;
+    ke:sha256 ?checksum; ke:capturedAt ?capture .
+} ORDER BY ?assessment ?passage

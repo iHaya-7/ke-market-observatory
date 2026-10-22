@@ -1,0 +1,7 @@
+PREFIX ke: <urn:ke-market-observatory:ontology:>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?role ?concept ?label ?work ?passage WHERE {
+  ?role a ke:JobRole; ke:roleConcept ?concept; ke:hasResponsibility ?duty .
+  ?concept a skos:Concept; skos:prefLabel ?label .
+  ?duty ke:actionText ?work; ke:evidencePassage ?passage .
+} ORDER BY ?role ?concept ?work
