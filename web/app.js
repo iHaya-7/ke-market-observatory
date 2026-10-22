@@ -344,6 +344,9 @@ const EN={
  reviewInstructions:'The public dashboard does not approve records. After reviewing an automatic candidate\'s source, add its ID to approved or rejected in data/review_decisions.json. Verify salary basis separately in data/curated.json before updating the evidence.',
 };
 Object.assign(AR,{
+ sourcesMatching:'المطابقة الآلية تنتج مرشحين للمراجعة؛ اعتماد الفرصة هنا يحتاج إلى دليل موثق على المسؤوليات.',
+ sourcesPay:'إحصائيات الراتب الأساسي تتطلب تحققًا مستقلًا من جهة العمل ونوع الأجر والعملة والفترة وسوق النطاق وانطباقه.',
+ reviewInstructions:'لا تُعتمد السجلات من المتصفح. يلزم توثيق مراجعة المسؤوليات وأدلتها، ومراجعة الراتب ونطاق انطباقه بصورة مستقلة. التصنيف الآلي وحده لا يكفي لإدخال السجل في النتائج المؤكدة.',
  'Filters':'الفلاتر','Recorded legacy category':'الفئة السابقة المسجلة',
  'Knowledge Engineer + seniority variants':'Knowledge Engineer ومستوياته الوظيفية',
  'Ontology Engineer':'مهندس أنطولوجيا','Knowledge Graph Engineer':'مهندس رسوم بيانية معرفية','Semantic Web Engineer':'مهندس ويب دلالي',
@@ -382,6 +385,9 @@ Object.assign(AR,{
  chartDisclaimer:'حدود أجور معلنة للنطاق المهني المحدد فقط، وليست متوسطًا للسوق أو دليلًا على تكافؤ الدول والمستويات.'
 });
 Object.assign(EN,{
+ sourcesMatching:'Automatic matching produces candidates for review; confirmed opportunities here require documented responsibility evidence.',
+ sourcesPay:'Base-pay statistics require independent verification of employer attribution, pay basis, currency, period, pay market and band applicability.',
+ reviewInstructions:'Records cannot be approved in the browser. Document responsibility review and its evidence, and independently review salary and band applicability. Automatic classification alone does not admit a record to confirmed results.',
  globalIntro:'Knowledge Engineer and seniority variants by default, with independently verified responsibility evidence. Select each specialization separately; occupational scopes are not pooled.',
  saudiIntro:'All Knowledge Engineer titles, explicit KE specializations and other titles with verified substantive KE responsibilities, together by default. Salary disclosure and a literal Knowledge Engineer title are not required.',
  saudiOverviewIntro:'All three KE categories together, with responsibility evidence for each confirmed role and unresolved relevance in a separate review section.',
@@ -437,6 +443,8 @@ function occupationalScope(r){
  if(review?.occupation&&review.occupation!=='knowledge-engineer')return Object.hasOwn(occupationNames,review.occupation)?review.occupation:null;
  if(titleVariant(r.title,'Knowledge Engineer'))return 'knowledge-engineer';
  if(review?.occupation==='knowledge-engineer')return null; // A different title does not silently widen the default.
+ // SKOS alternative label, only after substantive computational duties are verified.
+ if(review&&(titleVariant(r.title,'Computational Ontologist')||titleVariant(r.title,'Ontologist')))return 'ontology-engineer';
  for(const [key,title] of Object.entries(occupationNames))if(key!=='knowledge-engineer'&&titleVariant(r.title,title))return key;
  return null;
 }
@@ -551,7 +559,7 @@ function researchRanges(){
  const rows=market.records.filter(r=>!isSaudi(r)&&occupationalScope(r)==='knowledge-engineer'&&keStatus(r)!=='excluded'&&r.evidenceType==='employer'&&isSalary(r)&&!baseEligible(r)).slice(0,5);
  if(!rows.length)return '';
  return `<section class="research-ranges"><h3>${h('Research pay ranges · not in headline benchmark')}</h3><p>${h('These original advertised amounts are presented for research only and are not included in verified base-pay statistics.')}</p>`
- +rows.map(r=>`<div class="research-row"><button class="text-button" data-detail="${esc(r.id)}">${esc(r.company)}<small>${esc(r.title)}</small></button><strong dir="auto">${esc(payRange(r))}</strong></div>`).join('')
+ +rows.map(r=>`<div class="research-row"><button class="text-button" data-detail="${esc(r.id)}">${esc(r.company)}<small>${esc(r.title)}</small></button><strong dir="auto">${esc(originalPay(r))}</strong></div>`).join('')
  +`<span class="chip amber">${h('Responsibility or pay evidence needs review.')}</span></section>`;
 }
 function overview(){

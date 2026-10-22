@@ -53,6 +53,37 @@ test('each specialization has its own benchmark and defensive statistics never p
  assert.doesNotMatch(a.run("filterMarkup('global')").match(/<select id="filter-occupation"[\s\S]*?<\/select>/)[0],/value="all"/);
 });
 
+test('computational Ontologist aliases use the ontology specialty only with verified duties',()=>{
+ const a=app([record('o','Senior Computational Ontologist'),record('plain','Lead Ontologist'),
+  record('unknown','Ontologist',{keReview:undefined}),
+  record('unrelated','Ontologist',{keReview:review('Not relevant')}),
+  saudi('sa','Computational Ontologist')]);
+ assert.deepEqual(ids(a,"filtered('global')"),[]);
+ a.run("filters.global.occupation='ontology-engineer'");
+ assert.deepEqual(ids(a,"filtered('global')"),['o','plain']);
+ assert.deepEqual(ids(a,'benchmarkRows(market.records)'),['o','plain']);
+ assert.equal(a.run("saudiCategory(market.records[4])"),'specializations');
+ assert.equal(a.run("occupationalScope(market.records[2])"),null);
+});
+
+test('research ranges preserve original currency and period instead of unlabeled conversion',()=>{
+ const a=app([record('r','Knowledge Engineer',{keReview:undefined,salaryReview:undefined})]);
+ const html=a.run('researchRanges()');
+ assert.match(html,/USD 120,000–144,000 \/ year/);
+ assert.doesNotMatch(html,/37,500/);
+});
+
+test('filter change events update category results and counts in both languages',()=>{
+ const a=app([saudi('ke','Lead Knowledge Engineer'),saudi('ont','Ontology Engineer'),saudi('other','Data Engineer')]);
+ for(const language of ['en','ar']){
+  a.context.language=language;a.run("lang=language;filters.saudi.category='all';mount('saudi')");
+  assert.match(a.elements.get('#result-count').textContent,/^3 /);
+  for(const fn of a.events.change)fn({target:{dataset:{filter:'category'},type:'select-one',value:'specializations'}});
+  assert.match(a.elements.get('#result-count').textContent,/^1 /);
+  assert.deepEqual(ids(a,"filtered('saudi')"),['ont']);
+ }
+});
+
 test('other verified specializations are separate named views, not a pooled other bucket',()=>{
  const x=record('x','Semantic governance engineer',{keReview:{...review(),occupation:'other',specialization:'Semantic Governance'}});
  const y=record('y','Domain modeling engineer',{keReview:{...review(),occupation:'other',specialization:'Domain Modeling'}});
