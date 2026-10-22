@@ -6,7 +6,8 @@ const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;
 const clone=value=>JSON.parse(JSON.stringify(value));
 const validUrl=value=>{try{const u=new URL(value);return ['https:','http:'].includes(u.protocol)?u.href:'#';}catch{return '#';}};
 const link=(url,label,cls='')=>`<a class="${cls}" href="${esc(validUrl(url))}" target="_blank" rel="noopener noreferrer">${esc(label)} ↗</a>`;
-const CACHE='ke-market-observatory-v3-last-good';
+const LOCAL_PREVIEW=document.documentElement.dataset.localPreview==='true';
+const CACHE='ke-market-observatory-approved-filters'+(LOCAL_PREVIEW?'-local':'');
 const LANG_KEY='ke-market-observatory-language';
 let lang='en';
 try{lang=localStorage.getItem(LANG_KEY)==='ar'?'ar':'en';}catch{}
@@ -342,6 +343,53 @@ const EN={
  reviewIntro:'Uncertain role matches, unclear salary evidence and older listing statuses remain here until sufficient evidence is available.',
  reviewInstructions:'The public dashboard does not approve records. After reviewing an automatic candidate\'s source, add its ID to approved or rejected in data/review_decisions.json. Verify salary basis separately in data/curated.json before updating the evidence.',
 };
+Object.assign(AR,{
+ 'Filters':'الفلاتر','Recorded legacy category':'الفئة السابقة المسجلة',
+ 'Knowledge Engineer + seniority variants':'Knowledge Engineer ومستوياته الوظيفية',
+ 'Ontology Engineer':'مهندس أنطولوجيا','Knowledge Graph Engineer':'مهندس رسوم بيانية معرفية','Semantic Web Engineer':'مهندس ويب دلالي',
+ 'All KE opportunities':'جميع فرص هندسة المعرفة','Knowledge Engineer titles':'مسميات Knowledge Engineer',
+ 'Explicit KE specializations':'تخصصات هندسة المعرفة الصريحة','Other evidenced KE titles':'مسميات أخرى بمهام معرفية مثبتة',
+ 'Occupational scope':'النطاق المهني','KE category':'فئة الفرصة','Other verified specializations':'تخصصات أخرى متحقق منها',
+ 'Responsibility evidence':'دليل المسؤوليات','Reviewed by':'راجعه','Recorded pay market':'سوق الأجر الموثق',
+ 'Confirmed responsibility-based KE':'مهام هندسة معرفة متحقق منها',
+ 'Saved references awaiting verification':'مراجع محفوظة بانتظار التحقق',
+ 'Outside confirmed results and headline statistics':'خارج النتائج المؤكدة وإحصائيات الرواتب الرئيسية',
+ 'No verified responsibility assessment is available.':'لا يتوفر تقييم موثق ومتحقق منه لمسؤوليات الوظيفة.',
+ 'Relevance remains unresolved.':'صلة المسؤوليات بهندسة المعرفة لم تُحسم.',
+ 'Occupational scope needs verification.':'النطاق المهني يحتاج إلى تحقق.',
+ 'Saved summaries are not verified responsibility passages.':'الملخصات المحفوظة لا تعادل مقاطع مسؤوليات متحققًا منها.',
+ 'These records do not widen the selected benchmark or confirm an open vacancy.':'هذه السجلات لا توسّع نطاق مقارنة الرواتب المحدد ولا تؤكد أن التقديم مفتوح.',
+ 'No eligible base-pay observations for this scope.':'لا تتوفر ملاحظات راتب أساسي مؤهلة لهذا النطاق.',
+ 'Small reference set — interpret with care.':'عدد المراجع قليل؛ تُقرأ الأرقام بحذر.',
+ 'Advertised endpoints only; no market-wide or like-for-like salary claim.':'حدود أجور معلنة فقط؛ لا تمثل السوق ولا تثبت تكافؤ المقارنة.',
+ 'Currency conversion does not establish comparability. Check country, pay market, seniority, duties and evidence dates.':'تحويل العملة لا يثبت قابلية المقارنة. راجع الدولة وسوق الأجر والمستوى والمسؤوليات وتواريخ الأدلة.',
+ 'Local development preview — no collection or publishing.':'نسخة تطوير محلية؛ لا جمع بيانات ولا نشر.',
+ 'Knowledge Engineer base salary ranges':'نطاقات الرواتب الأساسية لمسميات Knowledge Engineer',
+ 'Confirmed Saudi KE opportunities':'فرص سعودية بمهام معرفية متحقق منها',
+ 'All three KE categories; salary not required':'الفئات الثلاث معًا؛ الإفصاح عن الراتب ليس شرطًا',
+ 'Evidence must establish role relevance and employer base pay independently.':'دليل صلة الدور ودليل الراتب الأساسي لصاحب العمل يُتحقق منهما بصورة مستقلة.',
+ 'Recorded total compensation — not base pay':'تعويض إجمالي مسجل؛ ليس راتبًا أساسيًا',
+ 'Gross/net basis is not inferred.':'لا يُفترض أن الأجر إجمالي قبل الضريبة أو صافٍ.',
+ 'Responsibility or pay evidence needs review.':'دليل المسؤوليات أو الأجر يحتاج إلى مراجعة.',
+ 'Saved references only — not confirmed KE salary observations':'مراجع محفوظة فقط؛ ليست ملاحظات رواتب KE مؤكدة',
+ 'Confirmed KE titles':'مسميات KE المؤكدة','Confirmed specializations':'تخصصات KE المؤكدة','Other confirmed KE roles':'أدوار KE أخرى مؤكدة',
+ globalIntro:'النطاق الافتراضي هو Knowledge Engineer ومستوياته، مع تحقق مستقل من المسؤوليات. اختر كل تخصص آخر على حدة؛ لا تُدمج النطاقات المهنية تلقائيًا.',
+ saudiIntro:'جميع مسميات Knowledge Engineer وتخصصاته والمسميات الأخرى ذات المسؤوليات المعرفية المثبتة معًا افتراضيًا. الراتب المعلن والمسمى الحرفي ليسا شرطين.',
+ saudiOverviewIntro:'اعرض الفئات الثلاث معًا؛ تظهر المسؤوليات الداعمة لكل فرصة مؤكدة وتبقى الصلة غير المحسومة في قسم مراجعة منفصل.',
+ overviewIntro:'مرجع رواتب بمسميات مهنية منفصلة وأدلة متحقق منها، وفرص سعودية مبنية على المسؤوليات الفعلية.',
+ saudiEmpty:'لا توجد فرص مؤكدة تطابق هذا الاختيار. راجع المراجع غير المحسومة أدناه أو غيّر الفلاتر؛ الراتب غير المعلن ليس سبب الاستبعاد.',
+ salaryTableIntro:'النطاق المهني المحدد فقط. المراجع المستبعدة من إحصائيات الراتب الأساسي مميزة بوضوح؛ احتفظ بالسوق والخبرة والأدلة مع كل مبلغ.',
+ chartDisclaimer:'حدود أجور معلنة للنطاق المهني المحدد فقط، وليست متوسطًا للسوق أو دليلًا على تكافؤ الدول والمستويات.'
+});
+Object.assign(EN,{
+ globalIntro:'Knowledge Engineer and seniority variants by default, with independently verified responsibility evidence. Select each specialization separately; occupational scopes are not pooled.',
+ saudiIntro:'All Knowledge Engineer titles, explicit KE specializations and other titles with verified substantive KE responsibilities, together by default. Salary disclosure and a literal Knowledge Engineer title are not required.',
+ saudiOverviewIntro:'All three KE categories together, with responsibility evidence for each confirmed role and unresolved relevance in a separate review section.',
+ overviewIntro:'Separate occupational salary views with verified evidence, alongside Saudi opportunities supported by actual responsibilities.',
+ saudiEmpty:'No confirmed opportunities match this selection. Check the unresolved references below or adjust filters; undisclosed salary is not an exclusion.',
+ salaryTableIntro:'Only the selected occupational scope. References excluded from base-pay statistics are marked; retain market, seniority and evidence with every amount.',
+ chartDisclaimer:'Advertised endpoints for the selected occupation only, not a market average or a finding that countries and seniority levels are comparable.'
+});
 const t=key=>lang==='ar'?(AR[key]||key):(EN[key]||key);
 const h=key=>esc(t(key));
 const num=n=>n==null?t('Not disclosed'):new Intl.NumberFormat('en-US',{maximumFractionDigits:0}).format(n);
@@ -358,8 +406,57 @@ const hoursAgo=value=>value?Math.max(0,(Date.now()-Date.parse(value))/3600000):I
 const seed=JSON.parse($('#seed-data').textContent);
 let market=clone(seed),view='overview',networkMode='initial',busy=false,toastTimer;
 let selected=new Set();
-const defaults={q:'',country:'all',city:'all',level:'all',evidence:'all',relevance:'all',status:'all',exact:false,archive:false,onlySalary:true};
-const filters={global:{...defaults},saudi:{...defaults},review:{...defaults}};
+function defaultFilters(scope){return {q:'',country:'all',city:'all',level:'all',evidence:'all',status:'all',archive:false,onlySalary:scope!=='saudi',occupation:'knowledge-engineer',category:'all'};}
+const filters={global:defaultFilters('global'),saudi:defaultFilters('saudi'),review:defaultFilters('review')};
+/* Presentation gates consume documented reviews; they do not classify duties,
+   infer evidence, or import evaluation labels. See web/FILTER_CONTRACT.md. */
+const occupationNames={'knowledge-engineer':'Knowledge Engineer + seniority variants','ontology-engineer':'Ontology Engineer','knowledge-graph-engineer':'Knowledge Graph Engineer','semantic-web-engineer':'Semantic Web Engineer'};
+const categoryNames={all:'All KE opportunities','knowledge-engineer':'Knowledge Engineer titles','specializations':'Explicit KE specializations','responsibility-based':'Other evidenced KE titles'};
+const present=value=>typeof value==='string'&&value.trim().length>0;
+const knownContext=value=>present(value)&&!/unknown|unspecified|not specified|not recorded|not reverified|unverified|^n\/a$|^none$|غير محدد|غير معروف/i.test(value.trim());
+function verifiedReview(review,outcomes){
+ return !!review&&review.status==='verified'&&review.origin==='human'&&outcomes.includes(review.outcome)
+  &&present(review.reviewer)&&present(review.rationale)&&present(review.reviewedAtUtc)
+  &&/(Z|[+]00:00)$/.test(review.reviewedAtUtc)&&Number.isFinite(Date.parse(review.reviewedAtUtc))
+  &&Array.isArray(review.evidence)&&review.evidence.length>0
+  &&review.evidence.every(e=>e&&validUrl(e.sourceUrl)!=='#'&&present(e.locator)&&present(e.quote));
+}
+function keStatus(r){
+ if(verifiedReview(r.keReview,['Relevant','Not relevant','Insufficient Evidence']))return r.keReview.outcome==='Relevant'?'confirmed':r.keReview.outcome==='Not relevant'?'excluded':'review';
+ return ['excluded','rejected'].includes(r.roleDecision)?'excluded':'review';
+}
+function titleVariant(title,role){
+ const level='(?:senior|sr[.]?|junior|jr[.]?|entry[- ]level|mid[- ]level|lead|principal|staff|associate)';
+ const name=role.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+ const normalized=String(title||'').normalize('NFKC').replace(/[\u2010-\u2015]/g,'-').trim().replace(/\s+/g,' ');
+ return new RegExp('^(?:'+level+' )*'+name+'(?: (?:I|II|III|IV|V))?(?: ?\\((?:IC|individual contributor)\\))?(?: ?[,/-] ?'+level+')?$','i').test(normalized);
+}
+function occupationalScope(r){
+ const review=verifiedReview(r.keReview,['Relevant'])?r.keReview:null;
+ if(review?.occupation==='other'&&present(review.specialization))return 'other:'+review.specialization.trim().toLowerCase();
+ if(review?.occupation&&review.occupation!=='knowledge-engineer')return Object.hasOwn(occupationNames,review.occupation)?review.occupation:null;
+ if(titleVariant(r.title,'Knowledge Engineer'))return 'knowledge-engineer';
+ if(review?.occupation==='knowledge-engineer')return null; // A different title does not silently widen the default.
+ for(const [key,title] of Object.entries(occupationNames))if(key!=='knowledge-engineer'&&titleVariant(r.title,title))return key;
+ return null;
+}
+function saudiCategory(r){
+ if(titleVariant(r.title,'Knowledge Engineer'))return 'knowledge-engineer';
+ const scope=occupationalScope(r);
+ return scope&&scope!=='knowledge-engineer'?'specializations':'responsibility-based';
+}
+function isSaudi(r){return r.region==='saudi'||['saudi arabia','kingdom of saudi arabia','ksa','sa','السعودية','المملكة العربية السعودية'].includes(String(r.country||'').trim().toLowerCase());}
+function verifiedBasePay(r){
+ const review=r.salaryReview,observation=review?.observation;
+ return verifiedReview(review,['Eligible'])&&knownContext(review.employerName)&&knownContext(review.payMarket)
+  &&knownContext(review.country)&&review.country===r.country
+  &&!!observation&&['salaryMin','salaryMax','currency','period'].every(k=>(observation[k]??null)===(r[k]??null))
+  &&r.evidenceType==='employer'&&r.salaryEligible===true&&r.salaryBasis==='base'&&r.salaryBasisVerified===true&&isSalary(r);
+}
+function benchmarkRows(rows,scope=filters.global.occupation){return rows.filter(r=>baseEligible(r)&&occupationalScope(r)===scope);}
+function assessmentEvidence(review,label){return `<div class="role-evidence"><strong>${h(label)}</strong>`+review.evidence.map(e=>`<blockquote>${esc(e.quote)}</blockquote><small>${esc(e.locator)} · ${link(e.sourceUrl,t('Original source'))}</small>`).join('')+`<p>${esc(review.rationale)}</p><small>${h('Reviewed by')}: ${esc(review.reviewer)} · ${dte(review.reviewedAtUtc)}</small></div>`;}
+function roleEvidence(r){return keStatus(r)==='confirmed'?assessmentEvidence(r.keReview,'Responsibility evidence'):'';}
+function salaryEvidence(r){return verifiedReview(r.salaryReview,['Eligible','Ineligible','Insufficient Evidence'])?assessmentEvidence(r.salaryReview,'Salary evidence'):'';}
 function validate(dataset){
  if(!dataset||dataset.schemaVersion!==2||!Array.isArray(dataset.records)||dataset.records.length>10000||!Array.isArray(dataset.sources)||!dataset.meta||!dataset.fx?.rates)throw Error('Unsupported dataset');
  const ids=new Set();for(const r of dataset.records){
@@ -373,10 +470,10 @@ function validate(dataset){
  if(!Array.isArray(dataset.reviewQueue))dataset.reviewQueue=[];
  return dataset;
 }
-try{if(location.protocol!=='file:'){const cached=localStorage.getItem(CACHE);if(cached){const candidate=validate(JSON.parse(cached));if(String(candidate.meta.lastAttemptAt||'')>String(market.meta.lastAttemptAt||'')){market=candidate;networkMode='cached';}}}}catch{}
+try{if(!LOCAL_PREVIEW&&location.protocol!=='file:'){const cached=localStorage.getItem(CACHE);if(cached){const candidate=validate(JSON.parse(cached));if(String(candidate.meta.lastAttemptAt||'')>String(market.meta.lastAttemptAt||'')){market=candidate;networkMode='cached';}}}}catch{}
 function toast(text){$('#toast').textContent=text;$('#toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').hidden=true,4800);}
-function isSalary(r){return r.salaryMin!=null&&Number.isFinite(market.fx.rates[r.currency])&&['Annual','Monthly'].includes(r.period);}
-const baseEligible=r=>r.region!=='saudi'&&r.roleDecision!=='pending'&&r.evidenceType==='employer'&&r.salaryEligible===true&&r.salaryBasis==='base'&&r.salaryBasisVerified===true&&isSalary(r);
+function isSalary(r){return Number.isFinite(r.salaryMin)&&r.salaryMin>=0&&(r.salaryMax==null||(Number.isFinite(r.salaryMax)&&r.salaryMax>=r.salaryMin))&&['USD','GBP','EUR','SAR'].includes(r.currency)&&Number.isFinite(market.fx.rates[r.currency])&&market.fx.rates[r.currency]>0&&['Annual','Monthly'].includes(r.period);}
+const baseEligible=r=>!isSaudi(r)&&keStatus(r)==='confirmed'&&verifiedBasePay(r);
 const totalEligible=r=>r.evidenceType==='employer'&&r.salaryBasis==='total'&&r.salaryBasisVerified===true&&isSalary(r);
 function monthly(r,key='salaryMin'){return isSalary(r)&&r[key]!=null?r[key]*market.fx.rates[r.currency]/(r.period==='Annual'?12:1):null;}
 function payRange(r){if(!isSalary(r))return t('Not disclosed');const lo=monthly(r),hi=monthly(r,'salaryMax');return hi==null?t('From')+' '+num(lo):lo===hi?num(lo):num(lo)+'–'+num(hi);}
@@ -385,11 +482,11 @@ function expText(r){const v=r.experience||'Not specified';if(lang!=='ar')return 
 function reLabel(r){return t(r.relevance||'Not specified');}
 function recordSummary(r){return lang==='ar'?(r.summaryAr|| (r.collection==='automatic'?'مهارات وردت في وصف الوظيفة: '+(r.skills||[]).join('، ')+'. تحقق من المسؤوليات في المصدر الأصلي.':r.summary)):r.summary;}
 const badge=(text,color='')=>`<span class="chip ${color}">${esc(text)}</span>`;
-function relevanceBadge(r){return badge(reLabel(r),r.relevance==='Core KE'?'green':r.relevance==='Applied KG / AI'?'blue':'');}
+function relevanceBadge(r){const status=keStatus(r);return status==='confirmed'?badge(t('Confirmed responsibility-based KE'),'green'):status==='excluded'?badge(t('Not relevant'),'red'):badge(t('Pending relevance review'),'amber');}
 function evidenceBadge(r){const key=({employer:'Employer disclosure',reposted:'Secondary evidence',estimate:'Salary estimate',user:'Unverified'})[r.evidenceType]||'Source record';return badge(t(key),r.evidenceType==='employer'?'green':r.evidenceType==='estimate'?'blue':'amber');}
 function basisBadge(r){if(!isSalary(r))return badge(t('Not disclosed'));
- if(baseEligible(r))return badge(t('Base pay verified'),'green');
- if(totalEligible(r))return badge(t('Verified total pay — separate'),'blue');
+ if(verifiedBasePay(r))return badge(t('Base pay verified'),'green');
+ if(totalEligible(r))return badge(t('Recorded total compensation — not base pay'),'blue');
  if(r.evidenceType==='reposted'||r.evidenceType==='estimate')return badge(t('Estimate / secondary evidence'),'amber');
  return badge(t('Pay basis needs review'),'amber');}
 const isArchived=r=>['Archived / unavailable','Not in latest feed'].includes(r.listingStatus);
@@ -417,14 +514,14 @@ function applyLanguage(){
 }
 function renderShell(){
  applyLanguage();
- $('#global-count').textContent=num(market.records.filter(r=>r.region!=='saudi'&&isSalary(r)).length);
- $('#saudi-count').textContent=num(market.records.filter(r=>r.region==='saudi').length);
+ $('#global-count').textContent=num(benchmarkRows(market.records,'knowledge-engineer').length);
+ $('#saudi-count').textContent=num(market.records.filter(r=>isSaudi(r)&&keStatus(r)==='confirmed'&&!isArchived(r)).length);
  $('#review-count').textContent=num(market.reviewQueue.length);
  const meta=market.meta,last=meta.lastSuccessfulCollectionAt;
  const ready=meta.automationActivated&&last&&hoursAgo(last)<=meta.staleAfterHours;
- const local=!['http:','https:'].includes(location.protocol);
+ const local=LOCAL_PREVIEW||!['http:','https:'].includes(location.protocol);
  let pill='Prepared for deployment',notice='Daily collection has not been activated.';
- if(local){pill='Offline preview';notice='This preview is not a live site. Data collection activates after deployment.';}
+ if(local){pill='Offline preview';notice=LOCAL_PREVIEW?'Local development preview — no collection or publishing.':'This preview is not a live site. Data collection activates after deployment.';}
  else if(networkMode==='failed'){pill='Update unavailable';notice='Showing the embedded or last saved snapshot because the update failed.';}
  else if(ready){pill='Snapshot connected';notice=t('Last successful collection')+': '+dte(last,true)+'. '+t('The browser checks published data every 5 minutes; the scheduled workflow checks sources daily.');}
  else if(meta.automationActivated){pill='Check collection health';notice='The last successful collection is missing or stale. Verify the source status.';}
@@ -441,8 +538,8 @@ function renderShell(){
  $('#crumb-title').textContent=t(({overview:'OVERVIEW',global:'GLOBAL SALARIES',saudi:'SAUDI ARABIA',junior:'JUNIOR EVIDENCE',sources:'SOURCES & UPDATES',review:'REVIEW QUEUE'})[view]);
  renderTray();
 }
-function graph(rows){
- const sample=rows.filter(baseEligible).sort((a,b)=>monthly(a)-monthly(b));
+function graph(rows,scope='knowledge-engineer'){
+ const sample=benchmarkRows(rows,scope).sort((a,b)=>monthly(a)-monthly(b));
  if(!sample.length)return `<div class="empty">${h('No verified employer base-salary ranges in this selection.')}</div>`;
  const ceiling=Math.max(10000,Math.ceil(Math.max(...sample.map(r=>monthly(r,'salaryMax')??monthly(r)))/10000)*10000);
  return `<div class="chart"><div class="chart-legend"><span>0</span><span>${num(ceiling/2)}</span><span>${num(ceiling)} SAR</span></div>${sample.map(r=>{
@@ -451,36 +548,39 @@ function graph(rows){
  }).join('')}<div class="caption">${h('chartDisclaimer')}</div></div>`;
 }
 function researchRanges(){
- const rows=market.records.filter(r=>r.region!=='saudi'&&isSalary(r)&&r.evidenceType==='employer'&&!baseEligible(r)).slice(0,5);
+ const rows=market.records.filter(r=>!isSaudi(r)&&occupationalScope(r)==='knowledge-engineer'&&keStatus(r)!=='excluded'&&r.evidenceType==='employer'&&isSalary(r)&&!baseEligible(r)).slice(0,5);
  if(!rows.length)return '';
  return `<section class="research-ranges"><h3>${h('Research pay ranges · not in headline benchmark')}</h3><p>${h('These original advertised amounts are presented for research only and are not included in verified base-pay statistics.')}</p>`
  +rows.map(r=>`<div class="research-row"><button class="text-button" data-detail="${esc(r.id)}">${esc(r.company)}<small>${esc(r.title)}</small></button><strong dir="auto">${esc(payRange(r))}</strong></div>`).join('')
- +`<span class="chip amber">${h('Salary basis pending verification')}</span></section>`;
+ +`<span class="chip amber">${h('Responsibility or pay evidence needs review.')}</span></section>`;
 }
 function overview(){
- const salaryRows=market.records.filter(baseEligible),saudiRows=market.records.filter(r=>r.region==='saudi');
+ const salaryRows=benchmarkRows(market.records,'knowledge-engineer'),saudiRows=market.records.filter(r=>isSaudi(r)&&keStatus(r)==='confirmed'&&!isArchived(r));
  const ok=market.sources.filter(s=>s.status.startsWith('OK')).length;
  const note=`<strong>${h('One reference. Two perspectives.')}</strong>${h('Global compensation · Saudi market demand')}`;
  $('#view-content').innerHTML=head('THE VALUE OF CONNECTED KNOWLEDGE',h('Know the market. Know your value.'),t('overviewIntro'),note)
- +`<div class="stats">${st('Verified base-salary references',num(salaryRows.length),'Not mixed with total pay or estimates')}${st('Saudi postings tracked',num(saudiRows.length),'Includes unverified and archived records')}${st('Configured public boards',num(market.sources.length),'Coverage limited to these sources')}${st('Sources checked successfully',num(ok)+'<small> / '+num(market.sources.length)+'</small>','Successful API checks, not manual review',true)}</div>`
- +`<div class="overview-grid"><section class="panel"><div class="panel-header"><div><h2>${h('Global base salary ranges')}</h2><p>${h('Gross monthly SAR equivalents · verified employer base pay only')}</p></div><button class="text-button" data-view="global">${h('Explore')} →</button></div>${graph(salaryRows)}${researchRanges()}</section>`
+ +`<div class="stats">${st('Verified base-salary references',num(salaryRows.length),'Not mixed with total pay or estimates')}${st('Confirmed Saudi KE opportunities',num(saudiRows.length),'All three KE categories; salary not required')}${st('Configured public boards',num(market.sources.length),'Coverage limited to these sources')}${st('Sources checked successfully',num(ok)+'<small> / '+num(market.sources.length)+'</small>','Successful API checks, not manual review',true)}</div>`
+ +`<div class="overview-grid"><section class="panel"><div class="panel-header"><div><h2>${h('Knowledge Engineer base salary ranges')}</h2><p>${h('Evidence must establish role relevance and employer base pay independently.')}</p></div><button class="text-button" data-view="global">${h('Explore')} →</button></div>${sampleNotice(salaryRows)}${graph(salaryRows)}${researchRanges()}</section>`
  +`<aside class="overview-aside"><section class="hero-card"><span class="eyebrow">${h('NEW · SAUDI ARABIA')}</span><h2>${h('Where the work is being advertised.')}</h2><p>${h('saudiOverviewIntro')}</p><button class="button" data-view="saudi">${h('Explore Saudi opportunities')} →</button></section>`
  +`<section class="panel evidence-card"><span class="eyebrow muted">${h('A FAIR COMPARISON')}</span><h3 style="margin-top:15px">${h('A missing year count does not mean Junior.')}</h3><p>${h('evidenceOverviewIntro')}</p><div class="thin-rule"></div><button class="text-button" data-view="junior">${h('Read the Junior evidence')} →</button><p style="margin:15px 0 0">${h('Review source health before sharing the benchmark.')}</p><button class="text-button" data-view="review">${h('Review queue')} →</button><p style="margin-top:12px"><button class="text-button" data-view="sources">${h('View update coverage')} →</button></p></section></aside></div>`;
 }
 function optionList(items,current){return `<option value="all">${h('All')}</option>`+[...new Set(items)].filter(Boolean).sort().map(x=>`<option value="${esc(x)}"${x===current?' selected':''}>${esc(t(x))}</option>`).join('');}
 function filterMarkup(scope){
- const f=filters[scope],records=market.records.filter(r=>scope==='saudi'?r.region==='saudi':r.region!=='saudi');
+ const f=filters[scope],records=market.records.filter(r=>scope==='saudi'?isSaudi(r):!isSaudi(r));
  const search=`<div class="field"><label for="filter-search">${h('Search company, role or skill')}</label><input id="filter-search" data-filter="q" type="search" value="${esc(f.q)}" placeholder="Ontology, Neo4j, company..."></div>`;
- const marketFilter=scope==='saudi'?`<div class="field"><label for="filter-city">${h('Location')}</label><select id="filter-city" data-filter="city">${optionList(records.map(r=>r.city),f.city)}</select></div><div class="field"><label for="filter-rel">${h('Role relevance')}</label><select id="filter-rel" data-filter="relevance">${optionList(records.map(r=>r.relevance),f.relevance)}</select></div>`
+ const marketFilter=scope==='saudi'?`<div class="field"><label for="filter-city">${h('Location')}</label><select id="filter-city" data-filter="city">${optionList(records.map(r=>r.city),f.city)}</select></div>`
  :`<div class="field"><label for="filter-country">${h('Country / market')}</label><select id="filter-country" data-filter="country">${optionList(records.map(r=>r.country),f.country)}</select></div><div class="field"><label for="filter-evidence">${h('Evidence type')}</label><select id="filter-evidence" data-filter="evidence"><option value="all">${h('All evidence types')}</option><option value="employer" ${f.evidence==='employer'?'selected':''}>${h('Employer disclosures')}</option><option value="reposted" ${f.evidence==='reposted'?'selected':''}>${h('Secondary evidence')}</option><option value="estimate" ${f.evidence==='estimate'?'selected':''}>${h('Salary estimates')}</option></select></div>`;
  const statusFilter=scope==='saudi'?`<div class="field"><label for="filter-status">${h('Status')}</label><select id="filter-status" data-filter="status"><option value="all">${h('All')}</option><option value="verified" ${f.status==='verified'?'selected':''}>${h('Verified in latest feed')}</option><option value="unverified" ${f.status==='unverified'?'selected':''}>${h('Unverified / saved')}</option><option value="archived" ${f.status==='archived'?'selected':''}>${h('Archived / absent')}</option></select></div>`:'';
  const levelFilter=`<div class="field"><label for="filter-level">${h('Career level')}</label><select id="filter-level" data-filter="level">${optionList(records.map(r=>r.level),f.level)}</select></div>`;
- return `<section class="filters" aria-label="Filters"><div class="filter-grid">${search}${marketFilter}${levelFilter}${statusFilter}</div><div class="filter-bottom"><div><label class="check-label"><input type="checkbox" data-filter="exact"${f.exact?' checked':''}>${h('Exact title: Knowledge Engineer')}</label>${scope==='saudi'?`<label class="check-label"><input type="checkbox" data-filter="archive"${f.archive?' checked':''}>${h('Include archived postings')}</label>`:`<label class="check-label"><input type="checkbox" data-filter="onlySalary"${f.onlySalary?' checked':''}>${h('Disclosed salary only')}</label>`}<button class="text-button" data-reset="${scope}">${h('Reset')}</button></div><span class="result-count" id="result-count"></span></div></section>`;
+ const otherScopes=new Map(records.filter(r=>keStatus(r)==='confirmed'&&occupationalScope(r)?.startsWith('other:')).map(r=>[occupationalScope(r),r.keReview.specialization.trim()]));
+ const scopeFilter=scope==='saudi'?`<div class="field"><label for="filter-category">${h('KE category')}</label><select id="filter-category" data-filter="category">${Object.entries(categoryNames).map(([key,name])=>`<option value="${key}"${f.category===key?' selected':''}>${h(name)}</option>`).join('')}</select></div>`
+ :`<div class="field"><label for="filter-occupation">${h('Occupational scope')}</label><select id="filter-occupation" data-filter="occupation">${Object.entries(occupationNames).map(([key,name])=>`<option value="${key}"${f.occupation===key?' selected':''}>${h(name)}</option>`).join('')}${otherScopes.size?`<optgroup label="${h('Other verified specializations')}">${[...otherScopes].sort((a,b)=>a[1].localeCompare(b[1])).map(([key,name])=>`<option value="${esc(key)}"${f.occupation===key?' selected':''}>${esc(name)}</option>`).join('')}</optgroup>`:''}</select></div>`;
+ return `<section class="filters" aria-label="${h('Filters')}"><div class="filter-grid">${search}${scopeFilter}${marketFilter}${levelFilter}${statusFilter}</div><div class="filter-bottom"><div>${scope==='saudi'?`<label class="check-label"><input type="checkbox" data-filter="archive"${f.archive?' checked':''}>${h('Include archived postings')}</label>`:`<label class="check-label"><input type="checkbox" data-filter="onlySalary"${f.onlySalary?' checked':''}>${h('Disclosed salary only')}</label>`}<button class="text-button" data-reset="${scope}">${h('Reset')}</button></div><span class="result-count" id="result-count"></span></div></section>`;
 }
-function filtered(scope){
+function matchingRows(scope){
  const f=filters[scope];
  return market.records.filter(r=>{
-  if(scope==='saudi'?r.region!=='saudi':r.region==='saudi')return false;
+  if(scope==='saudi'?!isSaudi(r):isSaudi(r))return false;
   if(scope==='saudi'&&!f.archive&&f.status!=='archived'&&isArchived(r))return false;
   if(scope!=='saudi'&&f.onlySalary&&!isSalary(r))return false;
   if(scope==='saudi'&&f.status==='verified'&&!feedVerified(r))return false;
@@ -489,17 +589,25 @@ function filtered(scope){
   const hay=[r.company,r.title,r.country,r.city,r.summary,r.summaryAr,...r.skills].join(' ').toLowerCase();
   return (!f.q||hay.includes(f.q.trim().toLowerCase()))
    &&(f.country==='all'||r.country===f.country)&&(f.city==='all'||r.city===f.city)
-   &&(f.level==='all'||r.level===f.level)&&(f.relevance==='all'||r.relevance===f.relevance)
+   &&(f.level==='all'||r.level===f.level)&&(scope!=='saudi'||f.category==='all'||saudiCategory(r)===f.category)
    &&(f.evidence==='all'||r.evidenceType===f.evidence)
-   &&(!f.exact||r.title.trim().toLowerCase()==='knowledge engineer');
+   ;
  }).sort((a,b)=>scope==='saudi'?({'Core KE':0,'Applied KG / AI':1,'Metadata / Semantic':2}[a.relevance]??3)-({'Core KE':0,'Applied KG / AI':1,'Metadata / Semantic':2}[b.relevance]??3)||(feedVerified(b)?1:0)-(feedVerified(a)?1:0)||a.company.localeCompare(b.company):(monthly(a)??Infinity)-(monthly(b)??Infinity));
 }
+function filtered(scope){return matchingRows(scope).filter(r=>keStatus(r)==='confirmed'&&(scope==='saudi'||occupationalScope(r)===filters[scope].occupation));}
+function reviewRows(scope){return matchingRows(scope).filter(r=>keStatus(r)==='review'||(scope!=='saudi'&&keStatus(r)==='confirmed'&&!occupationalScope(r)));}
+function pendingEvidence(scope){
+ const rows=reviewRows(scope);
+ if(!rows.length)return '';
+ return `<details class="panel pending-evidence" open><summary>${h('Saved references awaiting verification')} · ${num(rows.length)}</summary><p>${h('Outside confirmed results and headline statistics')}. ${h('These records do not widen the selected benchmark or confirm an open vacancy.')}</p><div class="review-list">`+rows.map(r=>`<article class="review-card"><div>${badge(t('Unverified'),'amber')}${evidenceBadge(r)}<h3><button class="title-link" data-detail="${esc(r.id)}">${esc(r.title)}</button></h3><small>${esc(r.company)} · ${esc(t(r.country))}</small><p>${h(keStatus(r)==='confirmed'?'Occupational scope needs verification.':verifiedReview(r.keReview,['Insufficient Evidence'])?'Relevance remains unresolved.':'No verified responsibility assessment is available.')}</p><p>${esc(recordSummary(r))}</p><small>${h('Saved summaries are not verified responsibility passages.')}</small>${scope==='global'&&isSalary(r)?`<p>${esc(originalPay(r))} · ${h('Not in headline benchmark')}</p>`:''}</div><div class="review-actions">${link(r.sourceUrl,t('Open source'),'button small')}<button class="text-button" data-detail="${esc(r.id)}">${h('Evidence & notes')} →</button></div></article>`).join('')+'</div></details>';
+}
+function sampleNotice(base){return `<div class="notice amber sample-notice" role="status">${!base.length?h('No eligible base-pay observations for this scope.'):base.length<5?h('Small reference set — interpret with care.'):h('Advertised endpoints only; no market-wide or like-for-like salary claim.')} ${h('Currency conversion does not establish comparability. Check country, pay market, seniority, duties and evidence dates.')}</div>`;}
 function salaryStats(rows){
- const base=rows.filter(baseEligible),mins=base.map(r=>monthly(r)),maxes=base.map(r=>monthly(r,'salaryMax')).filter(x=>x!=null);
- return `<div class="stats">${st('Employer base-salary references',num(base.length),'Eligible records in this selection')}${st('Markets represented',num(new Set(base.map(r=>r.country)).size),'Countries in verified-base sample')}${st('Lowest advertised floor',mins.length?'<small>SAR</small>'+num(Math.min(...mins)):'—','Monthly equivalent; not a Junior minimum')}${st('Highest advertised ceiling',maxes.length?'<small>SAR</small>'+num(Math.max(...maxes)):'—','Monthly equivalent; not a typical offer',true)}</div>`;
+ const base=benchmarkRows(rows),mins=base.map(r=>monthly(r)),maxes=base.map(r=>monthly(r,'salaryMax')).filter(x=>x!=null);
+ return `<div class="stats">${st('Employer base-salary references',num(base.length),'Eligible records in this selection')}${st('Markets represented',num(new Set(base.map(r=>r.salaryReview.payMarket)).size),'Recorded pay market')}${st('Lowest advertised floor',mins.length?'<small>SAR</small>'+num(Math.min(...mins)):'—','Monthly equivalent; not a Junior minimum')}${st('Highest advertised ceiling',maxes.length?'<small>SAR</small>'+num(Math.max(...maxes)):'—','Monthly equivalent; not a typical offer',true)}</div>`+sampleNotice(base);
 }
 function salaryTable(rows){
- return `<section class="panel"><div class="panel-header"><div><h2>${h('The salary reference set')}</h2><p>${h('salaryTableIntro')}</p></div><button class="button small" data-export="csv">${h('Export CSV')} ↓</button></div><div class="table-scroll"><table><thead><tr><th style="width:28%">${h('Role / company')}</th><th style="width:14%">${h('Market')}</th><th style="width:17%">${h('Experience')}</th><th style="width:22%">${h('Monthly SAR')}</th><th style="width:19%">${h('Evidence')}</th></tr></thead><tbody>`+rows.map(r=>`<tr><td><button class="title-link" data-detail="${esc(r.id)}">${esc(r.title)}</button><span class="subline">${esc(r.company)}</span><span class="subline"><label class="check-label"><input type="checkbox" data-compare="${esc(r.id)}" ${selected.has(r.id)?'checked':''}>${h('Compare')}</label></span></td><td>${esc(t(r.country))}<span class="subline">${esc(r.city)}</span></td><td>${esc(expText(r))}<span class="subline">${esc(t(r.level))}</span></td><td><div class="money mono" dir="auto">${esc(payRange(r))}<small>${esc(originalPay(r))}</small></div>${basisBadge(r)}${!baseEligible(r)?`<small class="pay-note">${h('Excluded from base benchmark')}</small>`:''}</td><td>${evidenceBadge(r)}<span class="subline">${h('Evidence date')}: ${dte(r.salaryVerifiedAt||r.evidenceDate)}</span><button class="text-button" data-detail="${esc(r.id)}" style="font-size:10px;margin-top:8px">${h('Source & details')} ↗</button></td></tr>`).join('')+`</tbody></table></div>${!rows.length?`<div class="empty"><strong>${h('No matching references')}</strong>${h('Change your filters. Missing evidence is not replaced with estimates.')}</div>`:''}</section>`;
+ return `<section class="panel"><div class="panel-header"><div><h2>${h('The salary reference set')}</h2><p>${h('salaryTableIntro')}</p></div><button class="button small" data-export="csv">${h('Export CSV')} ↓</button></div><div class="table-scroll"><table><thead><tr><th style="width:28%">${h('Role / company')}</th><th style="width:14%">${h('Market')}</th><th style="width:17%">${h('Experience')}</th><th style="width:22%">${h('Monthly SAR')}</th><th style="width:19%">${h('Evidence')}</th></tr></thead><tbody>`+rows.map(r=>`<tr><td><button class="title-link" data-detail="${esc(r.id)}">${esc(r.title)}</button><span class="subline">${esc(r.company)}</span><span class="subline"><label class="check-label"><input type="checkbox" data-compare="${esc(r.id)}" ${selected.has(r.id)?'checked':''}>${h('Compare')}</label></span></td><td>${esc(t(r.country))}<span class="subline">${esc(r.city)}</span><span class="subline">${h('Recorded pay market')}: ${esc(r.salaryReview?.payMarket||t('Not recorded'))}</span></td><td>${esc(expText(r))}<span class="subline">${esc(t(r.level))}</span></td><td><div class="money mono" dir="auto">${esc(payRange(r))}<small>${esc(originalPay(r))}</small></div>${basisBadge(r)}${!baseEligible(r)?`<small class="pay-note">${h('Excluded from base benchmark')}</small>`:''}</td><td>${evidenceBadge(r)}<span class="subline">${h('Evidence date')}: ${dte(r.salaryVerifiedAt||r.evidenceDate)}</span><button class="text-button" data-detail="${esc(r.id)}" style="font-size:10px;margin-top:8px">${h('Source & details')} ↗</button></td></tr>`).join('')+`</tbody></table></div>${!rows.length?`<div class="empty"><strong>${h('No matching references')}</strong>${h('Change your filters. Missing evidence is not replaced with estimates.')}</div>`:''}</section>`;
 }
 function globalPage(){
  $('#view-content').innerHTML=head('INTERNATIONAL SALARY BENCHMARK',h('Global salaries.'),t('globalIntro'))
@@ -513,20 +621,20 @@ function saudiPage(){
  +filterMarkup('saudi')+'<div id="results"></div>';
  renderResults();
 }
-function saudiCards(rows){return `<div class="cards-grid">`+rows.map(r=>`<article class="job-card"><div class="job-brand"><span class="company-mark">${esc(initials(r.company))}</span><span>${esc(r.company)}</span>${newTrack(r)?badge(t('Newly tracked'),'green'):''}</div><h3><button class="title-link" style="font-size:inherit" data-detail="${esc(r.id)}">${esc(r.title)}</button></h3><div class="job-location">${esc(r.city)} · ${h('Saudi Arabia')}</div><div class="chip-row">${relevanceBadge(r)}${statusBadge(r)}</div><p class="job-summary">${esc(recordSummary(r))}</p><div class="chip-row" style="margin-bottom:14px">${r.skills.slice(0,4).map(s=>badge(s)).join('')}</div><div class="job-facts"><div><small>${h('Experience required')}</small><strong>${esc(expText(r))}</strong></div><div><small>${h('Monthly salary / SAR')}</small><strong>${esc(payRange(r))}</strong></div></div><div class="job-footer">${link(r.sourceUrl,t('View original posting'),'button small')}<button class="text-button" data-detail="${esc(r.id)}">${h('Evidence & notes')} →</button></div><div class="job-dates">${h('Published')}: ${dte(r.postedAt)} · ${h('Evidence date')}: ${dte(r.evidenceDate)}${r.lastSeenAt?'<br>'+h('Last seen in feed')+': '+dte(r.lastSeenAt,true):''}${r.duplicateGroup?'<br>'+h('Possible overlap; client identity unconfirmed.'):''}</div></article>`).join('')+`</div>${!rows.length?`<div class="panel empty"><strong>${h('No matching Saudi postings')}</strong>${h('saudiEmpty')}</div>`:''}`;}
+function saudiCards(rows){return `<div class="cards-grid">`+rows.map(r=>`<article class="job-card"><div class="job-brand"><span class="company-mark">${esc(initials(r.company))}</span><span>${esc(r.company)}</span>${newTrack(r)?badge(t('Newly tracked'),'green'):''}</div><h3><button class="title-link" style="font-size:inherit" data-detail="${esc(r.id)}">${esc(r.title)}</button></h3><div class="job-location">${esc(r.city)} · ${h('Saudi Arabia')}</div><div class="chip-row">${badge(t(categoryNames[saudiCategory(r)]),'green')}${statusBadge(r)}</div><p class="job-summary">${esc(recordSummary(r))}</p>${roleEvidence(r)}<div class="job-facts"><div><small>${h('Experience required')}</small><strong>${esc(expText(r))}</strong></div><div><small>${h('Monthly salary / SAR')}</small><strong>${esc(payRange(r))}</strong></div></div><div class="job-footer">${link(r.sourceUrl,t('View original posting'),'button small')}<button class="text-button" data-detail="${esc(r.id)}">${h('Evidence & notes')} →</button></div><div class="job-dates">${h('Published')}: ${dte(r.postedAt)} · ${h('Evidence date')}: ${dte(r.evidenceDate)}${r.lastSeenAt?'<br>'+h('Last seen in feed')+': '+dte(r.lastSeenAt,true):''}${r.duplicateGroup?'<br>'+h('Possible overlap; client identity unconfirmed.'):''}</div></article>`).join('')+`</div>${!rows.length?`<div class="panel empty"><strong>${h('No matching Saudi postings')}</strong>${h('saudiEmpty')}</div>`:''}`;}
 function renderResults(){
  const rows=filtered(view);
  $('#result-count').textContent=num(rows.length)+' '+t('matching references');
- if(view==='global'){$('#results').innerHTML=salaryStats(rows)+salaryTable(rows);return;}
- const verified=rows.filter(feedVerified),core=rows.filter(r=>r.relevance==='Core KE');
- $('#results').innerHTML=`<div class="stats">${st('Postings in this view',num(rows.length),'Saved references, not unique requisitions')}${st('Core KE relevance',num(core.length),'Explicit ontology or knowledge-graph scope')}${st('Fresh feed-confirmed listings',num(verified.length),'Successful, recent public ATS check')}${st('Salaries disclosed',num(rows.filter(isSalary).length),'No undisclosed Saudi salary is inferred',true)}</div>`
- +`<div class="status-legend">${badge(t('Listing verified in feed'),'green')}${badge(t('Not yet verified open'),'amber')}${badge(t('Archived / unavailable'),'red')}<span>${h('Saudi posting verification is not salary verification')}</span></div>`+saudiCards(rows);
+ if(view==='global'){$('#results').innerHTML=salaryStats(rows)+salaryTable(rows)+pendingEvidence('global');return;}
+ const count=category=>num(rows.filter(r=>saudiCategory(r)===category).length);
+ $('#results').innerHTML=`<div class="stats">${st('Postings in this view',num(rows.length),'All three KE categories; salary not required')}${st('Confirmed KE titles',count('knowledge-engineer'),'Knowledge Engineer + seniority variants')}${st('Confirmed specializations',count('specializations'),'Explicit KE specializations')}${st('Other confirmed KE roles',count('responsibility-based'),'Confirmed responsibility-based KE',true)}</div>`
+ +`<div class="status-legend">${badge(t('Listing verified in feed'),'green')}${badge(t('Not yet verified open'),'amber')}${badge(t('Archived / unavailable'),'red')}<span>${h('Saudi posting verification is not salary verification')} · ${h('Salaries disclosed')}: ${num(rows.filter(isSalary).length)}</span></div>`+saudiCards(rows)+pendingEvidence('saudi');
 }
 function juniorPage(){
- const rows=market.records.filter(r=>r.region!=='saudi'&&r.level==='Junior'&&isSalary(r));
+ const rows=market.records.filter(r=>r.region!=='saudi'&&r.level==='Junior'&&isSalary(r)&&keStatus(r)!=='excluded');
  $('#view-content').innerHTML=head('EARLY CAREER / READ CAREFULLY',h('Junior evidence, without inflated claims.'),t('juniorIntro'))
  +`<div class="notice amber"><strong>${h('juniorDisclaimer')}</strong></div><div class="junior-grid">`
- +rows.map(r=>`<article class="panel junior-card">${evidenceBadge(r)}<h3>${esc(r.title)}</h3><small>${esc(r.company==='Market estimate'?r.sourceLabel:r.company)} · ${esc(t(r.country))}</small><div class="junior-money mono">${esc(payRange(r))}</div><small>${h('SAR per month, gross equivalent')}</small><p style="margin-top:17px">${esc(expText(r))}<br>${esc(t(r.compensation))}</p><p>${esc(lang==='ar'&&r.summaryAr?r.summaryAr:r.notes)}</p><button class="button small" data-detail="${esc(r.id)}">${h('Read source evidence')} ↗</button></article>`).join('')
+ +rows.map(r=>`<article class="panel junior-card">${evidenceBadge(r)}<h3>${esc(r.title)}</h3><small>${esc(r.company==='Market estimate'?r.sourceLabel:r.company)} · ${esc(t(r.country))}</small><div class="junior-money mono">${esc(payRange(r))}</div><small>${h('Gross/net basis is not inferred.')}</small><p style="margin-top:17px">${esc(expText(r))}<br>${esc(t(r.compensation))}</p><p>${esc(lang==='ar'&&r.summaryAr?r.summaryAr:r.notes)}</p><button class="button small" data-detail="${esc(r.id)}">${h('Read source evidence')} ↗</button></article>`).join('')
  +`</div><section class="panel method-card" style="margin-top:22px"><h2>${h('Compare the scope, then the price')}</h2><p>${h('juniorMethod')}</p><button class="text-button" data-view="global">${h('Browse all salary references')} →</button></section>`;
 }
 function sourceHealthCard(s){
@@ -564,6 +672,7 @@ function reviewPage(){
 function mount(page){
  if(!['overview','global','saudi','junior','sources','review'].includes(page))page='overview';
  view=page;renderShell();({overview,global:globalPage,saudi:saudiPage,junior:juniorPage,sources:sourcesPage,review:reviewPage})[view]();
+ if(LOCAL_PREVIEW)$('#view-content').innerHTML=`<div class="notice local-preview">${h('Local development preview — no collection or publishing.')}</div>`+$('#view-content').innerHTML;
  if(location.hash!=='#'+page)try{history.replaceState(null,'','#'+page);}catch{}
 }
 function details(id){
@@ -572,13 +681,13 @@ function details(id){
  const conversion=isSalary(r)?`${num(r.salaryMin)}${r.period==='Annual'?' / 12':''} × ${market.fx.rates[r.currency]} = ${num(monthly(r))} SAR/${t('month')}`:t('No salary conversion is calculated.');
  const recordNote=r.collection==='automatic'?t('Rule-matched feed role; review the source.'):t('Curated reference; check original evidence.');
  $('#detail-body').innerHTML=`<h2 class="detail-title" id="detail-heading">${esc(r.title)}</h2><p class="muted">${esc(r.company)} · ${esc(r.city)}, ${esc(t(r.country))}</p><div class="chip-row">${relevanceBadge(r)}${evidenceBadge(r)}${r.region==='saudi'?statusBadge(r):basisBadge(r)}</div>`
- +`<section class="detail-salary"><small>${h('MONTHLY EQUIVALENT / SAR')}</small><div class="amount mono" dir="auto">${esc(payRange(r))}</div><p>${esc(originalPay(r))} · ${esc(t(r.compensation))}</p><p>${esc(conversion)}<br>FX ${dte(market.fx.date)} · ${h('Gross, before tax; not a guaranteed offer.')}</p>${!baseEligible(r)&&r.region!=='saudi'?`<p><strong>${h('Excluded from base benchmark')}</strong></p>`:''}</section>`
- +`<div class="detail-grid"><div><strong>${h('Experience')}</strong><p>${esc(expText(r))}<br>${esc(r.levelBasis||t('Not specified'))}</p></div><div><strong>${h('Role relevance')}</strong><p>${esc(reLabel(r))}<br>${h(r.collection==='automatic'?'Rule-matched feed role; review the source.':'Curated reference; check original evidence.')}</p></div>`
- +`<div class="full"><strong>${h('Scope of the role')}</strong><p>${esc(recordSummary(r))}</p><div class="chip-row">${r.skills.map(s=>badge(s)).join('')}</div></div>`
+ +`<section class="detail-salary"><small>${h('MONTHLY EQUIVALENT / SAR')}</small><div class="amount mono" dir="auto">${esc(payRange(r))}</div><p>${esc(originalPay(r))} · ${esc(t(r.compensation))}</p><p>${esc(conversion)}<br>FX ${dte(market.fx.date)} · ${h('Gross/net basis is not inferred.')}</p>${!baseEligible(r)&&r.region!=='saudi'?`<p><strong>${h('Excluded from base benchmark')}</strong></p>`:''}</section>`
+ +`<div class="detail-grid"><div><strong>${h('Experience')}</strong><p>${esc(expText(r))}<br>${esc(r.levelBasis||t('Not specified'))}</p></div><div><strong>${h('Role relevance')}</strong><p>${h('Recorded legacy category')}: ${esc(reLabel(r))}<br>${h(r.collection==='automatic'?'Rule-matched feed role; review the source.':'Curated reference; check original evidence.')}</p></div>`
+ +roleEvidence(r)+salaryEvidence(r)+`<div class="full"><strong>${h('Scope of the role')}</strong><p>${esc(recordSummary(r))}</p><div class="chip-row">${r.skills.map(s=>badge(s)).join('')}</div></div>`
  +`<div><strong>${h('Evidence & dates')}</strong><p>${esc(r.sourceLabel)}<br>${h('Evidence date')}: ${dte(r.evidenceDate)}<br>${h('Salary evidence')}: ${dte(r.salaryVerifiedAt)}<br>${h('Published')}: ${dte(r.postedAt)}<br>${h('Last seen in feed')}: ${dte(r.lastSeenAt,true)}</p></div>`
  +`<div><strong>${h('Source status')}</strong><p>${esc(t(r.listingStatus||'Needs recheck'))}<br>${esc(r.evidenceMethod)}</p></div>`
  +`<div class="full"><strong>${h('Limitations & restrictions')}</strong><p>${esc(r.notes||'')}<br>${esc(r.restrictions||'')}</p>${r.duplicateGroup?`<div class="notice amber">${h('Client identity unconfirmed.')}</div>`:''}${r.reviewRequired?`<div class="notice amber">${h('Review required')}: ${esc(r.reviewReason||t('Needs manual review'))}</div>`:''}</div></div>`
- +`<h3>${h('Original evidence')}</h3>${link(r.sourceUrl,r.sourceUrl,'source-url')}${r.extraUrl?link(r.extraUrl,r.extraUrl,'source-url'):''}<div class="actions" style="margin-top:18px">${link(r.sourceUrl,t('Open source'),'button primary')}<button class="button" data-close="detail-dialog">${h('Close')}</button></div>`;
+ +`<p>${h('Recorded pay market')}: ${esc(r.salaryReview?.payMarket||t('Not recorded'))}</p><h3>${h('Original evidence')}</h3>${link(r.sourceUrl,r.sourceUrl,'source-url')}${r.extraUrl?link(r.extraUrl,r.extraUrl,'source-url'):''}<div class="actions" style="margin-top:18px">${link(r.sourceUrl,t('Open source'),'button primary')}<button class="button" data-close="detail-dialog">${h('Close')}</button></div>`;
  $('#detail-dialog').showModal();
 }
 function renderTray(){
@@ -590,14 +699,14 @@ function renderTray(){
 function compare(){
  const rows=[...selected].map(id=>market.records.find(r=>r.id===id)).filter(Boolean);
  if(rows.length<2)return;
- $('#compare-body').innerHTML=`<div class="compare-columns" style="--n:${rows.length}">`+rows.map(r=>`<article class="compare-card">${evidenceBadge(r)}<h3>${esc(r.title)}</h3><p>${esc(r.company)}<br>${esc(t(r.country))}</p><div class="money mono">SAR ${esc(payRange(r))}</div>${basisBadge(r)}<p>${esc(originalPay(r))}<br>${esc(t(r.compensation))}</p><strong>${h('EXPERIENCE')}</strong><p>${esc(expText(r))}<br>${esc(t(r.level))}</p><strong>${h('ROLE SCOPE')}</strong><p>${esc(recordSummary(r))}</p><strong>${h('LIMITATIONS')}</strong><p>${esc(r.notes)}<br>${esc(r.restrictions)}</p>${link(r.sourceUrl,t('Original source'),'text-button')}</article>`).join('')+'</div>';
+ $('#compare-body').innerHTML=`<div class="notice amber">${h('Currency conversion does not establish comparability. Check country, pay market, seniority, duties and evidence dates.')}</div><div class="compare-columns" style="--n:${rows.length}">`+rows.map(r=>`<article class="compare-card">${evidenceBadge(r)}<h3>${esc(r.title)}</h3><p>${esc(r.company)}<br>${esc(t(r.country))}</p><div class="money mono">SAR ${esc(payRange(r))}</div>${basisBadge(r)}<p>${esc(originalPay(r))}<br>${esc(t(r.compensation))}</p><strong>${h('EXPERIENCE')}</strong><p>${esc(expText(r))}<br>${esc(t(r.level))}</p><strong>${h('ROLE SCOPE')}</strong><p>${esc(recordSummary(r))}</p><strong>${h('LIMITATIONS')}</strong><p>${esc(r.notes)}<br>${esc(r.restrictions)}</p>${link(r.sourceUrl,t('Original source'),'text-button')}</article>`).join('')+'</div>';
  $('#compare-dialog').showModal();
 }
 function download(content,filename,type){const url=URL.createObjectURL(new Blob([content],{type}));const a=document.createElement('a');a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);}
 function exportCSV(all=false){
  const rows=all?market.records:(['global','saudi'].includes(view)?filtered(view):market.records);
- const cols=['ID','Company','Job Title','Country','City','Role Relevance','Experience Level','Experience Required','Minimum Years','Maximum Years','Monthly Minimum SAR','Monthly Maximum SAR','Original Minimum','Original Maximum','Currency','Salary Period','Compensation','Salary Basis','Pay Basis Verified','In Base Benchmark','Evidence Type','Evidence Date','Listing Status','Source URL','Last Seen In Feed'];
- const values=rows.map(r=>[r.id,r.company,r.title,r.country,r.city,r.relevance,r.level,r.experience,r.expMin,r.expMax,monthly(r),monthly(r,'salaryMax'),r.salaryMin,r.salaryMax,r.currency,r.period,r.compensation,r.salaryBasis,r.salaryBasisVerified,baseEligible(r),r.evidenceType,r.evidenceDate,r.listingStatus,r.sourceUrl,r.lastSeenAt]);
+ const cols=['ID','Company','Job Title','Country','City','Role Relevance','Experience Level','Experience Required','Minimum Years','Maximum Years','Monthly Minimum SAR','Monthly Maximum SAR','Original Minimum','Original Maximum','Currency','Salary Period','Compensation','Salary Basis','Pay Basis Verified','In Base Benchmark','Evidence Type','Evidence Date','Listing Status','Source URL','Last Seen In Feed','Role Verification','Occupational Scope','Pay Market','Seniority Basis','Responsibility Evidence','Salary Review'];
+ const values=rows.map(r=>[r.id,r.company,r.title,r.country,r.city,r.relevance,r.level,r.experience,r.expMin,r.expMax,monthly(r),monthly(r,'salaryMax'),r.salaryMin,r.salaryMax,r.currency,r.period,r.compensation,r.salaryBasis,r.salaryBasisVerified,baseEligible(r),r.evidenceType,r.evidenceDate,r.listingStatus,r.sourceUrl,r.lastSeenAt,keStatus(r),occupationalScope(r),r.salaryReview?.payMarket||'',r.levelBasis||'',JSON.stringify(r.keReview?.evidence||[]),JSON.stringify(r.salaryReview||null)]);
  const quote=v=>{let s=String(v??'');if(/^[\s]*[=+@-]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';};
  download('\ufeff'+[cols,...values].map(row=>row.map(quote).join(',')).join('\r\n'),'Knowledge_Engineering_'+(all?'All':view)+'.csv','text/csv;charset=utf-8');
  toast(t('Export CSV')+' · '+num(rows.length));
@@ -618,7 +727,7 @@ function printView(){
  $('#view-content').append(section);window.print();
 }
 async function refresh(manual=false){
- if(!['http:','https:'].includes(location.protocol)){if(manual)toast(t('This is an offline preview.'));renderShell();return;}
+ if(LOCAL_PREVIEW||!['http:','https:'].includes(location.protocol)){if(manual)toast(t('This is an offline preview.'));renderShell();return;}
  if(busy)return;busy=true;$('#refresh-data').disabled=true;
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15000);
  try{
@@ -643,7 +752,7 @@ document.addEventListener('click',event=>{
  if(b?.dataset.close)$('#'+b.dataset.close).close();
  if(b?.dataset.export==='csv')exportCSV();
  if(b?.dataset.export==='json')download(JSON.stringify(market,null,2),'Knowledge_Engineering_Market_Data.json','application/json');
- if(b?.dataset.reset){filters[b.dataset.reset]={...defaults};mount(view);}
+ if(b?.dataset.reset){filters[b.dataset.reset]=defaultFilters(b.dataset.reset);mount(view);}
  if(event.target.closest('#export-all-csv'))exportCSV(true);
 });
 document.addEventListener('input',event=>{if(event.target.dataset.filter==='q'&&filters[view]){filters[view].q=event.target.value;renderResults();}});

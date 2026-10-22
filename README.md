@@ -172,6 +172,14 @@ python -m http.server 8000 --directory public
 
 Open [http://localhost:8000](http://localhost:8000). This builds from the existing published JSON without collecting new jobs. Opening `public/index.html` directly also displays its embedded offline snapshot.
 
+### Preview the approved filters without changing the published snapshot
+
+```powershell
+& "$env:LOCALAPPDATA\Python\pythoncore-3.13-64\python.exe" -X utf8 scripts/preview_filters.py --serve
+```
+
+Open [http://127.0.0.1:8765](http://127.0.0.1:8765). This reuses the current frontend and existing builder in isolation, writes only the ignored `learning-local/approved-filters-preview/`, and does not collect, refresh, publish or overwrite `public/`. Ctrl+C stops the local server. With a working Python command, `python scripts/preview_filters.py --serve` is equivalent. See [the filter/data contract](web/FILTER_CONTRACT.md) for occupational defaults, separate source-review requirements, current data limitations and checks. Existing machine categories and Stage 7B AI judgments do not establish production role verification.
+
 ### Refresh Source Data
 
 ```bash

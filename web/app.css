@@ -82,3 +82,11 @@ html[lang="ar"] .sidebar{overflow-y:auto}
 .research-row strong{font-size:11px;white-space:nowrap;color:#947342}
 .footer-credit{font-size:9px;color:#79907f;white-space:nowrap}
 @media(max-width:600px){.research-ranges{padding:17px}.research-row{gap:8px}.research-row strong{font-size:10px}.footer-credit{width:100%;text-align:center;white-space:normal;margin-top:5px}}
+/* Evidence-backed opportunity cards and clearly separated local review references. */
+.role-evidence{margin:12px 0;padding:12px;border-inline-start:3px solid var(--line);background:#f5f8f1;border-radius:6px;overflow-wrap:anywhere}
+.role-evidence strong{font-size:11px}.role-evidence blockquote{margin:9px 0;font-size:12px;line-height:1.8;white-space:pre-wrap}
+.role-evidence p{font-size:11px;line-height:1.8;margin:10px 0}.role-evidence small{display:block;font-size:10px;line-height:1.7}
+.pending-evidence{padding:20px;margin-top:24px}.pending-evidence summary{cursor:pointer;font-weight:650;line-height:1.8}
+.pending-evidence>p{color:var(--muted);font-size:12px;line-height:1.8;margin:12px 0 18px}.pending-evidence .review-card{min-width:0;overflow-wrap:anywhere}
+.pending-evidence .review-card>div{min-width:0}.sample-notice{margin:15px 0;line-height:1.8}.local-preview{margin-bottom:18px}
+@media(max-width:600px){.role-evidence{padding:10px}.pending-evidence{padding:14px}.pending-evidence .review-actions{flex-wrap:wrap}}
