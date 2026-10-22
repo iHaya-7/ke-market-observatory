@@ -1,0 +1,65 @@
+@prefix shape: <urn:ke-market-observatory:shape:> .
+@prefix ke: <urn:ke-market-observatory:ontology:> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+# Six targeted Core shapes, scoped to the Stage 5 completed-record MVP.
+# Locator JSON, actual paths, hashes and text resolution are checked separately.
+shape:EvidencePassage a sh:NodeShape ;
+    sh:targetClass ke:EvidencePassage ; sh:nodeKind sh:IRI ;
+    sh:property [ sh:path ke:inArtifact ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:nodeKind sh:IRI ; sh:class ke:EvidenceArtifact ] ;
+    sh:property [ sh:path ke:passageLocator ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:datatype xsd:string ; sh:pattern '"pointer"\\s*:\\s*"/' ;
+        sh:message "A Stage 5 locator must name a non-root JSON pointer; Python verifies the full locator." ] ;
+    sh:property [ sh:path ke:passageLocator ;
+        sh:pattern '"transform"\\s*:\\s*"(text-v1|json)"' ] ;
+    sh:property [ sh:path ke:passageText ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path ke:contextPassage ; sh:nodeKind sh:IRI ; sh:class ke:EvidencePassage ] .
+
+shape:EvidenceArtifact a sh:NodeShape ;
+    sh:targetClass ke:EvidenceArtifact ; sh:nodeKind sh:IRI ;
+    sh:property [ sh:path ke:artifactLocation ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:datatype xsd:anyURI ; sh:minLength 1 ] ;
+    sh:property [ sh:path ke:sha256 ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:datatype xsd:string ; sh:pattern "^[0-9a-fA-F]{64}$" ] ;
+    sh:property [ sh:path ke:capturedAt ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:datatype xsd:dateTime ; sh:pattern "(Z|[+]00:00)$" ] ;
+    sh:property [ sh:path dct:source ; sh:minCount 1 ; sh:nodeKind sh:IRI ;
+        sh:pattern "^https?://[^ /]+/" ] .
+
+shape:Responsibility a sh:NodeShape ;
+    sh:targetClass ke:Responsibility ; sh:nodeKind sh:IRI ;
+    sh:property [ sh:path ke:evidencePassage ; sh:minCount 1 ;
+        sh:nodeKind sh:IRI ; sh:class ke:EvidencePassage ] .
+
+shape:SalaryObservation a sh:NodeShape ;
+    sh:targetClass ke:SalaryObservation ; sh:nodeKind sh:IRI ;
+    sh:property [ sh:path ke:evidencePassage ; sh:minCount 1 ;
+        sh:nodeKind sh:IRI ; sh:class ke:EvidencePassage ] ;
+    sh:property [ sh:path ke:lowerAmount ; sh:maxCount 1 ; sh:datatype xsd:decimal ; sh:minInclusive 0 ;
+        sh:lessThanOrEquals ke:upperAmount ] ;
+    sh:property [ sh:path ke:upperAmount ; sh:maxCount 1 ; sh:datatype xsd:decimal ; sh:minInclusive 0 ] .
+# Neither numeric endpoint nor currency/period/market/basis is mandatory.
+
+shape:MachineAssessment a sh:NodeShape ;
+    sh:targetClass ke:MachineAssessment ; sh:nodeKind sh:IRI ;
+    sh:property [ sh:path ke:assessmentTarget ; sh:minCount 1 ; sh:maxCount 1 ; sh:nodeKind sh:IRI ] ;
+    sh:property [ sh:path ( ke:assessmentTarget rdf:type ) ; sh:minCount 1 ] ;
+    sh:property [ sh:path ke:assessmentKind ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "\\S" ] ;
+    sh:property [ sh:path ke:outcome ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "\\S" ] ;
+    sh:property [ sh:path ke:rationale ; sh:minCount 1 ; sh:datatype xsd:string ; sh:pattern "\\S" ] ;
+    sh:property [ sh:path ke:criteriaReference ; sh:minCount 1 ; sh:datatype xsd:string ; sh:pattern "\\S" ] ;
+    sh:property [ sh:path owl:versionInfo ; sh:minCount 1 ; sh:datatype xsd:string ; sh:pattern "\\S" ] ;
+    sh:property [ sh:path prov:wasAttributedTo ; sh:minCount 1 ; sh:nodeKind sh:IRI ; sh:class prov:SoftwareAgent ] ;
+    sh:property [ sh:path prov:wasGeneratedBy ; sh:minCount 1 ; sh:maxCount 1 ; sh:nodeKind sh:IRI ; sh:class prov:Activity ] ;
+    sh:property [ sh:path prov:generatedAtTime ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:dateTime ; sh:pattern "(Z|[+]00:00)$" ] ;
+    sh:property [ sh:path ke:evidencePassage ; sh:minCount 1 ; sh:nodeKind sh:IRI ; sh:class ke:EvidencePassage ] .
+
+shape:JobPosting a sh:NodeShape ;
+    sh:targetClass ke:JobPosting ; sh:nodeKind sh:IRI ;
+    sh:property [ sh:path ke:advertisesRole ; sh:minCount 1 ; sh:nodeKind sh:IRI ; sh:class ke:JobRole ] .

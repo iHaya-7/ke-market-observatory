@@ -9,6 +9,7 @@ import sys
 from datetime import datetime, timezone
 from decimal import Decimal
 from urllib.parse import quote, urlsplit
+from uuid import uuid4
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'learning-local/stage5-deps'))
@@ -67,7 +68,7 @@ def main():
         g.bind(prefix, ns)
     now = Literal(datetime.now(timezone.utc).isoformat(), datatype=XSD.dateTime)
     agent = URIRef(BASE + 'software:stage5-builder')
-    run = URIRef(BASE + 'run:' + hashlib.sha256((sha(mapping_path) + sha(Path(__file__))).encode()).hexdigest())
+    run = URIRef(BASE + 'run:' + str(uuid4()))
     g.add((agent, RDF.type, PROV.SoftwareAgent))
     g.add((run, RDF.type, PROV.Activity))
     g.add((run, PROV.wasAssociatedWith, agent))
