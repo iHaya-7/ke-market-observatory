@@ -216,3 +216,95 @@ test('details retain separate pay-review evidence and manual comparison makes no
  assert.match(a.elements.get('#detail-body').innerHTML,/Gross\/net basis is not inferred/);
  a.run("selected=new Set(['ke','ont']);compare()");assert.match(a.elements.get('#compare-body').innerHTML,/Currency conversion does not establish comparability/);
 });
+
+test('annual USD uses existing FX for monthly SAR while retaining the original annual advertisement',()=>{
+ const r=record('annual');const original=copy(r);const a=app([r]);
+ assert.equal(a.run('baseEligible(market.records[0])'),true);
+ assert.equal(a.run('monthly(market.records[0])'),120000*3.75/12);
+ assert.equal(a.run("monthly(market.records[0],'salaryMax')"),45000);
+ const table=a.run('salaryTable(market.records)');
+ assert.match(table,/37,500–45,000/);
+ assert.match(table,/Calculated equivalent · SAR\/month/);
+ assert.match(table,/USD 120,000–144,000 \/ year/);
+ assert.match(table,/Base pay verified/);
+ assert.match(a.run('graph(market.records)'),/USD 120,000–144,000 \/ year/);
+ a.run("details('annual')");const detail=a.elements.get('#detail-body').innerHTML;
+ assert.match(detail,/120,000 × 3\.75 \/ 12 = 37,500 SAR\/month/);
+ assert.match(detail,/USD 120,000–144,000 \/ year/);
+ assert.match(detail,/https:\/\/example.org\/test-only/);
+ assert.deepEqual(a.value('market.records[0]'),original);
+});
+
+test('monthly salaries in supported currencies are never divided by 12 or advertised as originally annual',()=>{
+ for(const [currency,rate] of [['USD',3.75],['GBP',5],['EUR',4.2],['SAR',1]]){
+  const a=app([record('monthly','Knowledge Engineer',{salaryMin:10000,salaryMax:12000,currency,period:'Monthly'})]);
+  assert.equal(a.run('baseEligible(market.records[0])'),true);
+  assert.equal(a.run('monthly(market.records[0])'),10000*rate);
+  const table=a.run('salaryTable(market.records)');
+  assert.ok(table.includes(currency+' 10,000–12,000 / month'));
+  assert.doesNotMatch(table,/\/ year|original annual/i);
+  a.run("details('monthly')");const detail=a.elements.get('#detail-body').innerHTML;
+  assert.doesNotMatch(detail,/\/ 12|\/ year/);
+  assert.match(detail,/Calculated equivalent · SAR\/month/);
+ }
+});
+
+test('unknown currency, unknown period and hourly pay produce no calculated monthly equivalent',()=>{
+ for(const [field,value] of [['currency',null],['period',null],['period','Hourly']]){
+  const a=app([record('unknown')]);a.context.field=field;a.context.unit=value;
+  a.run('market.records[0][field]=unit');
+  assert.equal(a.run('monthly(market.records[0])'),null);
+  assert.equal(a.run("monthly(market.records[0],'salaryMax')"),null);
+  assert.deepEqual(ids(a,'benchmarkRows(market.records)'),[]);
+  a.run("details('unknown')");const detail=a.elements.get('#detail-body').innerHTML;
+  assert.match(detail,/No salary conversion is calculated/);
+  assert.doesNotMatch(detail,/Calculated equivalent|37,500|NaN|Infinity|= .*SAR/);
+ }
+});
+
+test('mathematically convertible pending pay is labeled for research and cannot affect headlines',()=>{
+ const pending=record('pending','Knowledge Engineer',{salaryMin:12000000,salaryMax:14400000,salaryReview:undefined});
+ delete pending.salaryReview; // The fixture factory normally supplies an independent synthetic salary review.
+ const a=app([record('verified'),pending]);
+ assert.equal(a.run('monthly(market.records[1])'),3750000);
+ assert.equal(a.run('baseEligible(market.records[1])'),false);
+ assert.deepEqual(ids(a,'benchmarkRows(market.records)'),['verified']);
+ const stats=a.run('salaryStats(market.records)');assert.match(stats,/37,500/);assert.doesNotMatch(stats,/3,750,000|4,500,000/);
+ const chart=a.run('graph(market.records)');assert.match(chart,/data-detail="verified"/);assert.doesNotMatch(chart,/data-detail="pending"/);
+ const research=a.run('researchRanges()');assert.match(research,/Unverified \/ Pending Review/);assert.match(research,/USD 12,000,000–14,400,000 \/ year/);
+ const table=a.run('salaryTable([market.records[1]])');assert.match(table,/Unverified \/ Pending Review/);assert.match(table,/Excluded from base benchmark/);
+ a.run("mount('overview')");assert.match(a.elements.get('#view-content').innerHTML,/Unverified \/ Pending Review/);
+});
+
+test('Core KE acceptance and AI joint decisions cannot supply missing salary verification',()=>{
+ const core=record('core');delete core.salaryReview;
+ const joint=record('joint','Knowledge Engineer',{keReview:{...review(),origin:'AI-Assisted Joint Review — Haya and Lubna'}});
+ const noSalary=record('none','Knowledge Engineer',{salaryMin:null,salaryMax:null,currency:null,period:null,salaryBasis:'none',salaryBasisVerified:false,salaryEligible:false});
+ const a=app([core,joint,noSalary]);
+ assert.equal(a.run("keStatus(market.records[0])"),'confirmed');
+ assert.equal(a.run('baseEligible(market.records[0])'),false);
+ assert.equal(a.run("keStatus(market.records[1])"),'review');
+ assert.deepEqual(ids(a,'benchmarkRows(market.records)'),[]);
+ assert.equal(a.run('monthly(market.records[2])'),null);
+});
+
+test('a completed ineligible salary review retains its exclusion instead of becoming pending',()=>{
+ const r=record('ineligible');r.salaryReview.outcome='Ineligible';
+ const a=app([r]);assert.equal(a.run('baseEligible(market.records[0])'),false);
+ const badge=a.run('basisBadge(market.records[0])');assert.match(badge,/Excluded from base benchmark/);assert.doesNotMatch(badge,/Pending Review/);
+ a.run("details('ineligible')");assert.match(a.elements.get('#detail-body').innerHTML,/Salary evidence/);
+});
+
+test('Arabic and English show consistent monthly equivalents, original units and pending status across views',()=>{
+ const pending=record('pending','Knowledge Engineer',{period:'Monthly',salaryMin:10000,salaryMax:12000});delete pending.salaryReview;
+ const a=app([record('annual','Knowledge Engineer',{level:'Junior'}),pending,saudi('sa','Data Architect',{salaryMin:10000,salaryMax:12000,currency:'USD',period:'Monthly'})]);
+ for(const [language,note,status,year,month] of [['en','Calculated equivalent · SAR/month','Unverified / Pending Review','year','month'],['ar','مقابل شهري محسوب · ريال/شهر','غير متحقق / بانتظار المراجعة','سنة','شهر']]){
+  a.context.language=language;a.run('lang=language');
+  const table=a.run('salaryTable(market.records.slice(0,2))');
+  assert.ok(table.includes(note));assert.ok(table.includes(status));assert.ok(table.includes('USD 120,000–144,000 / '+year));assert.ok(table.includes('USD 10,000–12,000 / '+month));assert.match(table,/37,500–45,000/);
+  a.run("selected=new Set(['annual','pending']);compare()");const comparison=a.elements.get('#compare-body').innerHTML;assert.ok(comparison.includes(note));assert.ok(comparison.includes(status));
+  const cards=a.run('saudiCards([market.records[2]])');assert.ok(cards.includes(note));assert.ok(cards.includes('USD 10,000–12,000 / '+month));
+  a.run("mount('junior')");const junior=a.elements.get('#view-content').innerHTML;assert.ok(junior.includes(note));assert.ok(junior.includes('USD 120,000–144,000 / '+year));
+  a.run("details('pending')");const detail=a.elements.get('#detail-body').innerHTML;assert.ok(detail.includes(note));assert.ok(detail.includes(status));assert.ok(detail.includes('USD 10,000–12,000 / '+month));
+ }
+});

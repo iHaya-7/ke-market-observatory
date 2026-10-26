@@ -4,6 +4,15 @@ A Knowledge Engineering market intelligence platform that brings together global
 
 **[View the live dashboard](https://ihaya-7.github.io/ke-market-observatory/)**
 
+## Start Here
+
+- Application: [`web/`](web/) and [`scripts/`](scripts/); source configuration: [`config/sources.json`](config/sources.json).
+- Data: [`data/`](data/) contains maintained inputs; [`public/`](public/) contains the generated publication snapshot. Tests are in [`tests/`](tests/).
+- Knowledge Engineering: use the [stage and continuation guide](knowledge-engineering/README.md) for the actual work and its current limits.
+- In this local workspace, read the [Arabic project explanation](knowledge-engineering/00-baseline/local-corpus/project-audit/PROJECT_EXPLAINED_AR.md) and [evidence audit](knowledge-engineering/00-baseline/local-corpus/project-audit/PROJECT_EVIDENCE_AUDIT.md). These protected reports and other private review materials are Git-ignored and are not included in a public clone.
+
+Use the safe local preview below to view current frontend changes. The generated `public/index.html` can contain an older committed frontend. The [private cleanup execution log](knowledge-engineering/00-baseline/local-corpus/project-audit/CLEANUP_EXECUTION.md) records the removed files and recovery backup.
+
 ## Overview
 
 The observatory helps Knowledge Engineering professionals, researchers, and job seekers explore compensation, role requirements, and opportunities involving ontologies, knowledge graphs, and semantic technologies. It combines curated references with automated collection from selected public applicant tracking system (ATS) feeds.
@@ -15,7 +24,7 @@ The platform keeps global compensation research separate from Saudi job tracking
 ### Global Salary Benchmarking
 
 - Explore international salary references by country, career level, evidence type, company, role, or skill.
-- Compare supported annual and monthly salaries as gross monthly Saudi riyal (SAR) equivalents while retaining original amounts, currencies, and pay periods.
+- Compare supported annual and monthly salaries as nominal monthly Saudi riyal (SAR) equivalents while retaining original amounts, currencies, and pay periods; gross/net status is not inferred.
 - View salary charts and summary statistics based only on eligible employer disclosures explicitly identified as verified base salary.
 - Distinguish base salary, total compensation, secondary evidence, and platform estimates.
 - Compare selected roles side by side, including experience requirements, role scope, and source limitations.
@@ -25,7 +34,7 @@ Currency conversion supports USD, GBP, EUR, and SAR. The collector refreshes GBP
 ### Saudi Job Tracking
 
 - Maintain a separate register of Saudi postings related to Knowledge Engineering, applied knowledge graphs and AI, and adjacent metadata or semantic work.
-- Search and filter by location, relevance, career level, listing status, and exact Knowledge Engineer title.
+- Search and filter by location, KE category, career level and listing status. The default includes all responsibility-verified KE opportunities, without requiring an exact KE title or salary.
 - Inspect source links, detected skills, experience requirements, available salary evidence, publication dates, and observation dates.
 - Distinguish recently confirmed feed listings from saved references, records needing rechecking, and archived or absent postings.
 
@@ -39,7 +48,7 @@ Uncertain adjacent roles are staged for human review and excluded from published
 
 ### Salary Verification
 
-Structured salary ranges are checked for supported currency, pay period, valid amounts, and explicit base-versus-total compensation wording. Only employer records with `salaryBasis: "base"`, `salaryBasisVerified: true`, and `salaryEligible: true` can enter the global base-salary benchmark.
+Structured salary ranges are checked for supported currency, pay period, valid amounts, and explicit base-versus-total compensation wording. Headline salary results additionally require separate source-backed `keReview` and `salaryReview` records and the selected occupational scope, as defined in the [filter contract](web/FILTER_CONTRACT.md). Employer/base/eligibility flags alone are insufficient.
 
 Verified total compensation is displayed separately. Unknown pay basis, multiple pay bands, and potential free-text salary evidence require review. Missing or ambiguous amounts are not replaced with inferred salaries, and an automated verification label reflects the parser's evidence rules rather than an independent employer audit.
 
@@ -89,7 +98,7 @@ Other interpretation limits include:
 - Recruiter and employer listings may overlap. Canonical URLs and stable source IDs support deduplication, but similar descriptions do not establish a unique requisition or reveal an undisclosed client.
 - Rule-based relevance and experience extraction can misinterpret context. Original postings remain the primary evidence.
 - Free-text salary evidence and platform estimates are not continuously refreshed or automatically converted into verified base pay.
-- International salary equivalents are nominal, gross comparisons. They do not represent Saudi market salaries, take-home pay, purchasing-power adjustments, or guaranteed offers.
+- International salary equivalents are nominal conversions; gross/net status is not inferred. They do not represent Saudi market salaries, take-home pay, purchasing-power adjustments, or guaranteed offers.
 - The selected references are not a representative market sample. The dashboard does not calculate a market-wide average or infer a junior salary band from missing evidence.
 
 ## Data Pipeline and Provenance
@@ -118,7 +127,7 @@ The dataset separates source publication dates (`postedAt`), collector observati
 | Automation and hosting | GitHub Actions and GitHub Pages |
 | Verification | Python `unittest`, dataset validation, and Node.js syntax checking |
 
-No third-party Python packages, frontend build framework, database server, or job-search API keys are required. The dashboard uses no external JavaScript packages, remote fonts, or analytics.
+No third-party Python packages, frontend build framework, database server, or job-search API keys are required for the Observatory product. Separate experimental KE scripts have their own local dependency requirements. The dashboard uses no external JavaScript packages, remote fonts, or analytics.
 
 ## Repository Structure
 
@@ -134,6 +143,7 @@ data/
 scripts/
     refresh.py             # Collection, classification, merging, and validation
     build_site.py          # Self-contained HTML generation
+    preview_filters.py     # Isolated local preview; does not overwrite public/
 web/
     template.html          # Dashboard layout
     app.css                # Responsive styles and RTL support
@@ -142,13 +152,16 @@ public/
     index.html             # Generated dashboard
     data/market.json       # Published dataset
 tests/
-    test_refresh.py        # Adapter, classification, validation, and preservation tests
+    test_*.py              # Collector, isolated build and preview tests
+    test_frontend_filters.js # Offline frontend tests
+knowledge-engineering/
+    README.md              # Stage map, evidence limits and continuation point
 README.md
 ```
 
 ## Knowledge Engineering Workspace
 
-The [`knowledge-engineering/`](knowledge-engineering/) workspace prepares the approved lightweight Ontology Pipeline for future improvements to job classification, salary benchmarking reliability, and source traceability. It provides stage folders for scope, vocabulary and metadata, taxonomy, ontology, knowledge graph, validation, and controlled before/after evaluation against the existing observatory baseline. This organization adds documentation and placeholders only; Stage 0 — Baseline and Stage 1 — Scope are the next steps.
+The [Knowledge Engineering workspace guide](knowledge-engineering/README.md) maps the frozen baseline, scope/CQs, vocabulary, SKOS taxonomy, ontology, three-case graph experiment, SHACL validation, Stage 7A triage pilot and local Stage 7B calibration. The graph is separate from the production data flow. Some private execution artifacts are missing from this checkout; semantic approval and a valid Before/After evaluation remain incomplete. Resume with the documented Development calibration checkpoint, not another implementation stage.
 
 ## Local Setup
 
@@ -160,25 +173,19 @@ The [`knowledge-engineering/`](knowledge-engineering/) workspace prepares the ap
 - Node.js for the JavaScript syntax check; it is not required to serve the dashboard.
 - Network access when collecting public feeds or refreshing exchange rates.
 
-### Preview the Dashboard
+### Safe Local Preview
 
 ```bash
-git clone https://github.com/iHaya-7/ke-market-observatory.git
-cd ke-market-observatory
-python scripts/refresh.py --validate-only
-python scripts/build_site.py
-python -m http.server 8000 --directory public
+python -B scripts/preview_filters.py --serve
 ```
 
-Open [http://localhost:8000](http://localhost:8000). This builds from the existing published JSON without collecting new jobs. Opening `public/index.html` directly also displays its embedded offline snapshot.
-
-### Preview the approved filters without changing the published snapshot
+If the `python` alias does not work on this Windows installation:
 
 ```powershell
-& "$env:LOCALAPPDATA\Python\pythoncore-3.13-64\python.exe" -X utf8 scripts/preview_filters.py --serve
+& "$env:LOCALAPPDATA\Python\pythoncore-3.13-64\python.exe" -X utf8 -B scripts/preview_filters.py --serve
 ```
 
-Open [http://127.0.0.1:8765](http://127.0.0.1:8765). This reuses the current frontend and existing builder in isolation, writes only the ignored `learning-local/approved-filters-preview/`, and does not collect, refresh, publish or overwrite `public/`. Ctrl+C stops the local server. With a working Python command, `python scripts/preview_filters.py --serve` is equivalent. See [the filter/data contract](web/FILTER_CONTRACT.md) for occupational defaults, separate source-review requirements, current data limitations and checks. Existing machine categories and Stage 7B AI judgments do not establish production role verification.
+Open [http://127.0.0.1:8765](http://127.0.0.1:8765). The command recreates the disposable ignored `learning-local/approved-filters-preview/` from current frontend source and existing public JSON. It uses the builder in isolation, makes no collection or live dataset-refresh requests, and does not overwrite `public/`. Ctrl+C stops the server. Opening `public/index.html` directly instead shows the retained publication snapshot. See the [filter contract](web/FILTER_CONTRACT.md) for evidence gates; machine categories and AI-assisted judgments do not establish production verification.
 
 ### Refresh Source Data
 
@@ -192,9 +199,10 @@ Collection updates `data/auto_records.json` and `public/data/market.json`; build
 ### Run Checks
 
 ```bash
-python -m unittest discover -s tests -p 'test_*.py' -v
-python scripts/refresh.py --validate-only
+python -B -m unittest discover -s tests -p 'test_*.py' -v
+python -B scripts/refresh.py --validate-only
 node --check web/app.js
+node --test tests/test_frontend_filters.js
 ```
 
 The Python tests use deterministic fixtures and temporary directories without external network requests. They cover parsing, relevance screening, salary eligibility, experience classification, review handling, and preservation of data after collection failures. Live feed health must be assessed separately.
@@ -217,6 +225,7 @@ Changes only to `README.md` or `data/review_decisions.json` do not match the cur
 - Update curated records in [`data/curated.json`](data/curated.json), retaining the original source URL, evidence date, and verification notes.
 - After inspecting an automatic candidate's original posting, add its `AUTO-*` ID to either `approved` or `rejected` in [`data/review_decisions.json`](data/review_decisions.json), never both. Approval controls role inclusion; salary and listing verification remain separate checks.
 - For confirmed employer base pay, record `salaryBasis: "base"`, `salaryBasisVerified: true`, and `salaryEligible: true`. For verified total compensation, use `salaryBasis: "total"`, `salaryBasisVerified: true`, and `salaryEligible: false`.
+- These flags do not replace the separate responsibility/pay reviews required by the [filter contract](web/FILTER_CONTRACT.md). Review persistence and source-version binding across automatic refreshes remain an integration dependency; do not copy evaluation labels into production review fields.
 - Rebuild and publish after updating evidence. `public/data/market.json` and `public/index.html` are generated outputs; permanent corrections belong in the source data or collection logic.
 
 ## Credits
