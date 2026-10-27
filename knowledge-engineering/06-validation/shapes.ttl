@@ -14,10 +14,15 @@ shape:EvidencePassage a sh:NodeShape ;
     sh:property [ sh:path ke:inArtifact ; sh:minCount 1 ; sh:maxCount 1 ;
         sh:nodeKind sh:IRI ; sh:class ke:EvidenceArtifact ] ;
     sh:property [ sh:path ke:passageLocator ; sh:minCount 1 ; sh:maxCount 1 ;
-        sh:datatype xsd:string ; sh:pattern '"pointer"\\s*:\\s*"/' ;
-        sh:message "A Stage 5 locator must name a non-root JSON pointer; Python verifies the full locator." ] ;
-    sh:property [ sh:path ke:passageLocator ;
-        sh:pattern '"transform"\\s*:\\s*"(text-v1|json)"' ] ;
+        sh:datatype xsd:string ;
+        sh:or (
+            [ sh:and (
+                [ sh:pattern '"pointer"\\s*:\\s*"/' ]
+                [ sh:pattern '"transform"\\s*:\\s*"(text-v1|json)"' ]
+            ) ]
+            [ sh:pattern '"transform"\\s*:\\s*"html-blocks-v1"' ]
+        ) ;
+        sh:message "Use a legacy JSON pointer or versioned HTML span; Python verifies bounds and source fidelity." ] ;
     sh:property [ sh:path ke:passageText ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
     sh:property [ sh:path ke:contextPassage ; sh:nodeKind sh:IRI ; sh:class ke:EvidencePassage ] .
 

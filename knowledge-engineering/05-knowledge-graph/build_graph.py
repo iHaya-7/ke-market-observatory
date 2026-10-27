@@ -1,8 +1,9 @@
-"""Offline, development-only ABox builder. Private mapping and evidence are required."""
+"""Offline ABox builder: legacy private mappings or manifest-bound HTML captures."""
 from pathlib import Path
 import hashlib
 import html
 import json
+import os
 import re
 import subprocess
 import sys
@@ -12,7 +13,9 @@ from urllib.parse import quote, urlsplit
 from uuid import uuid4
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / 'learning-local/stage5-deps'))
+if not os.environ.get('KE_LOCAL_DEPS'):
+    sys.path.insert(0, str(ROOT / 'learning-local/stage5-deps'))
+sys.path.insert(0, os.environ.get('KE_LOCAL_DEPS', str(ROOT / 'learning-local/stage6-deps')))
 from rdflib import Graph, Literal, Namespace, URIRef
 from rdflib.namespace import RDF, RDFS, OWL, XSD, SKOS, DCTERMS
 
@@ -23,6 +26,115 @@ CASES = ('EVAL-0d7b2c3f9f39cbcc', 'EVAL-4847917fd586d111', 'EVAL-5808d42f328be89
 KE = Namespace('urn:ke-market-observatory:ontology:')
 PROV = Namespace('http://www.w3.org/ns/prov#')
 BASE = 'urn:ke-market-observatory:instance:'
+sys.path.insert(0, str(HERE))
+from posting_evidence import VERSION, load_captures
+
+
+def assessment(g, target, kind, outcome, rationale, evidence, run, agent, now, unresolved=()):
+    """Shared machine-only assessment writer, including interpretations/abstentions."""
+    node = URIRef(str(run) + ':assessment:' + str(uuid4()))
+    for cls in (KE.Assessment, KE.MachineAssessment):
+        g.add((node, RDF.type, cls))
+    g.add((node, KE.assessmentTarget, target))
+    for prop, value in [('assessmentKind', kind), ('outcome', outcome), ('rationale', rationale),
+                        ('criteriaReference', VERSION + ' builder-sha256:' + sha(Path(__file__)))]:
+        g.add((node, KE[prop], Literal(value, datatype=XSD.string)))
+    for value in unresolved:
+        g.add((node, KE.unresolvedFact, Literal(value, datatype=XSD.string)))
+    for p in evidence:
+        g.add((node, KE.evidencePassage, p))
+    g.add((node, OWL.versionInfo, Literal(VERSION)))
+    g.add((node, PROV.wasGeneratedBy, run))
+    g.add((node, PROV.wasAttributedTo, agent))
+    g.add((node, PROV.generatedAtTime, now))
+    return node
+
+
+def build_postings(postings):
+    """Materialize extracted duties, supported mappings and separate pay bands.
+
+    No private legacy mapping is loaded and no source or approval is written.
+    """
+    g = Graph()
+    g.bind('ke', KE)
+    g.bind('prov', PROV)
+    run = URIRef(BASE + 'capture-run:' + str(uuid4()))
+    agent = URIRef(BASE + 'software:' + VERSION)
+    now = Literal(datetime.now(timezone.utc).isoformat(), datatype=XSD.dateTime)
+    g.add((run, RDF.type, PROV.Activity))
+    g.add((agent, RDF.type, PROV.SoftwareAgent))
+    g.add((run, PROV.wasAssociatedWith, agent))
+    import posting_evidence
+    for code in (Path(__file__), Path(posting_evidence.__file__)):
+        g.add((run, DCTERMS.identifier, Literal(code.name + '-sha256:' + sha(code))))
+    for item in postings:
+        stem = BASE + 'capture-posting:' + quote(item['source_id'], safe='') + ':' + quote(item['source_job_id'], safe='')
+        posting, role = URIRef(stem), URIRef(stem + ':role')
+        artifact = URIRef(BASE + 'artifact:sha256:' + item['sha256'])
+        publisher = URIRef(BASE + 'publisher:' + quote(item['publisher'], safe=''))
+        g.add((posting, RDF.type, KE.JobPosting))
+        g.add((role, RDF.type, KE.JobRole))
+        g.add((posting, KE.advertisesRole, role))
+        for identifier in (item['case_id'], 'sourceId:' + item['source_id'], 'sourceJobId:' + item['source_job_id']):
+            g.add((posting, DCTERMS.identifier, Literal(identifier)))
+        g.add((posting, DCTERMS.title, Literal(item['title'])))
+        g.add((posting, DCTERMS.description, Literal(item['responsibility_coverage'])))
+        g.add((posting, DCTERMS.source, URIRef(item['source_url'])))
+        g.add((artifact, RDF.type, KE.EvidenceArtifact))
+        g.add((artifact, DCTERMS.source, URIRef(item['source_url'])))
+        g.add((publisher, RDF.type, PROV.Agent))
+        g.add((publisher, RDFS.label, Literal(item['publisher'])))
+        g.add((artifact, DCTERMS.publisher, publisher))
+        g.add((artifact, DCTERMS.identifier, Literal(item['source_job_id'])))
+        g.add((artifact, KE.sha256, Literal(item['sha256'], datatype=XSD.string)))
+        location = Path(item['archive']).resolve().relative_to(ROOT).as_posix() + '#' + item['member']
+        g.add((artifact, KE.artifactLocation, Literal(location, datatype=XSD.anyURI)))
+        g.add((artifact, KE.capturedAt, Literal(item['captured_at'], datatype=XSD.dateTime)))
+        g.add((artifact, DCTERMS.description, Literal(item['identity_status'])))
+        refs = {}
+        for p in item['passages']:
+            node = URIRef(stem + ':' + p['id'])
+            refs[p['id']] = node
+            g.add((node, RDF.type, KE.EvidencePassage))
+            g.add((node, KE.inArtifact, artifact))
+            g.add((node, KE.passageLocator, Literal(json.dumps(p['locator'], sort_keys=True), datatype=XSD.string)))
+            g.add((node, KE.passageText, Literal(p['text'], datatype=XSD.string)))
+        context = refs[item['context_passage']]
+        g.add((posting, KE.evidencePassage, context))
+        for section in item['responsibility_sections']:
+            g.add((role, KE.evidencePassage, refs[section]))
+        for i, duty in enumerate(item['responsibilities']):
+            node = URIRef(stem + ':duty:' + str(i))
+            g.add((node, RDF.type, KE.Responsibility))
+            g.add((role, KE.hasResponsibility, node))
+            g.add((node, KE.actionText, Literal(duty['text'], datatype=XSD.string)))
+            p = refs[duty['passage']]
+            g.add((node, KE.evidencePassage, p))
+            g.add((p, KE.contextPassage, context))
+            mapping = duty['mapping']
+            if mapping:
+                rep = URIRef(str(node) + ':representation')
+                g.add((rep, RDF.type, KE.KnowledgeRepresentation))
+                g.add((rep, RDFS.label, Literal(mapping['representation'])))
+                g.add((node, KE.actsOnRepresentation, rep))
+                g.add((rep, KE.evidencePassage, p))
+                g.add((role, KE.roleConcept, URIRef('urn:ke-market-observatory:role:' + mapping['concept'])))
+                assessment(g, node, 'responsibility interpretation', 'Supported representation action',
+                           mapping['rationale'], [p], run, agent, now)
+        for i, salary in enumerate(item['salaries']):
+            node = URIRef(stem + ':salary:' + str(i))
+            g.add((node, RDF.type, KE.SalaryObservation))
+            g.add((posting, KE.hasSalaryObservation, node))
+            g.add((node, KE.evidencePassage, refs[salary['passage']]))
+            # Each observation comes from this posting's own offered band.
+            g.add((node, KE.salaryForRole, role))
+            if salary['market_passage']:
+                g.add((node, KE.evidencePassage, refs[salary['market_passage']]))
+            for prop in ('lowerAmount', 'upperAmount', 'currency', 'payPeriod', 'compensationBasis', 'payMarket', 'bandApplicability'):
+                if salary[prop] is not None:
+                    datatype = XSD.decimal if prop in ('lowerAmount', 'upperAmount') else XSD.string
+                    g.add((node, KE[prop], Literal(str(salary[prop]), datatype=datatype)))
+    return g, run, agent, now
 
 
 def sha(path):
@@ -219,4 +331,16 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    if '--captures' in sys.argv:
+        import argparse
+        parser = argparse.ArgumentParser(description=__doc__)
+        parser.add_argument('--captures', type=Path, required=True)
+        parser.add_argument('--output', type=Path, required=True)
+        args = parser.parse_args()
+        require(args.output.resolve().is_relative_to((ROOT / 'learning-local').resolve()), 'Capture graph output must stay in learning-local')
+        graph, *_ = build_postings(load_captures(args.captures))
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        graph.serialize(args.output, format='turtle')
+        print(json.dumps({'postings': len(list(graph.subjects(RDF.type, KE.JobPosting))), 'triples': len(graph)}))
+    else:
+        main()

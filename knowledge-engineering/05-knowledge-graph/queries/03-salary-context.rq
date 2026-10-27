@@ -2,7 +2,7 @@ PREFIX ke: <urn:ke-market-observatory:ontology:>
 PREFIX dct: <http://purl.org/dc/terms/>
 SELECT ?case ?observation ?lower ?upper ?currency ?period ?basis ?market ?passage ?context WHERE {
   ?posting dct:identifier ?case; ke:hasSalaryObservation ?observation .
-  FILTER(STRSTARTS(STR(?case), "EVAL-"))
+  FILTER(!STRSTARTS(STR(?case), "sourceId:") && !STRSTARTS(STR(?case), "sourceJobId:"))
   ?observation ke:evidencePassage ?passage .
   OPTIONAL { ?observation ke:lowerAmount ?lower }
   OPTIONAL { ?observation ke:upperAmount ?upper }

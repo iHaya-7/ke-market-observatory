@@ -4,15 +4,17 @@ from collections import Counter
 import hashlib
 import importlib.util
 import json
+import os
 import re
 import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / 'learning-local/stage6-deps'))
+sys.path.insert(0, os.environ.get('KE_LOCAL_DEPS', str(ROOT / 'learning-local/stage6-deps')))
 from pyshacl import validate
 from rdflib import Graph, Literal, Namespace
 from rdflib.namespace import RDF, XSD, DCTERMS
+from rdflib.namespace import RDFS, OWL, SKOS
 
 HERE = Path(__file__).resolve().parent
 LOCAL = ROOT / 'knowledge-engineering/00-baseline/local-corpus/development'
@@ -136,6 +138,51 @@ def shacl(g, shapes, schema):
             'categories': dict(Counter(r['component'].split('#')[-1] for r in rows)), 'results': rows}, report
 
 
+def validate_captures(g, archive):
+    """Validate only the supplied ZIP and reconstructed source/mapping facts.
+
+    The legacy allowlist and historical private mapping are deliberately unused.
+    Reconstruction is in memory from current captures, never historical artifacts.
+    """
+    from posting_evidence import load_captures, resolve_html
+    import zipfile
+    postings = load_captures(archive)
+    expected, *_ = builder.build_postings(postings)
+    def source_facts(graph):
+        return {(s, p, o) for s, p, o in graph
+                if str(s).startswith((builder.BASE + 'capture-posting:', builder.BASE + 'artifact:', builder.BASE + 'publisher:'))}
+    require(source_facts(g) == source_facts(expected), 'Capture source facts or responsibility mappings changed')
+    matched = 0
+    with zipfile.ZipFile(archive) as z:
+        by_hash = {p['sha256']: p for p in postings}
+        for passage in g.subjects(RDF.type, KE.EvidencePassage):
+            artifact = one(g, passage, KE.inArtifact)
+            item = by_hash[str(one(g, artifact, KE.sha256))]
+            resolved = resolve_html(z.read(item['member']), json.loads(str(one(g, passage, KE.passageLocator))))
+            require(resolved == str(one(g, passage, KE.passageText)), 'Capture passage mismatch')
+            matched += 1
+    schema = Graph().parse(HERE.parent / '04-ontology/ontology.ttl').parse(HERE.parent / '03-taxonomy/role-taxonomy.ttl')
+    shapes = Graph().parse(HERE / 'shapes.ttl')
+    structure, _ = shacl(g, shapes, schema)
+    require(structure['conforms'], 'Capture graph fails SHACL: ' + json.dumps(structure))
+    require(not list(g.subjects(RDF.type, KE.HumanAssessment)), 'Machine path cannot create human assessments')
+    require(not list(g.triples((None, OWL.sameAs, None))), 'Identity merging prohibited')
+    for s, p, o in g:
+        if str(p).startswith(str(KE)):
+            require((p, None, None) in schema, 'Undeclared ontology term')
+            domain, range_ = schema.value(p, RDFS.domain), schema.value(p, RDFS.range)
+            if domain:
+                require((s, RDF.type, domain) in g, 'Wrong property domain')
+            if (p, RDF.type, OWL.DatatypeProperty) in schema:
+                require(isinstance(o, Literal) and o.datatype == range_, 'Wrong property datatype')
+            elif range_:
+                require((o, RDF.type, range_) in g or (o, RDF.type, range_) in schema, 'Wrong property range')
+        if p == RDF.type and str(o).startswith(str(KE)):
+            require((o, RDF.type, OWL.Class) in schema, 'Undeclared ontology class')
+    return {'shacl_conforms': True, 'source_integrity_passed': True,
+            'artifacts': len(postings), 'resolved_passages': matched, 'source_facts_match': True}
+
+
 def main():
     before = digest(GRAPH)
     g = Graph().parse(GRAPH)
@@ -212,4 +259,12 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    if '--captures' in sys.argv:
+        import argparse
+        parser = argparse.ArgumentParser(description=__doc__)
+        parser.add_argument('--captures', type=Path, required=True)
+        parser.add_argument('--graph', type=Path, required=True)
+        args = parser.parse_args()
+        print(json.dumps(validate_captures(Graph().parse(args.graph), args.captures), indent=2))
+    else:
+        main()
