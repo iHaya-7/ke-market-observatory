@@ -1,0 +1,48 @@
+@prefix vx: <urn:ke-market-observatory:experimental:source-transport-vnext:> .
+@prefix ke: <urn:ke-market-observatory:ontology:> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+
+# A separate experimental profile; never edits or relaxes the frozen profile.
+vx:PostingShape a sh:NodeShape ; sh:targetClass ke:JobPosting ; sh:nodeKind sh:IRI ;
+    sh:property [ sh:path dct:title ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path dct:source ; sh:minCount 1 ; sh:maxCount 1 ; sh:nodeKind sh:IRI ] ;
+    sh:property [ sh:path vx:titleEvidence ; sh:minCount 1 ; sh:maxCount 1 ; sh:class ke:EvidencePassage ] ;
+    sh:property [ sh:path ke:advertisesRole ; sh:maxCount 1 ; sh:class ke:JobRole ] .
+# No minimum role: a title alone cannot supply a described work function.
+vx:ArtifactShape a sh:NodeShape ; sh:targetClass ke:EvidenceArtifact ; sh:nodeKind sh:IRI ;
+    sh:property [ sh:path ke:sha256 ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern '^[0-9a-f]{64}$' ] ;
+    sh:property [ sh:path ke:artifactLocation ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:anyURI ] ;
+    sh:property [ sh:path ke:capturedAt ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:dateTime ; sh:pattern '(Z|[+]00:00)$' ] ;
+    sh:property [ sh:path dct:source ; sh:minCount 1 ; sh:nodeKind sh:IRI ; sh:pattern '^https?://' ] .
+vx:PassageShape a sh:NodeShape ; sh:targetClass ke:EvidencePassage ; sh:nodeKind sh:IRI ;
+    sh:property [ sh:path ke:inArtifact ; sh:minCount 1 ; sh:maxCount 1 ; sh:class ke:EvidenceArtifact ] ;
+    sh:property [ sh:path ke:passageLocator ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path ke:passageText ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path vx:sourceValueJSON ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype rdf:JSON ] ;
+    sh:property [ sh:path ke:contextPassage ; sh:class ke:EvidencePassage ] .
+vx:DutyShape a sh:NodeShape ; sh:targetClass ke:Responsibility ;
+    sh:property [ sh:path ke:actionText ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path ke:evidencePassage ; sh:minCount 1 ; sh:class ke:EvidencePassage ] .
+vx:SalaryShape a sh:NodeShape ; sh:targetClass ke:SalaryObservation ;
+    sh:property [ sh:path ke:evidencePassage ; sh:minCount 1 ; sh:class ke:EvidencePassage ] ;
+    sh:property [ sh:path vx:sourceValueJSON ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype rdf:JSON ] ;
+    sh:property [ sh:path ke:lowerAmount ; sh:maxCount 1 ; sh:datatype xsd:decimal ; sh:minInclusive 0 ; sh:lessThanOrEquals ke:upperAmount ] ;
+    sh:property [ sh:path ke:upperAmount ; sh:maxCount 1 ; sh:datatype xsd:decimal ; sh:minInclusive 0 ] ;
+    sh:property [ sh:path ke:currency ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path ke:payPeriod ; sh:maxCount 1 ; sh:datatype xsd:string ] .
+vx:AssertionShape a sh:NodeShape ; sh:targetClass vx:SourceAssertion ;
+    sh:property [ sh:path rdf:subject ; sh:minCount 1 ; sh:maxCount 1 ; sh:nodeKind sh:IRI ] ;
+    sh:property [ sh:path rdf:predicate ; sh:minCount 1 ; sh:maxCount 1 ; sh:nodeKind sh:IRI ] ;
+    sh:property [ sh:path rdf:object ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path prov:wasDerivedFrom ; sh:minCount 1 ; sh:class ke:EvidencePassage ] ;
+    sh:property [ sh:path vx:derivation ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path prov:wasGeneratedBy ; sh:minCount 1 ; sh:maxCount 1 ; sh:class prov:Activity ] .
+vx:FieldShape a sh:NodeShape ; sh:targetClass vx:FieldView ;
+    sh:property [ sh:path vx:fieldPointer ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path vx:renderedText ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path vx:transform ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path ke:evidencePassage ; sh:minCount 1 ; sh:class ke:EvidencePassage ] .
