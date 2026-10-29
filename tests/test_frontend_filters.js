@@ -16,13 +16,13 @@ function record(id,title='Knowledge Engineer',options={}){
  return r;
 }
 function saudi(id,title,options={}){return record(id,title,{country:'Saudi Arabia',region:'saudi',city:'Riyadh',salaryMin:null,salaryMax:null,currency:null,period:null,salaryEligible:false,salaryBasis:'none',salaryBasisVerified:false,...options});}
-function app(records=[],local=false){
+function app(records=[],local=false,overrides={}){
  const elements=new Map(),events={};
  function el(selector){
   if(!elements.has(selector))elements.set(selector,{textContent:'',innerHTML:'',hidden:false,disabled:false,dataset:{},classList:{toggle(){}},setAttribute(){},removeAttribute(){},addEventListener(){},showModal(){this.open=true;},close(){this.open=false;}});
   return elements.get(selector);
  }
- const dataset={schemaVersion:2,records:copy(records),sources:[],reviewQueue:[],changes:[],fx:{rates:{SAR:1,USD:3.75,GBP:5,EUR:4.2},date:'2026-10-20'},meta:{automationActivated:false,staleAfterHours:48}};
+ const dataset={schemaVersion:2,records:copy(records),sources:[],reviewQueue:[],changes:[],fx:{rates:{SAR:1,USD:3.75,GBP:5,EUR:4.2},date:'2026-10-20'},meta:{automationActivated:false,staleAfterHours:48},...copy(overrides)};
  el('#seed-data').textContent=JSON.stringify(dataset);
  const document={documentElement:{dataset:{localPreview:String(local)}},querySelector:el,querySelectorAll:()=>[],addEventListener:(type,fn)=>(events[type]??=[]).push(fn),hidden:false};
  const context=vm.createContext({document,location:{protocol:'file:',hash:'#overview',href:'file:///synthetic/index.html'},localStorage:{getItem:()=>null,setItem(){}},window:{addEventListener(){},scrollTo(){},print(){}},history:{replaceState(){}},URL,Intl,Date,console,setTimeout:()=>0,clearTimeout(){},setInterval:()=>0,fetch:()=>{throw Error('Network forbidden in tests');}});
@@ -40,6 +40,153 @@ test('international default includes KE seniority variants, never other occupati
  assert.equal(a.run('filters.global.occupation'),'knowledge-engineer');
  assert.equal(a.run("titleVariant('Senior Knowledge Engineer - Commercial Sales','Knowledge Engineer')"),false);
  assert.equal(a.run("titleVariant('Knowledge Graph Engineer','Knowledge Engineer')"),false);
+});
+
+function previewDecision(r,decision='Accept',country=r.country,rule=country==='Saudi Arabia'?'S1':'G1'){
+ return {case_id:r.id,title:r.title,decision,job_market_eligible:decision==='Accept',rule,
+  reason:'Synthetic saved decision: explicit representation responsibility.',source_capture:'development/test-only.json',capture_sha256:'a'.repeat(64),
+  location:{country,display:r.city,conflict:false},responsibility_support:decision==='Accept'?[{quote:'Maintain domain ontologies (synthetic).',
+   locator:{source:{pointer:'/record/description'},start:0,end:39},role_context:[]}]:[]};
+}
+const previewMetadata={kind:'market-eligibility',label:'Development / Experimental Preview',policy:{G1:'Outside Saudi Arabia: explicit KE profession titles only.'}};
+
+test('Development eligibility is local-only and never becomes occupational verification or pay approval',()=>{
+ const r=saudi('saved','Senior Data Engineer',{keReview:undefined});r.marketEligibility=previewDecision(r);
+ for(const local of [false,true]){
+  const a=app([r],local,{developmentPreview:previewMetadata});
+  assert.equal(a.run('jobEligible(market.records[0])'),local);
+  assert.equal(a.run('keStatus(market.records[0])'),'review');
+  assert.equal(a.run('baseEligible(market.records[0])'),false);
+ }
+});
+
+test('Development decisions respect capture country, not a KSA title or stale region flag',()=>{
+ const a=saudi('jeddah','Data Engineer - KSA',{keReview:undefined});a.marketEligibility=previewDecision(a);
+ const b={...copy(a),id:'egypt',country:'Egypt',region:'saudi',city:'Cairo'};b.marketEligibility=previewDecision(b,'Reject','Egypt','G1');
+ const mismatched={...copy(a),id:'mismatch',country:'Egypt'};mismatched.marketEligibility.case_id='mismatch';
+ const x=app([a,b,mismatched],true,{developmentPreview:previewMetadata});
+ assert.deepEqual(ids(x,"filtered('saudi')"),['jeddah']);
+ assert.deepEqual(ids(x,"filtered('global')"),[]);
+ assert.equal(x.run('isSaudi(market.records[1])'),false);
+ assert.equal(x.run('jobEligible(market.records[2])'),false);
+});
+
+test('Development saved decisions drive results without title or case-specific UI exceptions',()=>{
+ const r=saudi('arbitrary-id','Generic Software Title',{keReview:undefined});r.marketEligibility=previewDecision(r,'Reject');
+ const a=app([r],true,{developmentPreview:previewMetadata});assert.deepEqual(ids(a,"filtered('saudi')"),[]);
+ a.run("market.records[0].marketEligibility.decision='Accept';market.records[0].marketEligibility.job_market_eligible=true;market.records[0].marketEligibility.responsibility_support=[{quote:'Explicit source duty',locator:{source:{pointer:'/record/description'},start:0,end:20}}]");
+ assert.deepEqual(ids(a,"filtered('saudi')"),['arbitrary-id']);
+ a.run('market.records[0].marketEligibility.responsibility_support=[]');
+ assert.deepEqual(ids(a,"filtered('saudi')"),[]);
+});
+
+test('Development cards and review reuse escaped evidence, reasons, geography and source locators',()=>{
+ const accepted=saudi('accepted','Senior Data Engineer',{keReview:undefined});accepted.marketEligibility=previewDecision(accepted);
+ const rejected=saudi('rejected','API Developer',{keReview:undefined});rejected.marketEligibility=previewDecision(rejected,'Reject');
+ rejected.marketEligibility.reason='<script>never execute</script> No substantive semantic duties.';
+ const a=app([accepted,rejected],true,{developmentPreview:previewMetadata});
+ a.run("mount('saudi')");assert.match(a.elements.get('#view-content').innerHTML,/Development \/ Experimental Preview/);
+ const cards=a.elements.get('#results').innerHTML;
+ assert.match(cards,/Senior Data Engineer/);assert.match(cards,/Market eligibility · Accept · S1/);
+ assert.match(cards,/\/record\/description/);assert.match(cards,/rendered span \[0, 39\)/);
+ assert.doesNotMatch(cards,/API Developer/);
+ a.run("mount('review')");const html=a.elements.get('#view-content').innerHTML;
+ assert.match(html,/Rejected Jobs/);assert.match(html,/API Developer/);assert.match(html,/&lt;script&gt;/);assert.doesNotMatch(html,/<script>|Senior Data Engineer/);
+});
+
+const developmentPreviewPath=process.env.STAGE7_MARKET_WEB_PREVIEW;
+test('actual built Development preview renders one Saudi job, zero Global salaries and all nine rejected reasons',
+ {skip:!developmentPreviewPath},()=>{
+ const page=fs.readFileSync(path.join(developmentPreviewPath,'index.html'),'utf8');
+ const data=JSON.parse(page.match(/id="seed-data">([\s\S]*?)<\/script>/)[1]);
+ assert.equal(data.records.length,10);assert.equal(data.developmentPreview.kind,'market-eligibility');
+ assert.match(page,/data-local-preview="true"/);
+ const a=app(data.records,true,data);
+ assert.deepEqual(ids(a,"filtered('saudi')"),['EVAL-f5abd1d8389ba873']);
+ assert.deepEqual(ids(a,"filtered('global')"),[]);assert.deepEqual(ids(a,'benchmarkRows(market.records)'),[]);
+ a.run("filters.global.onlySalary=false;mount('global')");assert.deepEqual(ids(a,"filtered('global')"),[]);
+ assert.doesNotMatch(a.elements.get('#results').innerHTML,/data-detail="EVAL-/);
+ a.run("mount('saudi')");assert.match(a.elements.get('#results').innerHTML,/Jeddah/);assert.match(a.elements.get('#results').innerHTML,/semantic reasoning engines/);
+ a.run("mount('review')");const html=a.elements.get('#view-content').innerHTML;
+ assert.equal((html.match(/data-case="EVAL-/g)||[]).length,9);
+ for(const r of data.records.filter(r=>r.marketEligibility.decision==='Reject')){
+  assert.ok(html.includes(r.id));assert.ok(html.includes(r.marketEligibility.reason));
+ }
+ a.run("details('EVAL-f5abd1d8389ba873')");const detail=a.elements.get('#detail-body').innerHTML;
+ assert.match(detail,/Cairo, Egypt · Reject · G1/);assert.match(detail,/Salary eligibility: not evaluated/);
+ assert.match(detail,/rendered span \[1505, 1737\)/);
+ assert.doesNotMatch(detail,/Base pay verified|Reviewed by/);
+});
+
+test('experimental international jobs remain visible without salary and cannot enter salary benchmarks',()=>{
+ const r=record('new-profession','Semantic Engineer',{keReview:undefined,salaryMin:null,salaryMax:null,currency:null,period:null});
+ r.marketEligibility=previewDecision(r);delete r.salaryReview;
+ const a=app([r],true,{developmentPreview:previewMetadata});
+ assert.equal(a.run('filters.global.onlySalary'),false);
+ assert.deepEqual(ids(a,"filtered('global')"),['new-profession']);
+ assert.deepEqual(ids(a,'benchmarkRows(market.records)'),[]);
+ a.run("mount('global')");assert.match(a.elements.get('#results').innerHTML,/Original title evidence/);
+ a.run('filters.global.onlySalary=true');assert.deepEqual(ids(a,"filtered('global')"),[]);
+});
+
+test('experimental unresolved geography is shown separately from rejected jobs',()=>{
+ const r=record('unknown','Power BI Developer',{country:null,city:'Remote',keReview:undefined});
+ r.marketEligibility={...previewDecision(r),decision:'Unresolved',job_market_eligible:null,rule:'L0'};
+ const a=app([r],true,{developmentPreview:previewMetadata});
+ a.run("mount('review')");const html=a.elements.get('#view-content').innerHTML;
+ assert.match(html,/0 rejected experimental postings/);assert.match(html,/Unresolved location or evidence · 1/);
+ assert.equal(a.elements.get('#review-count').textContent,'0');
+ assert.deepEqual(ids(a,"filtered('saudi')"),[]);assert.deepEqual(ids(a,"filtered('global')"),[]);
+});
+
+const newBatchPreviewPath=process.env.STAGE7_NEW_BATCH_WEB_PREVIEW;
+test('saved nine-candidate preview shows three international, zero Saudi, five rejected and one unresolved',
+ {skip:!newBatchPreviewPath},()=>{
+ const page=fs.readFileSync(path.join(newBatchPreviewPath,'index.html'),'utf8');
+ const data=JSON.parse(page.match(/id="seed-data">([\s\S]*?)<\/script>/)[1]);
+ // Historical preview bytes are preserved; render its saved data with the current presenter.
+ assert.equal(data.records.length,9);assert.equal(data.developmentPreview.batchKind,'new-employer-candidates');
+ const a=app(data.records,true,data);
+ assert.deepEqual(ids(a,"filtered('saudi')"),[]);
+ assert.equal(ids(a,"filtered('global')").length,3);
+ assert.equal(a.elements.get('#global-count').textContent,'3');assert.equal(a.elements.get('#review-count').textContent,'5');
+ a.run("mount('global')");const global=a.elements.get('#results').innerHTML;
+ for(const r of data.records.filter(r=>r.marketEligibility.decision==='Accept')){
+  assert.ok(global.includes(r.title));assert.ok(global.includes(r.sourceUrl));
+ }
+ assert.match(global,/No amount disclosed in captured posting/);
+ assert.match(global,/Salary eligibility not evaluated/);
+ assert.deepEqual(ids(a,'benchmarkRows(market.records)'),[]);
+ a.run("mount('review')");const html=a.elements.get('#view-content').innerHTML;
+ assert.match(html,/5 rejected experimental postings/);assert.match(html,/Unresolved location or evidence · 1/);
+ assert.equal((html.match(/data-case="NEW-/g)||[]).length,6);
+ assert.match(html,/coordinated verb wording/);assert.match(html,/Semantic and Data Mart layers object/);
+ for(const r of data.records.filter(r=>r.marketEligibility.decision!=='Accept'))assert.ok(html.includes(r.id));
+ assert.ok(data.records.every(r=>!r.id.startsWith('EVAL-')));
+ a.run('refresh(true)');assert.equal(a.run('market.records.length'),9);
+});
+
+const s1FixPreviewPath=process.env.STAGE7_S1_FIX_WEB_PREVIEW;
+test('corrected S1 preview shows two Saudi, three global, three rejected and one unresolved',
+ {skip:!s1FixPreviewPath},()=>{
+ const page=fs.readFileSync(path.join(s1FixPreviewPath,'index.html'),'utf8');
+ assert.ok(page.includes(source),'Current preview embeds the tested frontend');
+ const data=JSON.parse(page.match(/id="seed-data">([\s\S]*?)<\/script>/)[1]);
+ const a=app(data.records,true,data);
+ assert.equal(data.records.length,9);
+ assert.equal(ids(a,"filtered('saudi')").length,2);assert.equal(ids(a,"filtered('global')").length,3);
+ assert.equal(a.elements.get('#saudi-count').textContent,'2');assert.equal(a.elements.get('#global-count').textContent,'3');
+ a.run("mount('saudi')");const cards=a.elements.get('#results').innerHTML;
+ for(const text of ['Semantic Layer / Data Mart','Semantic &amp; BI Lead','Design, develop, and maintain Semantic Layer',
+                     'Design Semantic and Data Mart layers from scratch','Lead and mentor a team of Semantic Layer developers',
+                     'Enforce data governance','Market eligibility · Accept · S1'])assert.ok(cards.includes(text),text);
+ assert.doesNotMatch(cards,/S1 may miss|coordinated verb wording/);
+ assert.deepEqual(ids(a,'benchmarkRows(market.records)'),[]);
+ a.run("mount('review')");const review=a.elements.get('#view-content').innerHTML;
+ assert.match(review,/3 rejected experimental postings/);assert.match(review,/Unresolved location or evidence · 1/);
+ assert.equal((review.match(/data-case="NEW-/g)||[]).length,4);
+ assert.doesNotMatch(review,/Semantic &amp; BI Lead|Semantic Layer \/ Data Mart/);
+ assert.ok(data.records.every(r=>!r.keReview&&!r.salaryReview&&!r.marketEligibility.human_market_eligibility));
 });
 
 test('each specialization has its own benchmark and defensive statistics never pool occupations',()=>{

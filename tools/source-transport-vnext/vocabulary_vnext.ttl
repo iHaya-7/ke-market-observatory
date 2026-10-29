@@ -1,0 +1,32 @@
+@prefix vx: <urn:ke-market-observatory:experimental:source-transport-vnext:> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+
+vx: a owl:Ontology ; rdfs:comment "Experimental Development transport vocabulary. No frozen schema changes or new occupational concepts." .
+vx:GraphBuild a owl:Class ; rdfs:subClassOf prov:Activity .
+vx:FieldView a owl:Class ; rdfs:comment "A versioned rendering of one source field; not an additional posting or independently corroborating evidence." .
+vx:StructuredSalary a owl:Class ; rdfs:comment "Preserved source compensation structure; not verified base pay or eligible salary." .
+vx:SourceAssertion a owl:Class ; rdfs:subClassOf rdf:Statement ; rdfs:comment "An asserted RDF triple with precise source evidence and a documented derivation policy." .
+vx:posting a owl:ObjectProperty .
+vx:titleEvidence a owl:ObjectProperty .
+vx:rawFieldEvidence a owl:ObjectProperty .
+vx:fieldView a owl:ObjectProperty .
+vx:alternativeViewOf a owl:ObjectProperty .
+vx:caseId a owl:DatatypeProperty ; rdfs:comment "Development index identifier, not an upstream source fact." .
+vx:sourceId a owl:DatatypeProperty .
+vx:sourceJobId a owl:DatatypeProperty .
+vx:sourceType a owl:DatatypeProperty .
+vx:fieldPointer a owl:DatatypeProperty .
+vx:transform a owl:DatatypeProperty .
+vx:renderedText a owl:DatatypeProperty .
+vx:sectionLabel a owl:DatatypeProperty .
+vx:sourceValueJSON a owl:DatatypeProperty ; rdfs:comment "Canonical JSON of the exact original field value; original capture bytes remain in the verified transport packet." .
+vx:intervalTokenJSON a owl:DatatypeProperty ; rdfs:comment "Original supplied salary interval token, including its original JSON type." .
+vx:derivation a owl:DatatypeProperty .
+vx:unresolvedDimension a owl:DatatypeProperty ; rdfs:comment "An unmapped/unknown graph dimension; never a negative source fact." .
+vx:implementationHashesJSON a owl:DatatypeProperty .
+vx:transportSHA256 a owl:DatatypeProperty .
+vx:consumerSHA256 a owl:DatatypeProperty .
+vx:extractedResponsibilityCount a owl:DatatypeProperty ; rdfs:comment "Count of field-scoped extraction results for this build, not a claim that a role has no other duties." .

@@ -1,0 +1,16 @@
+PREFIX ke: <urn:ke-market-observatory:ontology:>
+PREFIX vx: <urn:ke-market-observatory:experimental:source-transport-vnext:>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+
+SELECT ?responsibility ?evidence ?context ?text ?locator ?capture ?sha256 ?source_value
+WHERE {
+  ?responsibility a ke:Responsibility ; ke:actionText ?action .
+  ?assertion a vx:SourceAssertion ; rdf:subject ?responsibility ;
+      rdf:predicate ke:actionText ; rdf:object ?action ; prov:wasDerivedFrom ?evidence .
+  ?evidence ke:contextPassage ?context .
+  ?context a ke:EvidencePassage ; ke:passageText ?text ;
+      ke:passageLocator ?locator ; ke:inArtifact ?artifact ; vx:sourceValueJSON ?source_value .
+  ?artifact ke:artifactLocation ?capture ; ke:sha256 ?sha256 .
+}
+ORDER BY ?responsibility ?context

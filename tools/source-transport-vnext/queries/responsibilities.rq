@@ -1,0 +1,21 @@
+PREFIX ke: <urn:ke-market-observatory:ontology:>
+PREFIX vx: <urn:ke-market-observatory:experimental:source-transport-vnext:>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX dct: <http://purl.org/dc/terms/>
+
+# Join the actionText assertion's own evidence, not every context passage.
+# This prevents section/context joins from multiplying responsibility rows.
+SELECT ?case_id ?posting ?title ?responsibility ?text ?evidence ?locator
+       ?capture ?sha256 ?source_value
+WHERE {
+  ?build a vx:GraphBuild ; vx:caseId ?case_id ; vx:posting ?posting .
+  ?posting dct:title ?title ; ke:advertisesRole/ke:hasResponsibility ?responsibility .
+  ?responsibility a ke:Responsibility ; ke:actionText ?text .
+  ?assertion a vx:SourceAssertion ; rdf:subject ?responsibility ;
+      rdf:predicate ke:actionText ; rdf:object ?text ; prov:wasDerivedFrom ?evidence .
+  ?evidence a ke:EvidencePassage ; ke:passageText ?text ;
+      ke:passageLocator ?locator ; ke:inArtifact ?artifact ; vx:sourceValueJSON ?source_value .
+  ?artifact ke:artifactLocation ?capture ; ke:sha256 ?sha256 .
+}
+ORDER BY ?case_id ?responsibility
