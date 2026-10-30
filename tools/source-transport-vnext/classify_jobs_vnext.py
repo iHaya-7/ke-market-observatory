@@ -18,12 +18,20 @@ import transport_vnext as transport
 from rdflib import Graph, Namespace
 from rdflib.namespace import OWL, RDF, RDFS, SKOS
 
-VERSION = 'development-job-classifier-vnext-1'
+VERSION = 'development-job-classifier-vnext-2'
 EXP = 'urn:ke-market-observatory:experimental:job-classifier-vnext:'
 ROLE = Namespace('urn:ke-market-observatory:role:')
 CATEGORIES = ('Core KE', 'Adjacent Technical', 'Neither', 'Insufficient Evidence')
 HUMAN_COLUMNS = ('case_id', 'human_classification', 'reviewer_id', 'reviewer_notes')
 RULES = {
+    'C3': {'name': 'Explicit graph representation construction',
+           'condition': 'An engineering action builds ingestion that transforms source data into explicit knowledge graph/RDF representations, or entity-linking workflows that resolve domain identities into canonical graph nodes. Querying, GraphRAG use, generic graphs and generic entity matching alone do not qualify.',
+           'ontology_basis': [str(builder.KE.Responsibility), str(builder.KE.KnowledgeRepresentation), str(builder.KE.actsOnRepresentation)],
+           'boundary_definition': [str(ROLE['knowledge-graph-engineer'])]},
+    'A2': {'name': 'Explicit knowledge graph component implementation',
+           'condition': 'An advertised duty explicitly implements knowledge graph components. This supports technical adjacency, not representation ownership or a Core conclusion.',
+           'concept_uri': EXP + 'SemanticSystemSupport',
+           'ontology_basis': [str(builder.KE.Responsibility)]},
     'C1': {'name': 'Direct representation engineering',
            'condition': 'An imperative engineering action directly targets an explicit ontology, knowledge graph, semantic model, RDF schema or SHACL constraint. Collateral/product objects do not qualify.',
            'ontology_basis': [str(builder.KE.Responsibility), str(builder.KE.KnowledgeRepresentation), str(builder.KE.actsOnRepresentation)]},
@@ -62,7 +70,7 @@ UNSAFE = re.compile(r'\b(?:not|never|without|may|might|could|occasionally|option
 CONDITIONAL_CONTEXT = re.compile(r'\b(?:may|might|could|optional|example|qualifications?|requirements)\b', re.I)
 DIRECT = re.compile(
     r'^(?P<action>design|build|implement|maintain|create|define|model|develop|integrate|extend|validate|own)'
-    r'\s+(?:(?:and\s+)?(?:design|build|implement|maintain|create|define|develop|validate)\s*,?\s*)*'
+    r'(?:(?:,\s*(?:and\s+)?|\s+and\s+)(?:design|build|implement|maintain|create|define|develop|validate))*\s+'
     r'(?:(?:a|an|the|our|explicit|domain|formal|enterprise)\s+)*'
     r'(?P<object>ontolog(?:y|ies)|knowledge graphs?|semantic models?|RDF schemas?|SHACL constraints?)\b', re.I)
 COLLATERAL = re.compile(r'^\s*(?:API(?:s)?|services?|products?|backend|documentation|presentations?|reports?|marketing|training|dashboards?)\b', re.I)
@@ -75,6 +83,13 @@ DEAL = re.compile(r'\bnegotiate\s*,?\s*(?:and\s+)?close\b[^.;\n]*\b(?:agreements
 UPSELL = re.compile(r'\b(?:build|grow)\b[^.;\n]*\brelationships\b[^.;\n]*\bupsell\b', re.I)
 REPORT = re.compile(r'\breports?\b[^.;\n]*\b(?:campaign results|advertising metrics)\b', re.I)
 SALES = re.compile(r'^support the sales organization\b[^.;\n]*\b(?:positioning stories|presentation materials)\b', re.I)
+GRAPH_OUTPUT = re.compile(r'\b(?:ingestion|ETL|ELT) pipelines?\b[^.;\n]*\btransform\b[^.;\n]*\binto\b[^.;\n]*\b(?P<object>knowledge graphs?|RDF triple stores?)\b', re.I)
+ENTITY_OUTPUT = re.compile(r'\b(?:entity linking|entity resolution)\b[^.;\n]*\b(?:resolve|reconcile)\b[^.;\n]*\binto\s+(?:unified\s+)?canonical graph nodes\b', re.I)
+ENGINEERING_HEAD = r'(?:design|build|implement|maintain|create|develop)(?:(?:,\s*(?:and\s+)?|\s+and\s+)(?:design|build|implement|maintain|create|develop))*\s+'
+PIPELINE_HEAD = re.compile(r'^' + ENGINEERING_HEAD + r'(?:(?:automated|high-speed|scalable|GraphRAG|data|production|robust)\s+)*$', re.I)
+ENTITY_HEAD = re.compile(r'^' + ENGINEERING_HEAD + r'(?:automated\s+)?(?:named entity recognition(?:\s*\(NER\))?,\s*)?$', re.I)
+GRAPH_COMPONENT = re.compile(r'\b(?:to\s+)?implement\s+(?:the\s+|our\s+)?knowledge graph components\b', re.I)
+LAYER = re.compile(r'\bsemantic(?: and data mart)? layers?\b', re.I)
 
 
 def vocabulary():
@@ -98,6 +113,10 @@ def clauses(text):
     for match in re.finditer(r'[^.;\n]+', text):
         raw = match.group(); offset = match.start() + len(raw) - len(raw.lstrip())
         value = raw.strip()
+        from market_eligibility_vnext import BULLET
+        bullet = BULLET.match(value)
+        if bullet:
+            offset += bullet.end(); value = value[bullet.end():]
         # A source category prefix is retained in the quotation but not an action.
         prefix = re.match(r'^[^:]{1,100}:\s+(?=(?:design|build|implement|optimize|monitor|ensure|lead)\b)', value, re.I)
         if prefix:
@@ -136,7 +155,7 @@ def classify_job(rows, concepts, *, case_id=None, source_title=''):
     transport.require((bool(rows) and len({r['case_id'] for r in rows}) == 1)
                       or (not rows and case_id is not None), 'One case identity required')
     core, adjacent, commercial = [], [], []
-    unsafe_mentions, unmatched_mentions = [], []
+    unsafe_mentions, unmatched_mentions, ambiguous_layers = [], [], []
     technical, conditional = False, False
     for row in rows:
         context_unsafe = bool(CONDITIONAL_CONTEXT.search(row['section_context_text']))
@@ -148,6 +167,8 @@ def classify_job(rows, concepts, *, case_id=None, source_title=''):
                 continue
             direct = DIRECT.match(clause)
             mapped = False
+            if LAYER.search(clause):
+                ambiguous_layers.append(row['responsibility_id'])
             if direct and not COLLATERAL.match(clause[direct.end():]):
                 target = direct['object'].casefold()
                 concept = str(ROLE['knowledge-graph-engineer'] if target.startswith('knowledge graph') else
@@ -155,6 +176,21 @@ def classify_job(rows, concepts, *, case_id=None, source_title=''):
                 item = support(row, 'C1', clause, offset, concept, 'candidate occupational concept; experimental interpretation')
                 item['action'] = direct['action'].casefold(); item['representation_text'] = direct['object']
                 core.append(item); mapped = True
+            graph_output = GRAPH_OUTPUT.search(clause)
+            entity_output = ENTITY_OUTPUT.search(clause)
+            graph_output = graph_output if graph_output and PIPELINE_HEAD.fullmatch(clause[:graph_output.start()]) else None
+            entity_output = entity_output if entity_output and ENTITY_HEAD.fullmatch(clause[:entity_output.start()]) else None
+            if not direct and (graph_output or entity_output):
+                item = support(row, 'C3', clause, offset, str(ROLE['knowledge-graph-engineer']),
+                               'candidate graph-construction occupation; experimental interpretation')
+                item['action'] = ACTION.match(clause).group().casefold()
+                item['representation_text'] = graph_output['object'] if graph_output else 'canonical graph nodes'
+                core.append(item); mapped = True
+            if ((ACTION.match(clause) or re.match(r'^collaborate\b', clause, re.I)) and GRAPH_COMPONENT.search(clause)
+                    and not re.search(r'\b(?:presentations?|documentation|training|marketing|sales|dashboards?)\b', clause, re.I)):
+                adjacent.append(support(row, 'A2', clause, offset, EXP + 'SemanticSystemSupport',
+                                        'technical component delivery, not graph ownership'))
+                mapped = True
             if ACTION.match(clause) and COMPONENT.search(clause) and (SEMANTIC_FEED.search(clause) or KG_SUPPORT.search(clause)):
                 adjacent.append(support(row, 'A1', clause, offset, EXP + 'SemanticSystemSupport',
                                         'experimental supporting-work concept, not a taxonomy occupation'))
@@ -176,10 +212,10 @@ def classify_job(rows, concepts, *, case_id=None, source_title=''):
         classification, supporting, triggered = 'Insufficient Evidence', [], ['U1']
         uncertainty.append('Competing representation-related and commercial responsibilities leave primary function unresolved.')
     elif has_core and not unsafe_mentions:
-        classification, supporting, triggered = 'Core KE', core, ['C1', 'C2']
+        classification, supporting, triggered = 'Core KE', core, sorted({i['rule_id'] for i in core} | {'C2'})
         uncertainty.append('Direct representation engineering supports a proposed Core function; job-level scope still requires human review.')
     elif adjacent and not unsafe_mentions:
-        classification, supporting, triggered = 'Adjacent Technical', adjacent, ['A1']
+        classification, supporting, triggered = 'Adjacent Technical', adjacent, sorted({i['rule_id'] for i in adjacent})
         uncertainty.append('Technical delivery explicitly supports a semantic system; ownership of the representation and a Core role are not established.')
     elif commercial_threshold and not (core or adjacent or unsafe_mentions or unmatched_mentions or technical or conditional):
         classification, supporting, triggered = 'Neither', commercial, sorted({s['rule_id'] for s in commercial} | {'N3'})
@@ -191,6 +227,7 @@ def classify_job(rows, concepts, *, case_id=None, source_title=''):
         if conditional: uncertainty.append('The source qualifies some duties as conditional; those statements cannot establish the primary function.')
         if unsafe_mentions: uncertainty.append('Representation mentions occur in negated, conditional or qualification-like language.')
         if unmatched_mentions: uncertainty.append('Representation terminology is present but no supported action/object or technical-support rule resolves it.')
+        if ambiguous_layers: uncertainty.append('Semantic Layer / Data Mart work is explicit, but BI-oriented modeling alone does not establish an ontology or explicit semantic knowledge representation under this occupational taxonomy.')
         if not any((core, technical, conditional, unsafe_mentions, unmatched_mentions)):
             uncertainty.append('No rule has enough positive, function-specific evidence to support a job-level decision.')
     for item in supporting:

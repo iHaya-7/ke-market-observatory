@@ -14,7 +14,7 @@ sys.path.insert(0, str(ROOT / 'tools/source-transport-vnext'))
 import transport_vnext as transport
 
 
-def development_dataset(root, results_path):
+def development_dataset(root, results_path, *, only_case=None):
     root = Path(root).resolve()
     results_path = transport.safe_path(root, Path(results_path).resolve().relative_to(root), Path('learning-local'))
     raw = results_path.read_bytes()
@@ -35,6 +35,8 @@ def development_dataset(root, results_path):
     public = transport.loads((root / 'public/data/market.json').read_bytes())
     records = []
     for decision in primary:
+        if only_case is not None and decision['case_id'] != only_case:
+            continue
         if new_batch:
             case = dict(case_id=decision['case_id'], source_id=decision['source_id'], source_job_id=decision['source_job_id'])
             path = transport.safe_path(root, decision['source_capture'], selection_path.parent / 'processed/captures')

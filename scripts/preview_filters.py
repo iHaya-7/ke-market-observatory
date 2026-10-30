@@ -12,13 +12,15 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def build_preview(root=ROOT, output=None, dataset=None):
+def build_preview(root=ROOT, output=None, dataset=None, *, app_source=None):
     root = Path(root)
     output = Path(output) if output is not None else root / 'learning-local/approved-filters-preview'
     # Reuse the existing validated, self-contained builder in an isolated copy.
     with tempfile.TemporaryDirectory(prefix='ke-filter-preview-') as directory:
         isolated = Path(directory)
         shutil.copytree(root / 'web', isolated / 'web')
+        if app_source is not None:
+            (isolated / 'web/app.js').write_text(app_source, encoding='utf-8')
         (isolated / 'scripts').mkdir()
         for name in ('build_site.py', 'refresh.py'):
             shutil.copy2(root / 'scripts' / name, isolated / 'scripts' / name)

@@ -154,6 +154,10 @@ def reference(packet, pointer):
     key = tokens(pointer)[0]
     require(key in packet['field_owners'], 'Field has no source owner')
     at(packet['record'], pointer)
+    if packet.get('version') == 'development-batch-transport-vnext-1':
+        suffix = pointer[len('/' + escape(key)):]
+        return {'capture_sha256': packet['field_owners'][key],
+                'pointer': packet['field_references'][key] + suffix}
     return {'capture_sha256': packet['field_owners'][key], 'pointer': '/record' + pointer}
 
 
@@ -166,6 +170,9 @@ def resolve_reference(packet, ref):
 
 
 def verify_packet(packet):
+    if packet.get('version') == 'development-batch-transport-vnext-1':
+        from batch_transport_vnext import verify_batch_packet
+        return verify_batch_packet(packet)
     require(packet.get('version') == VERSION, 'Unsupported transport version')
     try:
         raw = [base64.b64decode(a['bytes_base64'], validate=True) for a in packet['captures']]

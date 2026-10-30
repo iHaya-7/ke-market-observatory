@@ -14,6 +14,9 @@ import consumer_vnext as consumer
 import graph_vnext as builder
 import review_export_vnext as evidence
 import transport_vnext as transport
+import semantic_graph_vnext as semantic
+from rdflib import URIRef
+from rdflib.namespace import DCTERMS
 from test_transport_vnext import fixture
 
 
@@ -27,6 +30,52 @@ def source_rows(*texts, title='Metadata title', body=None):
 
 
 class RuleTests(unittest.TestCase):
+    def test_semantic_assertions_are_separate_resolvable_and_tamper_checked(self):
+        record = fixture()['record']; record['description'] = '<h2>Responsibilities</h2><p>Own ontologies.</p>'
+        packet = fixture(record); consumed = consumer.consume(packet)
+        graph = builder.build_graph(packet, consumed)
+        before = set(graph)
+        rows = evidence.query_rows(graph, packet, reader=lambda a: base64.b64decode(a['bytes_base64']))
+        decision = classifier.classify_job(rows, self.concepts)
+        inferred = semantic.build(graph, decision)
+        self.assertEqual(semantic.validate(inferred, graph, decision)['assertions'], 1)
+        self.assertEqual(set(graph), before)
+        inferred.add((URIRef('urn:test:fake'), DCTERMS.subject, URIRef('urn:test:unsupported')))
+        with self.assertRaises(transport.TransportError): semantic.validate(inferred, graph, decision)
+
+    def test_graph_construction_and_canonical_entity_linking_use_existing_taxonomy(self):
+        rows, decision = self.decide(
+            'Design, implement, and maintain ingestion pipelines that transform source data into RDF triple stores.',
+            'Build entity linking workflows to resolve supplier identities into canonical graph nodes.')
+        self.assertEqual(decision['proposed_classification'], 'Core KE')
+        self.assertEqual(set(decision['triggered_rules']), {'C2', 'C3'})
+        self.assertTrue(all(e['concept_uri'] == str(classifier.ROLE['knowledge-graph-engineer']) for e in decision['supporting_evidence']))
+        classifier.validate_decisions([decision], rows, self.concepts)
+
+    def test_graph_mentions_consumption_and_collateral_work_do_not_become_core(self):
+        for text in ('Build GraphRAG applications using existing knowledge graphs.',
+                     'Build ingestion pipelines for generic graph algorithms.',
+                     'Build entity matching workflows for contact deduplication.',
+                     'Create presentations about ingestion pipelines that transform data into RDF triple stores.',
+                     'Create training to implement knowledge graph components.',
+                     'Query knowledge graphs to produce reports.'):
+            _, decision = self.decide(text)
+            self.assertEqual(decision['proposed_classification'], 'Insufficient Evidence', text)
+
+    def test_graph_component_delivery_is_adjacent_not_representation_ownership(self):
+        _, decision = self.decide('Collaborate with engineers to implement the knowledge graph components required by the product.')
+        self.assertEqual(decision['proposed_classification'], 'Adjacent Technical')
+        self.assertEqual(decision['triggered_rules'], ['A2'])
+
+    def test_coordinated_verbs_do_not_lose_explicit_ontology_object(self):
+        _, decision = self.decide('Design, build, and maintain ontologies.', 'Validate ontologies against domain constraints.')
+        self.assertEqual(decision['proposed_classification'], 'Core KE')
+
+    def test_bi_layers_do_not_automatically_map_to_ontology_engineering(self):
+        _, decision = self.decide('Design Semantic Layer and Data Mart solutions.', 'Maintain Semantic layers for reporting.')
+        self.assertEqual(decision['proposed_classification'], 'Insufficient Evidence')
+        self.assertTrue(any('BI-oriented' in s for s in decision['unresolved_uncertainties']))
+
     @classmethod
     def setUpClass(cls):
         cls.concepts = classifier.vocabulary()

@@ -53,7 +53,7 @@ def check_consumer(packet, consumed):
 
 def implementation_hashes():
     paths = [HERE / p for p in ('graph_vnext.py', 'consumer_vnext.py', 'transport_vnext.py',
-                               'validate_graph_vnext.py', 'vocabulary_vnext.ttl', 'shapes_vnext.ttl')]
+                               'market_eligibility_vnext.py', 'validate_graph_vnext.py', 'vocabulary_vnext.ttl', 'shapes_vnext.ttl')]
     paths.append(Path(consumer.primitives.__file__))
     paths.append(transport.ROOT / 'knowledge-engineering/04-ontology/ontology.ttl')
     return {p.relative_to(transport.ROOT).as_posix(): transport.digest(p.read_bytes()) for p in paths}
@@ -99,7 +99,8 @@ def build_graph(packet, consumed, *, activity=None, generated_at=None):
         g.add((node, RDF.type, KE.EvidenceArtifact))
         g.add((node, KE.sha256, string(artifact['sha256'])))
         g.add((node, KE.artifactLocation, Literal(artifact['path'], datatype=XSD.anyURI)))
-        g.add((node, KE.capturedAt, Literal(doc['capturedAtUtc'], datatype=XSD.dateTime)))
+        time_key = 'retrievedAtUtc' if packet['version'] == 'development-batch-transport-vnext-1' else 'capturedAtUtc'
+        g.add((node, KE.capturedAt, Literal(doc[time_key], datatype=XSD.dateTime)))
         g.add((node, DCTERMS.source, URIRef(identity['source_url'])))
         g.add((run, PROV.used, node))
 
@@ -149,17 +150,21 @@ def build_graph(packet, consumed, *, activity=None, generated_at=None):
     for key, ref in consumed['raw_field_sources'].items():
         raw_fields[key] = passage(ref)
         g.add((posting, VX.rawFieldEvidence, raw_fields[key]))
-    url_field = next(k for k in (
+    url_field = next((k for k in (
         ('hostedUrl',) if identity['source_type'] == 'lever' else
         ('absolute_url',) if identity['source_type'] == 'greenhouse' else ('url', 'application_url', 'shortlink'))
-        if packet['record'].get(k))
-    assertion(posting, DCTERMS.source, URIRef(identity['source_url']), [raw_fields[url_field]])
+        if packet['record'].get(k)), None)
+    if packet['version'] == 'development-batch-transport-vnext-1':
+        url_evidence = passage({'capture_sha256': primary, 'pointer': '/sourceUrl'})
+    else:
+        url_evidence = raw_fields[url_field]
+    assertion(posting, DCTERMS.source, URIRef(identity['source_url']), [url_evidence])
     for artifact in packet['captures']:
         node = artifacts[artifact['sha256']]
-        ref = {'capture_sha256': artifact['sha256'], 'pointer': '/capturedAtUtc'}
+        ref = {'capture_sha256': artifact['sha256'], 'pointer': '/' + time_key}
         assertion(node, KE.capturedAt, g.value(node, KE.capturedAt), [passage(ref)],
                   'Original capture time; value-preserving xsd:dateTime lexical normalization')
-        assertion(node, DCTERMS.source, URIRef(identity['source_url']), [raw_fields[url_field]])
+        assertion(node, DCTERMS.source, URIRef(identity['source_url']), [url_evidence])
 
     views = {}
     for doc in consumed['documents']:

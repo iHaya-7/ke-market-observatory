@@ -20,6 +20,34 @@ def document(body, source_type='lever'):
 
 
 class LayoutTests(unittest.TestCase):
+    def test_explicit_future_responsibility_heading_and_nested_list(self):
+        body = ('<p>Your responsibilities will include (but will not be limited to):</p>'
+                '<ul><li><strong>Graph infrastructure</strong><ul><li>Build graph ingestion pipelines.</li></ul></li></ul>'
+                '<h2>Qualifications</h2><p>Design ontologies in a previous role.</p>')
+        packet, result = document(body)
+        self.assertEqual([d['text'] for d in result['responsibilities']], ['Build graph ingestion pipelines.'])
+        self.assertEqual(consumer.resolve_evidence(packet, result['responsibilities'][0]['locator']),
+                         'Build graph ingestion pipelines.')
+
+    def test_future_heading_does_not_promote_conditional_or_quoted_context(self):
+        for heading in ('Your responsibilities might include:', 'The handbook says your responsibilities will include:'):
+            _, result = document('<p>' + heading + '</p><p>Build ontologies.</p>')
+            self.assertEqual(result['responsibilities'], [])
+
+    def test_existing_s1_duties_reach_consumer_without_duplicate_or_new_scope(self):
+        record = fixture()['record']
+        record['description'] = ('<h2>Key Responsibilities</h2><p>\u2022 Design Semantic and Data Mart layers from scratch.</p>'
+                                 '<h2>Must-Have Skills & Experience</h2><p>\u2022 Design Semantic layers in prior employment.</p>')
+        for country, expected in (('Saudi Arabia', 1), ('United States', 0)):
+            record['country'] = country
+            packet = fixture(record)
+            result = consumer.consume(packet)
+            self.assertEqual(len(result['responsibilities']), expected)
+            if expected:
+                duty = result['responsibilities'][0]
+                self.assertEqual(duty['extraction_rule'], 'existing-saudi-s1-duty-view-v1')
+                self.assertEqual(consumer.resolve_evidence(packet, duty['locator']), duty['text'])
+
     def test_conditional_prose_introduction_with_gerund_list(self):
         intro = ('As an Engineer your main task will be building services. '
                  'However your responsibilities may also include:')

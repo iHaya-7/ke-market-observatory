@@ -30,6 +30,8 @@ LABELED_HEADING = re.compile(r'^(?:Key )?Responsibilities:?$', re.I)
 GERUND_DUTY = re.compile(r'^(?:supporting|assisting|designing|optimising|getting|working|collaborating)\b', re.I)
 LABELED_ACTION = re.compile(r'^(?:design|build|implement|optimize|monitor|ensure|lead)\b', re.I)
 NON_DUTY_LABEL = re.compile(r'^(?:experience|education|qualifications?|skills|requirements|benefits|nice to have)\b', re.I)
+EXPLICIT_DUTY_HEADING = re.compile(
+    r'^Your responsibilities will include(?: \(but will not be limited to\))?:?$', re.I)
 
 
 class _ListLayout(primitives.VisibleBlocks):
@@ -220,7 +222,8 @@ def extract_responsibilities(packet, documents):
         active = bool(label and primitives.DUTIES.fullmatch(label['value'].strip().rstrip(':')))
         for row in re.finditer(r'[^\n]+', doc['text']):
             text = row.group()
-            if primitives.DUTIES.fullmatch(text.strip().rstrip(':')):
+            if (primitives.DUTIES.fullmatch(text.strip().rstrip(':'))
+                    or EXPLICIT_DUTY_HEADING.fullmatch(text.strip())):
                 active = True
                 continue
             if primitives.STOP.fullmatch(text.strip().rstrip(':')):
@@ -244,7 +247,27 @@ def consume(packet):
     verify_packet(packet)
     documents = document_views(packet)
     duties = extract_responsibilities(packet, documents)
-    result = {'version': 'development-field-consumer-vnext-2', 'case_id': packet['case_id'],
+    # Reuse the existing Saudi-scoped S1 extraction, not its eligibility decision.
+    # Import at execution time: market scope itself uses this module's pure views.
+    import market_eligibility_vnext as market
+    location = market.location(packet['record'])
+    if location['country'] == 'Saudi Arabia' and not location['conflict']:
+        docs = [d for d in documents if not d['field_pointer'].startswith('/salaryDescription')]
+        existing = {canonical(d['locator']) for d in duties}
+        for duty in market.s1_duties(docs):
+            key = canonical(duty['locator'])
+            if key in existing:
+                continue
+            doc = next(d for d in docs if d['source'] == duty['locator']['source'])
+            duties.append({**copy.deepcopy(duty), 'field_pointer': doc['field_pointer'],
+                           'section_metadata': copy.deepcopy(doc['section_label']),
+                           'extraction_rule': 'existing-saudi-s1-duty-view-v1',
+                           'interpretation': primitives.interpret_duty(duty['text'])})
+            existing.add(key)
+    # Preserve the existing serialized contract for original-corpus packets.
+    version = ('development-field-consumer-vnext-3' if packet['version'] == 'development-batch-transport-vnext-1'
+               else 'development-field-consumer-vnext-2')
+    result = {'version': version, 'case_id': packet['case_id'],
               'identity': copy.deepcopy(packet['identity']), 'title_metadata': copy.deepcopy(packet['title_metadata']),
               'documents': documents, 'responsibilities': duties, 'structured_salary': structured_salary(packet),
               'raw_field_sources': {k: reference(packet, '/' + k.replace('~', '~0').replace('/', '~1'))

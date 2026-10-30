@@ -53,7 +53,7 @@ class SourceFields(HTMLParser):
 def project(spec, body):
     """Alias explicit provider fields only; keep original values and mapping, never rewrite prose."""
     kind = spec['format']
-    if kind in ('workable', 'greenhouse'):
+    if kind in ('workable', 'greenhouse', 'lever'):
         original = transport.at(transport.loads(body), spec['pointer'])
         return copy.deepcopy(original), {'record': {'response_pointer': spec['pointer']}}, original
     if kind == 'smartrecruiters':
