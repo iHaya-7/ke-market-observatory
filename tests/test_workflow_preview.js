@@ -7,7 +7,7 @@ const path=require('node:path');
 const vm=require('node:vm');
 const preview=process.env.STAGE7_WORKFLOW_PREVIEW;
 
-test('generated workflow preview renders separate assessments without approvals', {skip:!preview},()=>{
+function loadPreview(hash='#overview'){
  const html=fs.readFileSync(path.join(preview,'index.html'),'utf8');
  const dataset=JSON.parse(fs.readFileSync(path.join(preview,'data/market.json'),'utf8'));
  const scripts=[...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].map(m=>m[1]);
@@ -20,8 +20,51 @@ test('generated workflow preview renders separate assessments without approvals'
  }
  el('#seed-data').textContent=JSON.stringify(dataset);
  const document={documentElement:{dataset:{localPreview:'true'}},querySelector:el,querySelectorAll:()=>[],addEventListener(){},hidden:false};
- const context=vm.createContext({document,location:{protocol:'file:',hash:'#overview',href:'file:///development/index.html'},localStorage:{getItem:()=>null,setItem(){}},window:{addEventListener(){},scrollTo(){},print(){}},history:{replaceState(){}},URL,Intl,Date,console,setTimeout:()=>0,clearTimeout(){},setInterval:()=>0,fetch:()=>{throw Error('Network forbidden');}});
+ const context=vm.createContext({document,location:{protocol:'file:',hash,href:'file:///development/index.html'+hash},localStorage:{getItem:()=>null,setItem(){}},window:{addEventListener(){},scrollTo(){},print(){}},history:{replaceState(){}},URL,Intl,Date,console,setTimeout:()=>0,clearTimeout(){},setInterval:()=>0,fetch:()=>{throw Error('Network forbidden');}});
  vm.runInContext(source,context);
+ return {dataset,el,context};
+}
+
+test('direct global entry renders workflow salary evidence before any navigation', {skip:!preview},()=>{
+ const {el}=loadPreview('#global');
+ assert.ok(el('#results').innerHTML.includes('No verified comparable salary benchmark'));
+ assert.ok(el('#results').innerHTML.includes('Comparable base-pay observations'));
+});
+
+test('observed salary amounts remain visible when compensation dimensions are unresolved', {skip:!preview},()=>{
+ const {dataset,el,context}=loadPreview();
+ const rows=dataset.records.filter(r=>r.salaryAssessment.observations.some(o=>o.unresolved_dimensions.length));
+ assert.ok(rows.length,'Authentic unresolved salary observations must exercise this regression');
+ for(const row of rows){
+  const original=vm.runInContext(`originalPay(market.records.find(r=>r.id===${JSON.stringify(row.id)}))`,context);
+  assert.ok(!original.includes('Not disclosed'));
+  for(const o of row.salaryAssessment.observations){
+   assert.ok(original.includes(String(o.lower_amount)));
+   if(o.upper_amount!=null)assert.ok(original.includes(String(o.upper_amount)));
+   if(o.currency)assert.ok(original.includes(o.currency));
+   if(!o.period)assert.ok(original.includes('period unresolved'));
+   assert.equal(o.normalized,null);
+  }
+  vm.runInContext(`details(${JSON.stringify(row.id)})`,context);
+  assert.ok(el('#detail-body').innerHTML.includes(original));
+ }
+});
+
+test('Arabic salary evidence isolates original number order and preserves source direction', {skip:!preview},()=>{
+ const {dataset,el,context}=loadPreview();
+ const row=dataset.records.find(r=>r.salaryAssessment.observations.length);
+ assert.ok(row);
+ vm.runInContext(`lang='ar';details(${JSON.stringify(row.id)})`,context);
+ const detail=el('#detail-body').innerHTML;
+ assert.ok(detail.includes('<bdi dir="ltr">'));
+ assert.ok(detail.includes('<blockquote dir="auto">'));
+ assert.ok(detail.includes('<ul dir="auto">'));
+ assert.ok(detail.includes('أساس التعويض غير محسوم'));
+ assert.ok(detail.includes('panel role-evidence'));
+});
+
+test('generated workflow preview renders separate assessments without approvals', {skip:!preview},()=>{
+ const {dataset,el,context}=loadPreview();
  for(const row of dataset.records){
   vm.runInContext(`details(${JSON.stringify(row.id)})`,context);
   const detail=el('#detail-body').innerHTML;

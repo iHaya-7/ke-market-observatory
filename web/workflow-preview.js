@@ -7,22 +7,27 @@ function workflowEvidence(r){
  const locator=e=>{const l=typeof e.evidence_locator_json==='string'?JSON.parse(e.evidence_locator_json):e.locator;return l?`${l.source.pointer} · [${l.start}, ${l.end})`:JSON.stringify(e.source||{});};
  const supports=occupation.supporting_evidence||[];
  const observed=occupation.evidence_considered||[];
- return `<section class="panel"><h3>${esc(wf('Occupational evidence','الأدلة المهنية'))}</h3><p>${esc(workflowLabel(occupation.proposed_classification||'Not assessed'))} · ${esc((occupation.triggered_rules||[]).join(', '))}</p>`
- +supports.map(e=>`<blockquote>${esc(e.matched_clause||e.quote)}</blockquote><p>${esc(e.concept?.label||e.concept_uri)} · ${esc(e.concept_relation)}</p><small><code>${esc(locator(e))}</code></small>`).join('')
+ return `<section class="panel role-evidence"><h3>${esc(wf('Occupational evidence','الأدلة المهنية'))}</h3><p>${esc(workflowLabel(occupation.proposed_classification||'Not assessed'))} · ${esc((occupation.triggered_rules||[]).join(', '))}</p>`
+ +supports.map(e=>`<blockquote dir="auto">${esc(e.matched_clause||e.quote)}</blockquote><p dir="auto">${esc(e.concept?.label||e.concept_uri)} · ${esc(e.concept_relation)}</p><small><code dir="ltr">${esc(locator(e))}</code></small>`).join('')
  +(supports.length?'':`<p>${esc(wf('No occupational conclusion is supported by the implemented rules. Market eligibility is a separate decision.','لا تدعم القواعد الحالية استنتاجاً مهنياً. أهلية السوق قرار مستقل.'))}</p>`)
- +`<ul>${(occupation.unresolved_uncertainties||[]).map(s=>`<li>${esc(s)}</li>`).join('')}</ul>`
- +`<details><summary>${esc(wf('All extracted responsibilities','جميع المسؤوليات المستخرجة'))} (${observed.length})</summary>${observed.map(e=>`<blockquote>${esc(e.responsibility_text)}</blockquote><small><code>${esc(locator(e))}</code></small>`).join('')}</details></section>`
- +`<section class="panel"><h3>${esc(wf('Independent salary evidence','أدلة الراتب المستقلة'))}</h3><p>${esc(salary.status||'Not assessed')}</p>`
- +(salary.observations||[]).map(o=>`<p><strong>${esc(o.lower_amount)}${o.upper_amount==null?'':' – '+esc(o.upper_amount)} ${esc(o.currency||wf('currency unresolved','العملة غير محسومة'))} / ${esc(o.period||wf('period unresolved','الفترة غير محسومة'))}</strong><br>${esc(o.compensation_basis)} · ${esc(o.pay_market||wf('pay market unresolved','سوق الراتب غير محسوم'))}<br>${esc(o.reason)}</p>`
- +(o.normalized?`<p>${esc(num(o.normalized.lower_amount))} – ${esc(num(o.normalized.upper_amount))} SAR/month · FX ${esc(o.normalized.fx_date)} (${esc(o.normalized.rate)})</p>`:'')
- +(o.evidence||[]).map(e=>`<blockquote>${esc(e.text||JSON.stringify(o.original))}</blockquote><small><code>${esc(locator(e))}</code></small>`).join('')).join('')
- +(salary.unparsed_signals||[]).map(e=>`<blockquote>${esc(e.text)}</blockquote><p>${esc(e.reason)}</p><small>${esc(locator(e))}</small>`).join('')
- +(salary.unhandled_structured_fields||[]).map(e=>`<p>${esc(e.reason)} · <code>${esc(e.source.pointer)}</code></p><pre class="code">${esc(JSON.stringify(e.value,null,2))}</pre>`).join('')
- +`<p>${esc(salary.limitation||'')}</p></section>`
+ +`<ul dir="auto">${(occupation.unresolved_uncertainties||[]).map(s=>`<li>${esc(s)}</li>`).join('')}</ul>`
+ +`<details><summary>${esc(wf('All extracted responsibilities','جميع المسؤوليات المستخرجة'))} (${observed.length})</summary>${observed.map(e=>`<blockquote dir="auto">${esc(e.responsibility_text)}</blockquote><small><code dir="ltr">${esc(locator(e))}</code></small>`).join('')}</details></section>`
+ +`<section class="panel role-evidence"><h3>${esc(wf('Independent salary evidence','أدلة الراتب المستقلة'))}</h3><p dir="auto">${esc(salary.status||'Not assessed')}</p>`
+ +(salary.observations||[]).map(o=>`<p><strong><bdi dir="ltr">${esc(o.lower_amount)}${o.upper_amount==null?'':' – '+esc(o.upper_amount)} ${esc(o.currency||wf('currency unresolved','العملة غير محسومة'))}</bdi> / ${esc(o.period||wf('period unresolved','الفترة غير محسومة'))}</strong><br>${esc(o.compensation_basis==='unknown'?wf('Compensation basis unresolved','أساس التعويض غير محسوم'):o.compensation_basis)} · <bdi dir="auto">${esc(o.pay_market||wf('pay market unresolved','سوق الراتب غير محسوم'))}</bdi></p><p dir="auto">${esc(o.reason)}</p>`
+ +(o.normalized?`<p dir="ltr">${esc(num(o.normalized.lower_amount))} – ${esc(num(o.normalized.upper_amount))} SAR/month · FX ${esc(o.normalized.fx_date)} (${esc(o.normalized.rate)})</p>`:'')
+ +(o.evidence||[]).map(e=>`<blockquote dir="auto">${esc(e.text||JSON.stringify(o.original))}</blockquote><small><code dir="ltr">${esc(locator(e))}</code></small>`).join('')).join('')
+ +(salary.unparsed_signals||[]).map(e=>`<blockquote dir="auto">${esc(e.text)}</blockquote><p dir="auto">${esc(e.reason)}</p><small><code dir="ltr">${esc(locator(e))}</code></small>`).join('')
+ +(salary.unhandled_structured_fields||[]).map(e=>`<p dir="auto">${esc(e.reason)} · <code dir="ltr">${esc(e.source.pointer)}</code></p><pre class="code" dir="ltr" style="white-space:pre-wrap">${esc(JSON.stringify(e.value,null,2))}</pre>`).join('')
+ +`<p dir="auto">${esc(salary.limitation||'')}</p></section>`
  +`<p><strong>${esc(wf('Production approval: not granted','اعتماد النشر: غير ممنوح'))}</strong><br>${esc(wf('Captured evidence is historical; current listing availability was not rechecked.','الأدلة محفوظة بتاريخ الالتقاط؛ لم يُعَد التحقق من توفر الوظيفة حالياً.'))}</p>`
- +`<details><summary>${esc(wf('Technical provenance and validation','مصدر الأدلة والتحقق التقني'))}</summary><pre class="code">${esc(JSON.stringify({validation:r.workflowValidation,source:r.marketEligibility?.source_capture,sha256:r.marketEligibility?.capture_sha256},null,2))}</pre></details>`;
+ +`<details><summary>${esc(wf('Technical provenance and validation','مصدر الأدلة والتحقق التقني'))}</summary><pre class="code" dir="ltr" style="white-space:pre-wrap;overflow-wrap:anywhere">${esc(JSON.stringify({validation:r.workflowValidation,source:r.marketEligibility?.source_capture,sha256:r.marketEligibility?.capture_sha256},null,2))}</pre></details>`;
 }
 if(DEVELOPMENT_PREVIEW&&seed.developmentPreview?.workflow){
+ const priorOriginalPay=originalPay;
+ originalPay=function(r){
+  const observations=r.salaryAssessment?.observations||[];
+  return observations.length?observations.map(o=>`${o.lower_amount??'—'}${o.upper_amount==null?'':' – '+o.upper_amount} ${o.currency||wf('currency unresolved','العملة غير محسومة')} / ${o.period||wf('period unresolved','الفترة غير محسومة')}`).join('; '):priorOriginalPay(r);
+ };
  const priorPayRange=payRange;
  payRange=function(r){return isSalary(r)?priorPayRange(r):(r.salaryAssessment?.observations?.length||r.salaryAssessment?.unparsed_signals?.length)?wf('Pay evidence unresolved; see details','أدلة الراتب غير محسومة؛ راجع التفاصيل'):wf('Salary not disclosed','الراتب غير معلن');};
  const priorReview=reviewPage;

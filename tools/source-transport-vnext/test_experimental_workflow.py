@@ -23,6 +23,11 @@ class PreviewBindingTests(unittest.TestCase):
         self.assertNotIn('Occupational classification: not assessed in this preview.', result)
         self.assertIn('Production approval: not granted', result)
 
+    def test_missing_bootstrap_fails_closed(self):
+        source = (t.ROOT / 'web/app.js').read_text(encoding='utf-8')
+        with self.assertRaisesRegex(t.TransportError, 'bootstrap binding changed'):
+            workflow.workflow_app(source.replace("validate(market);mount(location.hash.slice(1)||'overview');refresh();", ''))
+
 
 @unittest.skipUnless(os.environ.get('STAGE7_WORKFLOW_SOURCE_ROOT'), 'Explicit private Development fixture root required')
 class AuthenticBatchIntegrationTests(unittest.TestCase):

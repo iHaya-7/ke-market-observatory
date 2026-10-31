@@ -23,9 +23,17 @@ $ErrorActionPreference='Stop'
 $repositoryRoot=[System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $sourcePath=(Resolve-Path -LiteralPath $SourceRoot).Path
 $resultsPath=if([System.IO.Path]::IsPathRooted($Results)){$Results}else{Join-Path $sourcePath $Results}
+if(-not (Test-Path -LiteralPath $resultsPath -PathType Leaf)){throw ('Saved Development results not found: '+$resultsPath+'. Supply -Results for an existing saved batch; no source collection is performed.')}
 if(-not $Output){$Output='learning-local/observatory-'+[DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfffZ')}
 $outputPath=if([System.IO.Path]::IsPathRooted($Output)){$Output}else{Join-Path $repositoryRoot $Output}
-if(-not $Dependencies){$Dependencies=Join-Path $repositoryRoot 'learning-local/stage6-deps'}
+if($Dependencies){
+    $dependencyCandidates=@(if([System.IO.Path]::IsPathRooted($Dependencies)){$Dependencies}else{Join-Path $repositoryRoot $Dependencies})
+}else{
+    $dependencyCandidates=@()
+    if($env:KE_LOCAL_DEPS){$dependencyCandidates+=if([System.IO.Path]::IsPathRooted($env:KE_LOCAL_DEPS)){$env:KE_LOCAL_DEPS}else{Join-Path $repositoryRoot $env:KE_LOCAL_DEPS}}
+    $dependencyCandidates+=Join-Path $repositoryRoot 'learning-local/stage6-deps'
+    $dependencyCandidates+=Join-Path $repositoryRoot 'learning-local/development-v2-deps/Lib/site-packages'
+}
 if(-not $PythonExecutable){
     foreach($key in @('HKCU:\Software\Python\PythonCore\3.13\InstallPath','HKLM:\Software\Python\PythonCore\3.13\InstallPath')){
         $registered=Get-ItemProperty -LiteralPath $key -ErrorAction SilentlyContinue
@@ -37,20 +45,38 @@ if(-not $PythonExecutable){throw 'Python 3.13 is unavailable. Supply -PythonExec
 $previousDeps=$env:KE_LOCAL_DEPS
 $previousBytecode=$env:PYTHONDONTWRITEBYTECODE
 $check=@'
-import importlib.metadata, os, pathlib, sys
-assert sys.version_info[:2] == (3, 13), 'Python 3.13 required'
-sys.path.insert(0, os.environ['KE_LOCAL_DEPS'])
+import importlib.metadata, pathlib, sys
+if sys.version_info[:2] != (3, 13):
+    raise SystemExit('Python 3.13 required; supply -PythonExecutable for an existing compatible installation.')
+requirements = []
 for line in (pathlib.Path(sys.argv[1])/'knowledge-engineering/06-validation/requirements-local.txt').read_text().splitlines():
     if '==' in line:
-        name, version = line.split('==')
-        assert importlib.metadata.version(name) == version, 'Dependency mismatch: '+name
-print('Runtime:', sys.executable, sys.version.split()[0], '; pinned dependencies verified')
+        requirements.append(line.split('=='))
+failures = []
+for value in sys.argv[2:]:
+    candidate = pathlib.Path(value).resolve()
+    try:
+        for name, version in requirements:
+            distribution = next(importlib.metadata.distributions(path=[str(candidate)], name=name), None)
+            if distribution is None or distribution.version != version:
+                raise ValueError('Missing/unreadable or mismatched '+name+'=='+version)
+        sys.path.insert(0, str(candidate))
+        import rdflib, pyshacl
+        if not all(pathlib.Path(module.__file__).resolve().is_relative_to(candidate) for module in (rdflib, pyshacl)):
+            raise ValueError('RDF packages must load from the verified dependency directory')
+        print(candidate)
+        break
+    except (OSError, ValueError, ImportError) as error:
+        failures.append(str(candidate)+': '+str(error))
+else:
+    raise SystemExit('No readable pinned dependency set. Supply -Dependencies for an existing site-packages directory. Nothing was installed.\n'+'\n'.join(failures))
 '@
 try{
-    $env:KE_LOCAL_DEPS=[System.IO.Path]::GetFullPath($Dependencies)
     $env:PYTHONDONTWRITEBYTECODE='1'
-    & $PythonExecutable -B -X utf8 -c $check $repositoryRoot
+    $verifiedDependencies=& $PythonExecutable -B -X utf8 -c $check $repositoryRoot @dependencyCandidates
     if($LASTEXITCODE -ne 0){throw 'Runtime/dependency verification failed; nothing was installed.'}
+    $env:KE_LOCAL_DEPS=$verifiedDependencies
+    Write-Output ('Runtime: '+$PythonExecutable+' ; pinned dependencies verified in '+$verifiedDependencies)
     & $PythonExecutable -B -X utf8 -W ignore::DeprecationWarning (Join-Path $repositoryRoot 'scripts/process_experimental_workflow.py') --source-root $sourcePath --results $resultsPath --output $outputPath
     if($LASTEXITCODE -ne 0){throw 'Workflow failed; inspect the retained local output.'}
     Write-Output ('Preview: '+(Join-Path $outputPath 'preview/index.html'))

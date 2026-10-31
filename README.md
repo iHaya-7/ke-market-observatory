@@ -187,6 +187,20 @@ If the `python` alias does not work on this Windows installation:
 
 Open [http://127.0.0.1:8765](http://127.0.0.1:8765). The command recreates the disposable ignored `learning-local/approved-filters-preview/` from current frontend source and existing public JSON. It uses the builder in isolation, makes no collection or live dataset-refresh requests, and does not overwrite `public/`. Ctrl+C stops the server. Opening `public/index.html` directly instead shows the retained publication snapshot. See the [filter contract](web/FILTER_CONTRACT.md) for evidence gates; machine categories and AI-assisted judgments do not establish production verification.
 
+### Offline Development Workflow (Windows)
+
+From this repository's root, process the saved nine-candidate Development batch and open the existing Observatory preview:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/run_observatory.ps1 -SourceRoot . -Results learning-local/saudi-s1-fix-20261029/results/market-eligibility.json -Serve
+```
+
+Open [http://127.0.0.1:8766/](http://127.0.0.1:8766/). Ctrl+C stops the server. The launcher prints the exact preview and results directory; the HTML also works offline. Each run creates a fresh ignored `learning-local/observatory-*` directory. An explicit `-Output` must be new; previous results and source captures are never replaced.
+
+This workflow requires the separately transferred private Development fixtures, Python 3.13, and the pinned packages in `knowledge-engineering/06-validation/requirements-local.txt`. The launcher checks existing dependency directories (`KE_LOCAL_DEPS`, `learning-local/stage6-deps`, then `learning-local/development-v2-deps/Lib/site-packages`) and installs nothing. Use `-PythonExecutable` or `-Dependencies` to select another existing compatible environment; relative dependency paths resolve from the repository root. `-SourceRoot` may identify a separate private fixture checkout, while implementation and output remain in this checkout.
+
+The generated preview shows independent market, occupational and salary assessments, source quotations and validation details. Per-record failures remain isolated. Experimental classifications are machine proposals, and unsupported salary dimensions remain unresolved. Local results do not approve records for production or update published market data. No live source collection runs.
+
 ### Refresh Source Data
 
 ```bash

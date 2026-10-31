@@ -46,7 +46,14 @@ def workflow_app(source):
         source = source.replace(old, new)
     source = source.replace('r.marketEligibility.listing_status||r.listingStatus', 'r.listingStatus')
     source = source.replace("esc(r.marketEligibility.salary_availability?.status||'Salary availability not assessed')", "esc(r.salaryAssessment?.status||'Salary not assessed')")
-    return source + '\n' + (ROOT / 'web/workflow-preview.js').read_text(encoding='utf-8')
+    source = source.replace('<p>${esc(originalPay(r))} · ${esc(t(r.compensation))}</p>',
+                            '<p dir="auto">${esc(originalPay(r))} · ${esc(t(r.compensation))}</p>')
+    # Install local bindings before the first render, including direct #global
+    # navigation. Appending them after bootstrap leaves a stale initial view.
+    bootstrap = "validate(market);mount(location.hash.slice(1)||'overview');refresh();"
+    t.require(source.count(bootstrap) == 1, 'Preview bootstrap binding changed')
+    bindings = (ROOT / 'web/workflow-preview.js').read_text(encoding='utf-8')
+    return source.replace(bootstrap, bindings + '\n' + bootstrap)
 
 
 def run(results_path, output, source_root=ROOT):
