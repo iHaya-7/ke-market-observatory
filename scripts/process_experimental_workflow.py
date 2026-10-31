@@ -23,6 +23,7 @@ import process_experimental_batch as batch
 import refresh
 import salary_vnext
 import semantic_graph_vnext
+from observatory_bundle import build_bundle
 
 
 def workflow_app(source):
@@ -111,7 +112,7 @@ def run(results_path, output, source_root=ROOT):
     report = dict(scope='Development / Experimental only', results=outcomes,
                   input_results_sha256=t.digest(results_path.read_bytes()),
                   implementation_sha256={str(p.relative_to(ROOT)):t.digest(p.read_bytes()) for p in
-                      [Path(__file__), Path(market.__file__), Path(classifier.__file__), Path(consumer.__file__),
+                      [Path(__file__), Path(__file__).with_name('observatory_bundle.py'), Path(market.__file__), Path(classifier.__file__), Path(consumer.__file__),
                        Path(graph.__file__), Path(t.__file__), Path(batch_transport.__file__), Path(batch.__file__),
                        Path(validator.__file__), Path(evidence.__file__), Path(refresh.__file__),
                        Path(salary_vnext.__file__), Path(semantic_graph_vnext.__file__), ROOT / 'web/app.js', ROOT / 'web/workflow-preview.js']},
@@ -119,6 +120,7 @@ def run(results_path, output, source_root=ROOT):
     (output / 'results.json').write_text(t.canonical(report), encoding='utf-8')
     build_preview(ROOT, output / 'preview', dataset=dataset,
                   app_source=workflow_app((ROOT / 'web/app.js').read_text(encoding='utf-8')))
+    build_bundle(ROOT, output, dataset)
     return report
 
 

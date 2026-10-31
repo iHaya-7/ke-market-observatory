@@ -53,6 +53,23 @@ class AuthenticBatchIntegrationTests(unittest.TestCase):
             self.assertFalse(any(row['occupational_assessment']['human_ground_truth'].values()))
         self.assertIsNone(self.report['evaluation_metrics'])
 
+    def test_shared_bundle_preserves_published_data_and_review_decisions(self):
+        data = self.output / 'preview/data'
+        bundle = t.loads((data / 'observatory.json').read_bytes())
+        original = (t.ROOT / 'public/data/market.json').read_bytes()
+        self.assertEqual((data / 'published.json').read_bytes(), original)
+        self.assertEqual(bundle['published'], t.loads(original))
+        self.assertEqual(len(bundle['experimental']['records']), 9)
+        self.assertFalse(bundle['collection']['performed'])
+        decisions = t.ROOT / 'data/review_decisions.json'
+        if decisions.exists():
+            self.assertEqual((data / 'review-decisions.json').read_bytes(), decisions.read_bytes())
+            self.assertEqual(bundle['reviewDecisions'], t.loads(decisions.read_bytes()))
+        else:
+            self.assertIsNone(bundle['reviewDecisions'])
+        self.assertIn('published/index.html', (self.output / 'preview/index.html').read_text(encoding='utf-8'))
+        self.assertIn('../index.html', (self.output / 'preview/published/index.html').read_text(encoding='utf-8'))
+
     def test_rdf_roundtrip_and_evidence_resolution(self):
         passed = [r for r in self.report['results'] if r['execution'] == 'PASS']
         self.assertEqual(len(passed), 9)
