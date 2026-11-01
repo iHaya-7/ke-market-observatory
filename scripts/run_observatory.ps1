@@ -9,10 +9,19 @@ The historical exact-LF eligibility test convention is separate from this launch
 no source materialization or hash normalization is performed here.
 .EXAMPLE
 .\scripts\run_observatory.ps1 -SourceRoot <fixture-checkout> -Results <saved-batch-json> -Serve
+.EXAMPLE
+.\scripts\run_observatory.ps1 -SavedResponses learning-local/collector-input/responses.json -State learning-local/collector-state -Serve
+# SavedResponses manifest: scope=Development-only; sources use existing collector
+# id/type/account/company, optional record_ids; responses bind exact URL, relative
+# path, SHA-256 and authentic retrieved_at_utc. No network fallback is allowed.
+# Review annotations live in State/review-decisions.json, keyed by sourceId/jobId
+# then record revision SHA-256. They are retained verbatim, never publication approval.
 #>
 param(
-    [Parameter(Mandatory=$true)][string]$SourceRoot,
-    [Parameter(Mandatory=$true)][string]$Results,
+    [string]$SourceRoot,
+    [string]$Results,
+    [string]$SavedResponses,
+    [string]$State = 'learning-local/collector-state',
     [string]$Output,
     [string]$PythonExecutable,
     [string]$Dependencies,
@@ -21,9 +30,17 @@ param(
 )
 $ErrorActionPreference='Stop'
 $repositoryRoot=[System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
-$sourcePath=(Resolve-Path -LiteralPath $SourceRoot).Path
-$resultsPath=if([System.IO.Path]::IsPathRooted($Results)){$Results}else{Join-Path $sourcePath $Results}
-if(-not (Test-Path -LiteralPath $resultsPath -PathType Leaf)){throw ('Saved Development results not found: '+$resultsPath+'. Supply -Results for an existing saved batch; no source collection is performed.')}
+if($SavedResponses){
+    if($Results -or $SourceRoot){throw 'Use -SavedResponses or the existing -SourceRoot/-Results mode, not both.'}
+    $savedPath=if([System.IO.Path]::IsPathRooted($SavedResponses)){$SavedResponses}else{Join-Path $repositoryRoot $SavedResponses}
+    $statePath=if([System.IO.Path]::IsPathRooted($State)){$State}else{Join-Path $repositoryRoot $State}
+}else{
+    if(-not $SourceRoot){$SourceRoot=$repositoryRoot}
+    if(-not $Results){throw 'Supply -SavedResponses or -Results.'}
+    $sourcePath=(Resolve-Path -LiteralPath $SourceRoot).Path
+    $resultsPath=if([System.IO.Path]::IsPathRooted($Results)){$Results}else{Join-Path $sourcePath $Results}
+    if(-not (Test-Path -LiteralPath $resultsPath -PathType Leaf)){throw ('Saved Development results not found: '+$resultsPath)}
+}
 if(-not $Output){$Output='learning-local/observatory-'+[DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfffZ')}
 $outputPath=if([System.IO.Path]::IsPathRooted($Output)){$Output}else{Join-Path $repositoryRoot $Output}
 if($Dependencies){
@@ -77,6 +94,16 @@ try{
     if($LASTEXITCODE -ne 0){throw 'Runtime/dependency verification failed; nothing was installed.'}
     $env:KE_LOCAL_DEPS=$verifiedDependencies
     Write-Output ('Runtime: '+$PythonExecutable+' ; pinned dependencies verified in '+$verifiedDependencies)
+    if($SavedResponses){
+        $preview=& $PythonExecutable -B -X utf8 -W ignore::DeprecationWarning (Join-Path $repositoryRoot 'scripts/collect_observatory.py') --saved-responses $savedPath --state $statePath
+        if($LASTEXITCODE -ne 0){throw 'Local collector workflow failed; prior state retained.'}
+        Write-Output ('Preview: '+$preview)
+        if($Serve){
+            Write-Output ('Local URL: http://127.0.0.1:'+$Port+'/')
+            & $PythonExecutable -B -m http.server $Port --bind 127.0.0.1 --directory (Split-Path -Parent $preview)
+        }
+        return
+    }
     & $PythonExecutable -B -X utf8 -W ignore::DeprecationWarning (Join-Path $repositoryRoot 'scripts/process_experimental_workflow.py') --source-root $sourcePath --results $resultsPath --output $outputPath
     if($LASTEXITCODE -ne 0){throw 'Workflow failed; inspect the retained local output.'}
     Write-Output ('Preview: '+(Join-Path $outputPath 'preview/index.html'))

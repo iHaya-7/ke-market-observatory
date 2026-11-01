@@ -23,7 +23,7 @@ def build(source_graph, decision):
         statement = URIRef('urn:ke-market-observatory:experimental:interpretation:' + key)
         concept = URIRef(item['concept_uri'])
         predicate, obj = DCTERMS.subject, concept
-        if item['rule_id'] in ('C1', 'C3'):
+        if item['rule_id'] in ('C1', 'C3', 'C4'):
             obj = URIRef(str(statement) + ':representation')
             predicate = source.KE.actsOnRepresentation
             graph.add((obj, RDF.type, source.KE.KnowledgeRepresentation))

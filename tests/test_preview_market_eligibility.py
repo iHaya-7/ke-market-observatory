@@ -4,6 +4,7 @@ from unittest.mock import patch
 import copy
 import importlib.util
 import json
+import os
 import sys
 import tempfile
 import unittest
@@ -13,6 +14,7 @@ sys.path.insert(0, str(ROOT / 'scripts'))
 spec = importlib.util.spec_from_file_location('preview_market_eligibility', ROOT / 'scripts/preview_market_eligibility.py')
 preview = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(preview)
+ROOT = Path(os.environ.get('STAGE7_WORKFLOW_SOURCE_ROOT', ROOT)).resolve()
 RESULTS = ROOT / 'learning-local/market-eligibility-20261029-0dfbb5469d/market-eligibility.json'
 
 
@@ -60,7 +62,7 @@ class DevelopmentPreviewTests(unittest.TestCase):
         with self.assertRaises((ValueError, preview.transport.TransportError)):
             preview.development_dataset(ROOT, ROOT / 'public/data/market.json')
         with self.assertRaises(preview.transport.TransportError):
-            preview.build_development_preview(RESULTS, RESULTS.parent)
+            preview.build_development_preview(RESULTS, RESULTS.parent, root=ROOT)
 
     def test_wrong_capture_binding_fails_before_source_projection(self):
         result = json.loads(RESULTS.read_bytes())

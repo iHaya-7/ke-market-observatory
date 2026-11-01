@@ -7,9 +7,9 @@ const path=require('node:path');
 const vm=require('node:vm');
 const preview=process.env.STAGE7_WORKFLOW_PREVIEW;
 
-function loadPreview(hash='#overview'){
- const html=fs.readFileSync(path.join(preview,'index.html'),'utf8');
- const dataset=JSON.parse(fs.readFileSync(path.join(preview,'data/market.json'),'utf8'));
+function loadPreview(hash='#overview',directory=preview){
+ const html=fs.readFileSync(path.join(directory,'index.html'),'utf8');
+ const dataset=JSON.parse(fs.readFileSync(path.join(directory,'data/market.json'),'utf8'));
  const scripts=[...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].map(m=>m[1]);
  const source=scripts.find(s=>s.includes('function details(id)'));
  assert.ok(source,'Existing Observatory application must be embedded');
@@ -24,6 +24,22 @@ function loadPreview(hash='#overview'){
  vm.runInContext(source,context);
  return {dataset,el,context};
 }
+
+test('collected candidate reaches existing review page with independent decisions', {skip:!process.env.STAGE7_COLLECTOR_PREVIEW},()=>{
+ const {dataset,el,context}=loadPreview('#review',process.env.STAGE7_COLLECTOR_PREVIEW);
+ assert.equal(dataset.records.length,1);
+ const row=dataset.records[0];
+ assert.equal(row.title,'Graph Engineer');
+ assert.ok(el('#view-content').innerHTML.includes('Graph Engineer'));
+ assert.ok(el('#view-content').innerHTML.includes('Pending human review'));
+ vm.runInContext(`details(${JSON.stringify(row.id)})`,context);
+ const rendered=[...['#modal-body','#detail-body','#detail-content'].map(s=>el(s).innerHTML)].join('');
+ assert.equal(row.operationalReview.productionApproval,null);
+ assert.equal(row.marketEligibility.decision,'Reject');
+ assert.equal(row.occupationalAssessment.proposed_classification,'Adjacent Technical');
+ assert.ok(vm.runInContext(`workflowEvidence(market.records[0])`,context).includes('Pending human review'));
+ assert.equal(row.workflowValidation.experimental_shacl_conforms,true);
+});
 
 test('direct global entry renders workflow salary evidence before any navigation', {skip:!preview},()=>{
  const {el}=loadPreview('#global');

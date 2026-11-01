@@ -15,15 +15,19 @@ import subprocess
 import graph_vnext as builder
 import review_export_vnext as evidence
 import transport_vnext as transport
+import representation_actions_vnext as representation_actions
 from rdflib import Graph, Namespace
 from rdflib.namespace import OWL, RDF, RDFS, SKOS
 
-VERSION = 'development-job-classifier-vnext-2'
+VERSION = 'development-job-classifier-vnext-3'
 EXP = 'urn:ke-market-observatory:experimental:job-classifier-vnext:'
 ROLE = Namespace('urn:ke-market-observatory:role:')
 CATEGORIES = ('Core KE', 'Adjacent Technical', 'Neither', 'Insufficient Evidence')
 HUMAN_COLUMNS = ('case_id', 'human_classification', 'reviewer_id', 'reviewer_notes')
 RULES = {
+    'C4': {'name': 'Explicit ontology lifecycle or validation engineering',
+           'condition': 'Own ontology design/development/versioning, or directly engineer ontology schemas or SHACL shapes. Requires explicit action/object wording; the existing ownership/two-duty threshold still applies.',
+           'ontology_basis': [str(builder.KE.Responsibility), str(builder.KE.KnowledgeRepresentation), str(builder.KE.actsOnRepresentation)]},
     'C3': {'name': 'Explicit graph representation construction',
            'condition': 'An engineering action builds ingestion that transforms source data into explicit knowledge graph/RDF representations, or entity-linking workflows that resolve domain identities into canonical graph nodes. Querying, GraphRAG use, generic graphs and generic entity matching alone do not qualify.',
            'ontology_basis': [str(builder.KE.Responsibility), str(builder.KE.KnowledgeRepresentation), str(builder.KE.actsOnRepresentation)],
@@ -166,6 +170,7 @@ def classify_job(rows, concepts, *, case_id=None, source_title=''):
                 if REPRESENTATION.search(clause): unsafe_mentions.append(row['responsibility_id'])
                 continue
             direct = DIRECT.match(clause)
+            expanded = representation_actions.match(clause) if not direct else None
             mapped = False
             if LAYER.search(clause):
                 ambiguous_layers.append(row['responsibility_id'])
@@ -175,6 +180,12 @@ def classify_job(rows, concepts, *, case_id=None, source_title=''):
                               ROLE['knowledge-engineer'] if target.startswith('semantic model') else ROLE['ontology-engineer'])
                 item = support(row, 'C1', clause, offset, concept, 'candidate occupational concept; experimental interpretation')
                 item['action'] = direct['action'].casefold(); item['representation_text'] = direct['object']
+                core.append(item); mapped = True
+            if expanded and not COLLATERAL.match(clause[expanded.end():]):
+                item = support(row, 'C4', clause, offset, str(ROLE['ontology-engineer']),
+                               'candidate occupational concept; explicit ontology lifecycle or validation engineering')
+                item['action'] = expanded['action'].split()[0].lower().rstrip(',')
+                item['representation_text'] = expanded['object']
                 core.append(item); mapped = True
             graph_output = GRAPH_OUTPUT.search(clause)
             entity_output = ENTITY_OUTPUT.search(clause)

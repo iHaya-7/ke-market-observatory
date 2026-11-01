@@ -32,6 +32,10 @@ LABELED_ACTION = re.compile(r'^(?:design|build|implement|optimize|monitor|ensure
 NON_DUTY_LABEL = re.compile(r'^(?:experience|education|qualifications?|skills|requirements|benefits|nice to have)\b', re.I)
 EXPLICIT_DUTY_HEADING = re.compile(
     r'^Your responsibilities will include(?: \(but will not be limited to\))?:?$', re.I)
+# Explicit ATS responsibility sections can contain duties beyond the frozen
+# primitive's small verb list. This preserves evidence, not occupational meaning.
+STRUCTURED_DUTY_ACTION = re.compile(
+    r'^(?:author|establish|lead|co-own|reason|apply|(?:formally\s+)?mentor|actively\s+develop)\b', re.I)
 
 
 class _ListLayout(primitives.VisibleBlocks):
@@ -229,7 +233,11 @@ def extract_responsibilities(packet, documents):
             if primitives.STOP.fullmatch(text.strip().rstrip(':')):
                 active = False
                 continue
-            if active and primitives.DUTY_ACTION.search(text):
+            structured_action = (packet.get('version') != 'development-source-transport-vnext-1'
+                                 and packet['source']['type'] == 'lever' and label
+                                 and primitives.DUTIES.fullmatch(label['value'].strip().rstrip(':'))
+                                 and STRUCTURED_DUTY_ACTION.match(text.strip()))
+            if active and (primitives.DUTY_ACTION.search(text) or structured_action):
                 duties.append({'text': text, 'field_pointer': doc['field_pointer'],
                                'section_metadata': copy.deepcopy(label),
                                'locator': {'source': copy.deepcopy(doc['source']),

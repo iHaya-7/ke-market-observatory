@@ -58,7 +58,7 @@ def canonical(url: str) -> str:
  from urllib.parse import urlencode
  return urlunsplit(('https', p.netloc.lower(), path, urlencode(keep, doseq=True), ''))
 
-def fetch_json(url: str, timeout: int = 20):
+def fetch_json(url: str, timeout: int = 20, *, capture=None):
  if urlsplit(url).hostname not in ALLOWED_HOSTS:
   raise ValueError('Endpoint is outside the configured public API host allowlist')
  for attempt in range(2):
@@ -69,7 +69,9 @@ def fetch_json(url: str, timeout: int = 20):
      raise ValueError('Unexpected redirect host')
     body=response.read(20_000_001)
     if len(body)>20_000_000:raise ValueError('Feed exceeds safe response limit; not treated as complete')
-    return json.loads(body)
+    parsed=json.loads(body)
+    if capture is not None:capture(url,body,stamp())
+    return parsed
   except HTTPError as error:
    if error.code not in (429,500,502,503,504) or attempt:raise
    retry=error.headers.get('Retry-After','2')

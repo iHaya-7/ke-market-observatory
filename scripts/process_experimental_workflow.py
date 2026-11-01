@@ -18,6 +18,8 @@ import validate_graph_vnext as validator
 import review_export_vnext as evidence
 import classify_jobs_vnext as classifier
 import market_eligibility_vnext as market
+import operational_market_vnext as operational_market
+import representation_actions_vnext as representation_actions
 import batch_transport_vnext as batch_transport
 import process_experimental_batch as batch
 import refresh
@@ -57,7 +59,7 @@ def workflow_app(source):
     return source.replace(bootstrap, bindings + '\n' + bootstrap)
 
 
-def run(results_path, output, source_root=ROOT):
+def run(results_path, output, source_root=ROOT, *, build_views=True):
     source_root = Path(source_root).resolve()
     results_path = t.safe_path(source_root, Path(results_path).resolve().relative_to(source_root), Path('learning-local'))
     results = t.loads(results_path.read_bytes())
@@ -115,12 +117,16 @@ def run(results_path, output, source_root=ROOT):
                       [Path(__file__), Path(__file__).with_name('observatory_bundle.py'), Path(market.__file__), Path(classifier.__file__), Path(consumer.__file__),
                        Path(graph.__file__), Path(t.__file__), Path(batch_transport.__file__), Path(batch.__file__),
                        Path(validator.__file__), Path(evidence.__file__), Path(refresh.__file__),
-                       Path(salary_vnext.__file__), Path(semantic_graph_vnext.__file__), ROOT / 'web/app.js', ROOT / 'web/workflow-preview.js']},
+                       Path(salary_vnext.__file__), Path(semantic_graph_vnext.__file__), Path(operational_market.__file__), Path(representation_actions.__file__), ROOT / 'web/app.js', ROOT / 'web/workflow-preview.js']},
                   human_judgments=None, evaluation_metrics=None)
     (output / 'results.json').write_text(t.canonical(report), encoding='utf-8')
-    build_preview(ROOT, output / 'preview', dataset=dataset,
-                  app_source=workflow_app((ROOT / 'web/app.js').read_text(encoding='utf-8')))
-    build_bundle(ROOT, output, dataset)
+    if build_views:
+        build_preview(ROOT, output / 'preview', dataset=dataset,
+                      app_source=workflow_app((ROOT / 'web/app.js').read_text(encoding='utf-8')))
+        build_bundle(ROOT, output, dataset)
+    else:
+        (output / 'preview/data').mkdir(parents=True)
+        (output / 'preview/data/market.json').write_text(t.canonical(dataset), encoding='utf-8')
     return report
 
 
@@ -132,7 +138,8 @@ def process_case(saved, row, source_root, selection_path, selection, concepts, f
         response = t.safe_path(source_root, spec['response_path'], selection_path.parent).read_bytes()
         packet = make_batch_packet(row['id'], saved['source_capture'], raw, spec, response)
         artifact = packet['captures'][0]
-        decision = market.decide(capture['record'], capture['sourceType'], artifact)
+        policy = operational_market if saved.get('policy_version') == operational_market.VERSION else market
+        decision = policy.decide(capture['record'], capture['sourceType'], artifact)
         # Existing market outputs must reproduce, not merely be carried forward.
         t.require(all(saved[k] == v for k, v in decision.items()), 'Market decision regression')
         result = dict(case_id=row['id'], title=row['title'], market_eligibility=decision,
@@ -140,6 +147,13 @@ def process_case(saved, row, source_root, selection_path, selection, concepts, f
                       source_response=dict(path=spec['response_path'], sha256=spec['response_sha256']),
                       field_mapping=capture['fieldMapping'], graph_field_references=packet['field_references'],
                       unconsumed_source_sections=packet['unconsumed_source_sections'])
+        if spec.get('transport_components'):
+            components = t.loads(response)['components']
+            for component in components:
+                original = t.safe_path(source_root, component['path'], selection_path.parent.parent / 'responses').read_bytes()
+                t.require(t.digest(original) == component['sha256'], 'Original component changed')
+            result['source_response'].update(kind='Derived transport envelope; not a native API response',
+                components=[{k:v for k,v in c.items() if k != 'bytes_base64'} for c in components])
         (folder / 'packet.json').write_text(t.canonical(packet), encoding='utf-8')
         try:
             consumed = consumer.consume(packet)
@@ -173,6 +187,9 @@ def process_case(saved, row, source_root, selection_path, selection, concepts, f
                                           observation_applicability=None)
         row.update({key: salary[key] for key in ('salaryMin', 'salaryMax', 'currency', 'period', 'salaryEligible',
                     'salaryBasis', 'salaryBasisVerified', 'compensation', 'salaryReview')})
+        # Intrinsic pay comparability stays in salaryAssessment. Shared dataset
+        # approval fields cannot be granted by a machine assessment.
+        row.update(salaryEligible=False, salaryBasisVerified=False)
         row['occupationalAssessment'] = occupation
         row['salaryAssessment'] = result['salary_assessment']
         row['workflowValidation'] = result.get('validation', dict(blocker=result.get('blocker')))

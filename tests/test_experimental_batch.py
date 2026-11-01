@@ -2,6 +2,7 @@
 import base64
 from collections import Counter
 import json
+import os
 from pathlib import Path
 import sys
 import unittest
@@ -11,6 +12,9 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 import preview_market_eligibility as preview
 import process_experimental_batch as batch
+
+CODE_ROOT = ROOT
+ROOT = Path(os.environ.get('STAGE7_WORKFLOW_SOURCE_ROOT', ROOT)).resolve()
 
 RESULTS = ROOT / 'learning-local/market-new-batch-20261029/processed/market-eligibility.json'
 
@@ -31,7 +35,7 @@ class SavedBatchTests(unittest.TestCase):
     def test_saved_results_stay_historical_and_only_two_penta_decisions_change(self):
         self.assertEqual(len(self.rows), 9)
         self.assertNotEqual(self.report['eligibility_implementation_sha256'], batch.transport.digest(
-            (ROOT / 'tools/source-transport-vnext/market_eligibility_vnext.py').read_bytes()))
+            (CODE_ROOT / 'tools/source-transport-vnext/market_eligibility_vnext.py').read_bytes()))
         self.assertEqual(Counter(r['decision'] for r in self.rows), {'Accept': 3, 'Reject': 5, 'Unresolved': 1})
         self.assertIsNone(self.report['human_reference'])
         for row in self.rows:
@@ -105,11 +109,11 @@ class SavedBatchTests(unittest.TestCase):
 
     def test_original_batch_and_new_outputs_refuse_overwrite(self):
         with self.assertRaisesRegex(batch.transport.TransportError, 'no overwrites'):
-            batch.process(ROOT / self.report['selection_path'])
+            batch.process(ROOT / self.report['selection_path'], root=ROOT)
         with self.assertRaisesRegex(batch.transport.TransportError, 'no overwrites'):
-            preview.build_development_preview(RESULTS, RESULTS.parent)
+            preview.build_development_preview(RESULTS, RESULTS.parent, root=ROOT)
         with self.assertRaisesRegex(batch.transport.TransportError, 'no overwrites'):
-            batch.rerun_saved(RESULTS, RESULTS.parent)
+            batch.rerun_saved(RESULTS, RESULTS.parent, root=ROOT)
 
 
 class SourceProjectionTests(unittest.TestCase):
@@ -149,7 +153,7 @@ class CorrectedBatchTests(unittest.TestCase):
         self.assertEqual(new['previous_results_sha256'], batch.transport.digest(RESULTS.read_bytes()))
         self.assertEqual(new['responsibility_detection_version'], batch.eligibility.S1_IMPLEMENTATION_VERSION)
         self.assertEqual(new['eligibility_implementation_sha256'], batch.transport.digest(
-            (ROOT / 'tools/source-transport-vnext/market_eligibility_vnext.py').read_bytes()))
+            (CODE_ROOT / 'tools/source-transport-vnext/market_eligibility_vnext.py').read_bytes()))
         self.assertEqual(Counter(r['decision'] for r in new['capture_decisions']), {'Accept': 5, 'Reject': 3, 'Unresolved': 1})
         changed = []
         for before, after in zip(old['capture_decisions'], new['capture_decisions']):

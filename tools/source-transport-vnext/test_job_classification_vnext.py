@@ -30,6 +30,22 @@ def source_rows(*texts, title='Metadata title', body=None):
 
 
 class RuleTests(unittest.TestCase):
+    def test_explicit_ontology_lifecycle_and_validation_patterns(self):
+        _, decision = self.decide("Own the end-to-end design, development, and versioning of Acme's core ontologies in RDF/RDFS/OWL.")
+        self.assertEqual(decision['proposed_classification'], 'Core KE')
+        _, decision = self.decide("Implement and extend Acme's RDF/RDFS/OWL ontology schemas in the graph database.",
+                                  'Build and maintain SHACL validation shapes for post-load consistency checks.')
+        self.assertEqual(decision['proposed_classification'], 'Core KE')
+        self.assertEqual(set(decision['triggered_rules']), {'C2', 'C4'})
+
+    def test_lifecycle_words_do_not_accept_training_qualifications_or_negation(self):
+        for text in ('Own presentations about ontology design and versioning.',
+                     'Experience authoring SHACL shapes is preferred.',
+                     'May author and maintain SHACL shapes.',
+                     'Build and maintain SHACL validation shapes documentation.'):
+            _, decision = self.decide(text)
+            self.assertEqual(decision['proposed_classification'], 'Insufficient Evidence')
+
     def test_semantic_assertions_are_separate_resolvable_and_tamper_checked(self):
         record = fixture()['record']; record['description'] = '<h2>Responsibilities</h2><p>Own ontologies.</p>'
         packet = fixture(record); consumed = consumer.consume(packet)

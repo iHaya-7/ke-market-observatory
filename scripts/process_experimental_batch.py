@@ -53,6 +53,23 @@ class SourceFields(HTMLParser):
 def project(spec, body):
     """Alias explicit provider fields only; keep original values and mapping, never rewrite prose."""
     kind = spec['format']
+    if spec.get('transport_components'):
+        transport.require(kind == 'greenhouse', 'Multi-response transport is Greenhouse only')
+        envelope = transport.loads(body)
+        transport.require(envelope.get('kind') == 'exact-api-response-envelope-v1' and len(envelope['components']) == 2,
+                          'Invalid response envelope')
+        merged, fields, originals = {}, {}, []
+        for component in envelope['components']:
+            raw = base64.b64decode(component['bytes_base64'], validate=True)
+            transport.require(transport.digest(raw) == component['sha256'], 'Component response hash mismatch')
+            value = transport.at(transport.loads(raw), component['pointer'])
+            transport.require(str(value.get('id')) == str(spec['source_job_id']), 'Component posting identity mismatch')
+            originals.append(copy.deepcopy(value))
+            for key, val in value.items():
+                merged[key] = copy.deepcopy(val)
+                fields[key] = dict(path=component['path'], sha256=component['sha256'],
+                                   pointer=component['pointer']+'/'+transport.escape(key))
+        return merged, dict(merged_fields=fields, transport='exact-api-response-envelope-v1'), dict(source_records=originals)
     if kind in ('workable', 'greenhouse', 'lever'):
         original = transport.at(transport.loads(body), spec['pointer'])
         return copy.deepcopy(original), {'record': {'response_pointer': spec['pointer']}}, original

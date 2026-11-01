@@ -22,7 +22,7 @@ def build_bundle(root, output, experimental):
     bundle = dict(schemaVersion=1, published=published, experimental=experimental,
                   reviewDecisions=decisions,
                   publicationGate='Experimental records are not approved for publication',
-                  collection=dict(performed=False, mode='Saved Development evidence'),
+                  collection=experimental.get('collectionRun', dict(performed=False, mode='Saved Development evidence')),
                   provenance=dict(publishedPath='public/data/market.json',
                                   publishedSha256=hashlib.sha256(published_bytes).hexdigest(),
                                   reviewDecisionsSha256=hashlib.sha256(decisions_bytes).hexdigest()
@@ -44,7 +44,7 @@ def build_bundle(root, output, experimental):
             raise ValueError('Existing site body binding changed')
         notice = (f'<nav class="notice" aria-label="Dataset"><a href="{href}">{label}</a>'
                   f' · Published: {len(published["records"])} · Experimental: {len(ids)}'
-                  ' · Local snapshot; no live collection / نسخة محلية دون جمع مباشر'
+                  ' · Local snapshot; browser collection disabled / نسخة محلية دون جمع عبر المتصفح'
                   ' · Separate statistics; experimental publication approval pending.</nav>')
         page.write_text(html.replace(marker, marker + notice, 1), encoding='utf-8')
     # Fail closed if another process changes the source while the bundle builds.

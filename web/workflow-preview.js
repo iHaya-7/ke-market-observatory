@@ -19,6 +19,7 @@ function workflowEvidence(r){
  +(salary.unparsed_signals||[]).map(e=>`<blockquote dir="auto">${esc(e.text)}</blockquote><p dir="auto">${esc(e.reason)}</p><small><code dir="ltr">${esc(locator(e))}</code></small>`).join('')
  +(salary.unhandled_structured_fields||[]).map(e=>`<p dir="auto">${esc(e.reason)} · <code dir="ltr">${esc(e.source.pointer)}</code></p><pre class="code" dir="ltr" style="white-space:pre-wrap">${esc(JSON.stringify(e.value,null,2))}</pre>`).join('')
  +`<p dir="auto">${esc(salary.limitation||'')}</p></section>`
+ +`<p>${esc(r.operationalReview?.status||'')} ${esc(r.operationalReview?.lastProcessingError||'')}</p>`
  +`<p><strong>${esc(wf('Production approval: not granted','اعتماد النشر: غير ممنوح'))}</strong><br>${esc(wf('Captured evidence is historical; current listing availability was not rechecked.','الأدلة محفوظة بتاريخ الالتقاط؛ لم يُعَد التحقق من توفر الوظيفة حالياً.'))}</p>`
  +`<details><summary>${esc(wf('Technical provenance and validation','مصدر الأدلة والتحقق التقني'))}</summary><pre class="code" dir="ltr" style="white-space:pre-wrap;overflow-wrap:anywhere">${esc(JSON.stringify({validation:r.workflowValidation,source:r.marketEligibility?.source_capture,sha256:r.marketEligibility?.capture_sha256},null,2))}</pre></details>`;
 }
@@ -31,7 +32,19 @@ if(DEVELOPMENT_PREVIEW&&seed.developmentPreview?.workflow){
  const priorPayRange=payRange;
  payRange=function(r){return isSalary(r)?priorPayRange(r):(r.salaryAssessment?.observations?.length||r.salaryAssessment?.unparsed_signals?.length)?wf('Pay evidence unresolved; see details','أدلة الراتب غير محسومة؛ راجع التفاصيل'):wf('Salary not disclosed','الراتب غير معلن');};
  const priorReview=reviewPage;
- reviewPage=function(){priorReview();const failures=market.processingFailures||[];if(failures.length)$('#view-content').innerHTML+=`<section class="panel"><h2>${esc(wf('Processing failures','حالات تعذر المعالجة'))}</h2>${failures.map(f=>`<h3>${esc(f.title)}</h3><p>${esc(f.error_type)}: ${esc(f.blocker)}</p>`).join('')}</section>`;};
+ reviewPage=function(){
+  if(market.developmentPreview?.operational){
+   $('#view-content').innerHTML=head('REVIEW BEFORE PUBLICATION',wf('Candidate review','مراجعة المرشحين'),wf('Machine assessments do not grant publication approval.','التقييمات الآلية لا تمنح موافقة النشر.'))
+    +`<div class="review-list">${market.records.map(r=>`<article class="review-card"><div><h3>${esc(r.title)}</h3><p>${esc(r.operationalReview.status)}</p><p>${esc(r.operationalReview.lastProcessingError||'')}</p>${marketEvidence(r)}</div><div class="review-actions"><button class="button small" data-detail="${esc(r.id)}">${h('Evidence & notes')}</button></div></article>`).join('')}</div>`;
+  }else{priorReview();}
+  const failures=market.processingFailures||[];if(failures.length)$('#view-content').innerHTML+=`<section class="panel"><h2>${esc(wf('Processing failures','حالات تعذر المعالجة'))}</h2>${failures.map(f=>`<h3>${esc(f.title)}</h3><p>${esc(f.error_type)}: ${esc(f.blocker)}</p>`).join('')}</section>`;
+ };
+ const priorSources=sourcesPage;
+ sourcesPage=function(){
+  if(!market.developmentPreview?.operational){priorSources();return;}
+  $('#view-content').innerHTML=head('SOURCE HEALTH',wf('Local collection evidence','أدلة الجمع المحلي'),wf('Saved-response timestamps are historical; no browser collection or publication.','تواريخ الاستجابات المحفوظة تاريخية؛ لا يجمع المتصفح البيانات أو ينشرها.'))
+   +market.sources.map(s=>`<section class="panel"><h3>${esc(s.company||s.id)}</h3><p>${esc(s.status)}</p><p>${esc(s.error||'')}</p><p>${esc((s.retrievedAt||[]).join(', '))}</p><p>${esc((s.warnings||[]).join('; '))}</p></section>`).join('');
+ };
  salaryStats=function(rows){
   const observations=rows.flatMap(r=>(r.salaryAssessment?.observations||[]).filter(o=>o.comparable&&o.normalized&&jobEligible(r)));
   return `<div class="notice">${esc(wf('Local Development salary evidence only — no production approval or population-level claims.','أدلة رواتب تطوير محلية فقط — دون اعتماد نشر أو تعميم على السوق.'))}</div><div class="stats">${st(wf('Comparable base-pay observations','ملاحظات راتب أساسي قابلة للمقارنة'),num(observations.length),wf('Explicit amounts, units, basis and pay market required','تتطلب مبلغاً ووحدة وأساس راتب وسوقاً موثقاً'))}${st(wf('Eligible postings without comparable pay','وظائف مؤهلة دون راتب قابل للمقارنة'),num(rows.filter(r=>!(r.salaryAssessment?.observations||[]).some(o=>o.comparable)).length),wf('Retained as jobs; excluded from salary benchmarks','تظل وظائف مؤهلة وتُستبعد من مؤشرات الرواتب'))}</div>`

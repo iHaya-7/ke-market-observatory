@@ -20,6 +20,26 @@ def document(body, source_type='lever'):
 
 
 class LayoutTests(unittest.TestCase):
+    def test_explicit_lever_duties_preserve_additional_actions_and_offsets(self):
+        texts = ['Author and maintain SHACL shapes.', 'Lead ontology design reviews.',
+                 'Apply embedding-based approaches to ontology alignment.',
+                 'Actively develop expertise under the Senior Ontologist.']
+        record = fixture()['record']
+        record['lists'] = [{'text': "What You'll Do:", 'content': '<ul>'+''.join('<li>'+s+'</li>' for s in texts)+'</ul>'}]
+        packet = fixture(record)
+        view = dict(packet)
+        view.pop('version')  # New source projection, not a historical replay packet.
+        duties = consumer.extract_responsibilities(view, consumer.document_views(packet))
+        for text in texts:
+            duty, = [d for d in duties if d['text'] == text]
+            self.assertEqual(consumer.resolve_evidence(packet, duty['locator']), text)
+
+    def test_additional_actions_do_not_promote_qualification_or_unlabeled_prose(self):
+        record = fixture()['record']
+        record['description'] = '<p>Author and maintain SHACL shapes.</p>'
+        record['lists'] = [{'text': 'Qualifications', 'content': '<ul><li>Lead ontology design reviews.</li></ul>'}]
+        self.assertEqual(consumer.consume(fixture(record))['responsibilities'], [])
+
     def test_explicit_future_responsibility_heading_and_nested_list(self):
         body = ('<p>Your responsibilities will include (but will not be limited to):</p>'
                 '<ul><li><strong>Graph infrastructure</strong><ul><li>Build graph ingestion pipelines.</li></ul></li></ul>'
