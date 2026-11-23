@@ -3,9 +3,9 @@
   "meta": {
     "product": "Knowledge Engineering | Market Observatory",
     "preparedAt": "2026-10-20",
-    "publishedAt": "2026-11-22T13:24:05Z",
-    "lastAttemptAt": "2026-11-22T13:24:05Z",
-    "lastSuccessfulCollectionAt": "2026-11-22T13:24:05Z",
+    "publishedAt": "2026-11-23T16:01:53Z",
+    "lastAttemptAt": "2026-11-23T16:01:53Z",
+    "lastSuccessfulCollectionAt": "2026-11-23T16:01:53Z",
     "lastContentChangeAt": "2026-11-19T14:28:08Z",
     "automationActivated": true,
     "repositoryUrl": "https://github.com/iHaya-7/ke-market-observatory",
@@ -27,16 +27,16 @@
     "rates": {
       "SAR": 1,
       "USD": 3.75,
-      "GBP": 4.921777,
-      "EUR": 4.121241
+      "GBP": 4.902538,
+      "EUR": 4.102127
     },
-    "date": "2026-11-20",
+    "date": "2026-11-23",
     "source": "https://frankfurter.dev/",
     "label": "Frankfurter reference rates, cross-converted through the configured USD/SAR assumption.",
     "usdSar": 3.75,
     "usdSarBasis": "Fixed conversion assumption inherited from the original reference. Review periodically.",
     "status": "Updated",
-    "lastAttemptAt": "2026-11-22T13:24:05Z",
+    "lastAttemptAt": "2026-11-23T16:01:53Z",
     "error": null
   },
   "records": [
@@ -322,7 +322,7 @@
       "salaryBasis": "unknown",
       "salaryBasisVerified": false,
       "reviewReason": "Verify whether this disclosed amount is base salary or total compensation using the original employer posting.",
-      "missingChecks": 5
+      "missingChecks": 6
     },
     {
       "id": "KE-006",
@@ -380,7 +380,7 @@
       "salaryBasis": "unknown",
       "salaryBasisVerified": false,
       "reviewReason": "Verify whether this disclosed amount is base salary or total compensation using the original employer posting.",
-      "missingChecks": 5
+      "missingChecks": 6
     },
     {
       "id": "KE-007",
@@ -1230,7 +1230,7 @@
       "exactTitle": false,
       "reviewRequired": true,
       "reviewReason": "Structured salary found but period or currency is ambiguous. Conversion is withheld.",
-      "missingChecks": 5,
+      "missingChecks": 6,
       "origin": "Automatic public ATS collection"
     },
     {
@@ -1284,7 +1284,7 @@
       "exactTitle": false,
       "reviewRequired": false,
       "reviewReason": null,
-      "missingChecks": 5,
+      "missingChecks": 6,
       "origin": "Automatic public ATS collection"
     },
     {
@@ -1342,7 +1342,7 @@
       "exactTitle": false,
       "reviewRequired": true,
       "reviewReason": "Structured salary found but period or currency is ambiguous. Conversion is withheld.",
-      "missingChecks": 5,
+      "missingChecks": 6,
       "origin": "Automatic public ATS collection"
     },
     {
@@ -1383,11 +1383,11 @@
       "sourceUrl": "https://job-boards.greenhouse.io/sapienceaicorporation/jobs/4409177009",
       "extraUrl": "",
       "evidenceMethod": "Public ATS record; rule-based extraction. No salary estimates.",
-      "evidenceDate": "2026-11-22",
+      "evidenceDate": "2026-11-23",
       "salaryVerifiedAt": null,
       "postedAt": "2026-09-16T19:56:23-04:00",
       "firstSeenAt": "2026-10-20T16:33:42Z",
-      "lastSeenAt": "2026-11-22T13:24:05Z",
+      "lastSeenAt": "2026-11-23T16:01:53Z",
       "listingStatus": "Open in feed",
       "statusNote": "Present in the public job feed at the last successful source check.",
       "collection": "automatic",
@@ -1448,7 +1448,7 @@
       "exactTitle": false,
       "reviewRequired": false,
       "reviewReason": null,
-      "missingChecks": 7,
+      "missingChecks": 8,
       "origin": "Automatic public ATS collection"
     }
   ],
@@ -1462,8 +1462,8 @@
       "scope": "Global ontology roles",
       "boardUrl": "https://jobs.lever.co/sambatv",
       "status": "OK",
-      "lastAttemptAt": "2026-11-22T13:24:05Z",
-      "lastSuccessAt": "2026-11-22T13:24:05Z",
+      "lastAttemptAt": "2026-11-23T16:01:53Z",
+      "lastSuccessAt": "2026-11-23T16:01:53Z",
       "jobCount": 0,
       "matchedCount": 0,
       "error": null
@@ -1477,8 +1477,8 @@
       "scope": "Global knowledge graph roles",
       "boardUrl": "https://job-boards.greenhouse.io/nearform",
       "status": "OK",
-      "lastAttemptAt": "2026-11-22T13:24:05Z",
-      "lastSuccessAt": "2026-11-22T13:24:05Z",
+      "lastAttemptAt": "2026-11-23T16:01:53Z",
+      "lastSuccessAt": "2026-11-23T16:01:53Z",
       "jobCount": 23,
       "matchedCount": 0,
       "error": null
@@ -1492,9 +1492,9 @@
       "scope": "Saudi metadata and semantic roles",
       "boardUrl": "https://job-boards.greenhouse.io/tamara",
       "status": "OK",
-      "lastAttemptAt": "2026-11-22T13:24:05Z",
-      "lastSuccessAt": "2026-11-22T13:24:05Z",
-      "jobCount": 35,
+      "lastAttemptAt": "2026-11-23T16:01:53Z",
+      "lastSuccessAt": "2026-11-23T16:01:53Z",
+      "jobCount": 36,
       "matchedCount": 0,
       "error": null
     },
@@ -1507,8 +1507,8 @@
       "scope": "Global knowledge graph roles",
       "boardUrl": "https://job-boards.greenhouse.io/sapienceaicorporation",
       "status": "OK",
-      "lastAttemptAt": "2026-11-22T13:24:05Z",
-      "lastSuccessAt": "2026-11-22T13:24:05Z",
+      "lastAttemptAt": "2026-11-23T16:01:53Z",
+      "lastSuccessAt": "2026-11-23T16:01:53Z",
       "jobCount": 13,
       "matchedCount": 7,
       "error": null
@@ -1522,8 +1522,8 @@
       "scope": "Saudi / global semantic roles; recruiter client may be undisclosed",
       "boardUrl": "https://apply.workable.com/envisiones/",
       "status": "OK",
-      "lastAttemptAt": "2026-11-22T13:24:05Z",
-      "lastSuccessAt": "2026-11-22T13:24:05Z",
+      "lastAttemptAt": "2026-11-23T16:01:53Z",
+      "lastSuccessAt": "2026-11-23T16:01:53Z",
       "jobCount": 59,
       "matchedCount": 1,
       "error": null
@@ -1537,9 +1537,9 @@
       "scope": "Saudi data / knowledge graph roles",
       "boardUrl": "https://apply.workable.com/robusta/",
       "status": "OK",
-      "lastAttemptAt": "2026-11-22T13:24:05Z",
-      "lastSuccessAt": "2026-11-22T13:24:05Z",
-      "jobCount": 88,
+      "lastAttemptAt": "2026-11-23T16:01:53Z",
+      "lastSuccessAt": "2026-11-23T16:01:53Z",
+      "jobCount": 87,
       "matchedCount": 0,
       "error": null
     }
